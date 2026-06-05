@@ -232,6 +232,7 @@ export default function AdminPages() {
           </>
         )}
       </div>
+      </div>
     </div>
   )
 }
