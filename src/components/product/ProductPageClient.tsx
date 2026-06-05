@@ -293,7 +293,7 @@ export default function ProductPageClient({ product, related, locale }: ProductP
           {/* Guide des longueurs + Wishlist */}
           <div className="flex items-center justify-between mt-2 mb-5">
             <SizeGuide locale={locale} />
-            <WishlistButton product={product} locale={locale} size="sm" />
+            <WishlistButton product={product} size="sm" />
           </div>
 
           {/* Bouton ajouter */}

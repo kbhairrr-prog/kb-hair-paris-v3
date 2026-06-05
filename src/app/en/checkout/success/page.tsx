@@ -1,11 +1,12 @@
 'use client'
+import { Suspense } from 'react'
 import { useEffect } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useCartStore } from '@/store/cart'
 
-export default function CheckoutSuccessEN() {
-  const params  = useSearchParams()
+function CheckoutSuccessENInner() {
+  const params = useSearchParams()
   const orderId = params.get('order_id')
   const clearCart = useCartStore(s => s.clearCart)
   useEffect(() => { clearCart() }, [clearCart])
@@ -22,5 +23,13 @@ export default function CheckoutSuccessEN() {
         CONTINUE SHOPPING
       </Link>
     </div>
+  )
+}
+
+export default function CheckoutSuccessEN() {
+  return (
+    <Suspense fallback={<div/>}>
+      <CheckoutSuccessENInner />
+    </Suspense>
   )
 }

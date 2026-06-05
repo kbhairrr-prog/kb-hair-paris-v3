@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, Suspense, useEffect, useCallback } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -11,7 +11,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import CartDrawer from '@/components/cart/CartDrawer'
 
-export default function SearchPageEN() {
+function SearchPageENInner() {
   const searchParams = useSearchParams()
   const router       = useRouter()
   const [query,   setQuery]   = useState(searchParams.get('q') ?? '')
@@ -98,5 +98,13 @@ export default function SearchPageEN() {
       <Footer locale="en" />
       <CartDrawer locale="en" />
     </>
+  )
+}
+
+export default function SearchPageEN() {
+  return (
+    <Suspense fallback={<div/>}>
+      <SearchPageENInner />
+    </Suspense>
   )
 }

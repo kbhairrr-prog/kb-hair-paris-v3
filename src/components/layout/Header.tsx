@@ -254,7 +254,7 @@ export default function Header({ locale }: HeaderProps) {
               {submenu}
             </button>
             <div className="h-px bg-gray-100 mb-4" />
-            {nav.find(n => n.label === submenu)?.children?.map(child => (
+            {nav.find(n => n.label === submenu)?.children?.map((child: any) => (
               <Link
                 key={child.href}
                 href={child.href}
