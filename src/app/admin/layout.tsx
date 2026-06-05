@@ -23,6 +23,7 @@ const NAV = [
   { href: '/admin/avis',               icon: Star,            label: 'Avis clients'       },
   { href: '/admin/videos',             icon: Video,           label: 'Videos'             },
   { href: '/admin/settings',           icon: Settings,        label: 'Parametres'         },
+  { href: '/admin/footer',             icon: ExternalLink,    label: 'Footer'             },
 ]
 
 function LogoutButton() {
