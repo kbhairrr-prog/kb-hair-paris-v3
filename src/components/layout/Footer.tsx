@@ -6,16 +6,18 @@ interface FooterProps {
 
 const MENU_LINKS = {
   fr: [
-    { label: 'Recherche',                    href: '/fr/search' },
+    { label: 'Recherche',                     href: '/fr/search' },
     { label: 'Conditions générales de vente', href: '/fr/pages/cgv' },
-    { label: 'Mentions légales',             href: '/fr/pages/mentions-legales' },
-    { label: 'Retours et remboursements',    href: '/fr/pages/retours' },
+    { label: 'Mentions légales',              href: '/fr/pages/mentions-legales' },
+    { label: 'Politique de confidentialité',  href: '/fr/pages/confidentialite' },
+    { label: 'Livraison & Retours',           href: '/fr/pages/livraison' },
   ],
   en: [
-    { label: 'Search',           href: '/en/search' },
-    { label: 'Terms of Sale',    href: '/en/pages/terms' },
-    { label: 'Legal Notice',     href: '/en/pages/legal' },
-    { label: 'Returns & Refunds',href: '/en/pages/returns' },
+    { label: 'Search',                href: '/en/search' },
+    { label: 'Terms of Sale',         href: '/en/pages/cgv' },
+    { label: 'Legal Notice',          href: '/en/pages/mentions-legales' },
+    { label: 'Privacy Policy',        href: '/en/pages/confidentialite' },
+    { label: 'Shipping & Returns',    href: '/en/pages/livraison' },
   ],
 }
 
