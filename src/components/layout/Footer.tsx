@@ -11,6 +11,8 @@ const MENU_LINKS = {
     { label: 'Mentions légales',              href: '/fr/pages/mentions-legales' },
     { label: 'Politique de confidentialité',  href: '/fr/pages/confidentialite' },
     { label: 'Livraison & Retours',           href: '/fr/pages/livraison' },
+    { label: 'La Fondatrice',                 href: '/fr/pages/la-fondatrice' },
+    { label: 'Qui Sommes-Nous',               href: '/fr/pages/qui-sommes-nous' },
   ],
   en: [
     { label: 'Search',                href: '/en/search' },
@@ -18,6 +20,8 @@ const MENU_LINKS = {
     { label: 'Legal Notice',          href: '/en/pages/mentions-legales' },
     { label: 'Privacy Policy',        href: '/en/pages/confidentialite' },
     { label: 'Shipping & Returns',    href: '/en/pages/livraison' },
+    { label: 'The Founder',           href: '/en/pages/la-fondatrice' },
+    { label: 'About Us',              href: '/en/pages/qui-sommes-nous' },
   ],
 }
 
