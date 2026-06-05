@@ -22,7 +22,7 @@ export default async function PageLegaleEN({ params }: Props) {
   if (!page) notFound()
 
   const title   = page.title_en   || page.title_fr
-  const content = page.content_en || page.content_fr
+  const content = (page.content_en && page.content_en.length > 10) ? page.content_en : page.content_fr
 
   return (
     <>

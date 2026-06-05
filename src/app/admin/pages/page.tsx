@@ -66,10 +66,17 @@ export default function AdminPages() {
   const labelCls = "font-sans text-[10px] tracking-[0.15em] uppercase text-[#888] mb-1 block"
 
   return (
-    <div className="min-h-screen bg-[#f8f8f8] flex">
-
-      {/* Liste pages */}
-      <div className="w-64 bg-white border-r border-[#e8e8e8] flex flex-col flex-shrink-0">
+    <div className="min-h-screen bg-[#f8f8f8]">
+      {selected && (
+        <div className="lg:hidden bg-white border-b border-[#e8e8e8] px-4 py-3 flex items-center gap-3">
+          <button onClick={() => setSelected(null)} className="text-black bg-transparent border-none cursor-pointer font-sans text-[12px]">
+            ← Retour
+          </button>
+          <span className="font-sans text-[12px] font-medium text-black truncate">{selected.title_fr}</span>
+        </div>
+      )}
+      <div className="flex min-h-screen">
+      <div className={(selected ? "hidden lg:flex lg:w-64" : "w-full lg:w-64") + " bg-white border-r border-[#e8e8e8] flex flex-col flex-shrink-0"}>
         <div className="px-4 py-4 border-b border-[#e8e8e8]">
           <h1 className="font-sans text-[13px] font-medium tracking-[0.1em] uppercase">Pages légales</h1>
         </div>
