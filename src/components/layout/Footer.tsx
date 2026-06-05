@@ -1,64 +1,97 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
 
-interface FooterProps {
-  locale: 'fr' | 'en'
-}
+interface FooterProps { locale: 'fr' | 'en' }
 
-const MENU_LINKS = {
+const DEFAULT_LINKS = {
   fr: [
-    { label: 'Recherche',                     href: '/fr/search' },
+    { label: 'Recherche', href: '/fr/search' },
     { label: 'Conditions générales de vente', href: '/fr/pages/cgv' },
-    { label: 'Mentions légales',              href: '/fr/pages/mentions-legales' },
-    { label: 'Politique de confidentialité',  href: '/fr/pages/confidentialite' },
-    { label: 'Livraison & Retours',           href: '/fr/pages/livraison' },
-    { label: 'La Fondatrice',                 href: '/fr/pages/la-fondatrice' },
-    { label: 'Qui Sommes-Nous',               href: '/fr/pages/qui-sommes-nous' },
+    { label: 'Mentions légales', href: '/fr/pages/mentions-legales' },
+    { label: 'Politique de confidentialité', href: '/fr/pages/confidentialite' },
+    { label: 'Livraison & Retours', href: '/fr/pages/livraison' },
+    { label: 'La Fondatrice', href: '/fr/pages/la-fondatrice' },
+    { label: 'Qui Sommes-Nous', href: '/fr/pages/qui-sommes-nous' },
   ],
   en: [
-    { label: 'Search',                href: '/en/search' },
-    { label: 'Terms of Sale',         href: '/en/pages/cgv' },
-    { label: 'Legal Notice',          href: '/en/pages/mentions-legales' },
-    { label: 'Privacy Policy',        href: '/en/pages/confidentialite' },
-    { label: 'Shipping & Returns',    href: '/en/pages/livraison' },
-    { label: 'The Founder',           href: '/en/pages/la-fondatrice' },
-    { label: 'About Us',              href: '/en/pages/qui-sommes-nous' },
+    { label: 'Search', href: '/en/search' },
+    { label: 'Terms of Sale', href: '/en/pages/cgv' },
+    { label: 'Legal Notice', href: '/en/pages/mentions-legales' },
+    { label: 'Privacy Policy', href: '/en/pages/confidentialite' },
+    { label: 'Shipping & Returns', href: '/en/pages/livraison' },
+    { label: 'The Founder', href: '/en/pages/la-fondatrice' },
+    { label: 'About Us', href: '/en/pages/qui-sommes-nous' },
   ],
 }
 
 export default function Footer({ locale }: FooterProps) {
-  const links = MENU_LINKS[locale] ?? []
+  const [links, setLinks] = useState(DEFAULT_LINKS[locale])
+  const [email, setEmail] = useState('')
+  const [sent, setSent] = useState(false)
+
+  useEffect(() => {
+    supabase
+      .from('footer_links')
+      .select('*')
+      .eq('is_active', true)
+      .order('position')
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          setLinks(data.map(l => ({
+            label: locale === 'fr' ? l.label_fr : l.label_en,
+            href:  locale === 'fr' ? l.href_fr  : l.href_en,
+          })))
+        }
+      })
+  }, [locale])
+
+  const handleNewsletter = async () => {
+    if (!email) return
+    await fetch('/api/newsletter', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, locale }),
+    })
+    setSent(true)
+  }
 
   return (
     <footer className="bg-white px-6 pt-10 pb-8">
-
-      {/* Newsletter inline footer */}
       <div className="mb-10">
         <p className="font-sans text-[11px] font-medium tracking-[0.2em] uppercase text-black mb-2">
           NEWSLETTER
         </p>
-        <p className="font-sans text-[13px] font-light text-[#555] mb-4">
-          {locale === 'fr'
-            ? 'Sign up to our newsletter to receive exclusive offers.'
-            : 'Sign up to our newsletter to receive exclusive offers.'}
+        <p className="font-sans text-[11px] font-light text-[#888] mb-4">
+          {locale === 'fr' ? 'Inscrivez-vous pour recevoir nos offres exclusives.' : 'Sign up to receive exclusive offers.'}
         </p>
-        <div className="flex flex-col gap-0">
-          <input
-            type="email"
-            placeholder="E-mail"
-            className="px-4 py-3.5 border border-[#e0e0e0] bg-white text-[12px] font-light text-black placeholder:text-[#aaa] outline-none w-full"
-          />
-          <button className="bg-black text-white text-[10px] font-medium tracking-[0.2em] uppercase px-6 py-3.5 w-fit mt-0 cursor-pointer hover:opacity-85 transition-opacity border-none">
-            {locale === 'fr' ? 'S\'INSCRIRE' : 'SUBSCRIBE'}
-          </button>
-        </div>
+        {sent ? (
+          <p className="font-sans text-[11px] text-green-600">
+            {locale === 'fr' ? 'Merci !' : 'Thank you!'}
+          </p>
+        ) : (
+          <div className="flex gap-2">
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="Email"
+              className="flex-1 px-3 py-2.5 border border-[#e0e0e0] font-sans text-[12px] outline-none focus:border-black"
+            />
+            <button
+              onClick={handleNewsletter}
+              className="bg-black text-white font-sans text-[10px] tracking-[0.15em] uppercase px-4 py-2.5 border-none cursor-pointer hover:opacity-85"
+            >
+              {locale === 'fr' ? "S'INSCRIRE" : 'SUBSCRIBE'}
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Divider */}
-      <div className="h-px bg-[#e8e8e8] mb-8" />
-
-      {/* MENU */}
       <div className="mb-8">
-        <p className="font-sans text-[10px] font-medium tracking-[0.25em] uppercase text-black mb-4">
+        <p className="font-sans text-[11px] font-medium tracking-[0.2em] uppercase text-black mb-4">
           MENU
         </p>
         <ul className="flex flex-col gap-3.5">
@@ -66,7 +99,7 @@ export default function Footer({ locale }: FooterProps) {
             <li key={l.href}>
               <Link
                 href={l.href}
-                className="font-sans text-[13px] font-light text-[#555] no-underline hover:text-black transition-colors"
+                className="font-sans text-[12px] font-light text-[#555] hover:text-black no-underline transition-colors"
               >
                 {l.label}
               </Link>
@@ -75,54 +108,34 @@ export default function Footer({ locale }: FooterProps) {
         </ul>
       </div>
 
-      {/* JOIN US */}
-      <div className="mb-8">
-        <p className="font-sans text-[10px] font-medium tracking-[0.25em] uppercase text-black mb-4">
+      <div className="mb-6">
+        <p className="font-sans text-[11px] font-medium tracking-[0.2em] uppercase text-black mb-3">
           JOIN US :
         </p>
-        <ul className="flex flex-col gap-3">
-          <li className="font-sans text-[13px] font-light text-[#555]">
-            Instagram : @KBHAIR.PARIS
-          </li>
-          <li className="font-sans text-[13px] font-light text-[#555]">
-            WhatsApp : +33 X XX XX XX XX
-          </li>
-          <li className="font-sans text-[13px] font-light text-[#555]">
-            Email : contact@kbhair.fr
-          </li>
-        </ul>
+        <div className="flex flex-col gap-2">
+          <p className="font-sans text-[12px] font-light text-[#555]">Instagram : @KBHAIR PARIS</p>
+          <p className="font-sans text-[12px] font-light text-[#555]">WhatsApp : +33 X XX XX XX XX</p>
+          <p className="font-sans text-[12px] font-light text-[#555]">Email : contact@kbhair.fr</p>
+        </div>
       </div>
 
-      {/* Divider */}
-      <div className="h-px bg-[#e8e8e8] mb-6" />
-
-      {/* Locale */}
-      <div className="flex items-center gap-3 mb-4 flex-wrap">
-        <button className="flex items-center gap-1.5 font-sans text-[11px] tracking-[0.1em] uppercase text-black bg-transparent border-none cursor-pointer">
-          🇫🇷 {locale === 'fr' ? 'France (EUR €)' : 'France (EUR €)'} ∨
-        </button>
-        <span className="text-[#e0e0e0]">|</span>
-        <Link
-          href={locale === 'fr' ? '/en' : '/fr'}
-          className="font-sans text-[11px] tracking-[0.1em] uppercase text-black no-underline"
-        >
-          {locale === 'fr' ? 'FRANÇAIS' : 'ENGLISH'} ∨
-        </Link>
+      <div className="border-t border-[#e8e8e8] pt-6 flex items-center justify-between flex-wrap gap-3">
+        <div className="flex items-center gap-3">
+          <span className="text-lg">{locale === 'fr' ? '🇫🇷' : '🇬🇧'}</span>
+          <span className="font-sans text-[11px] font-light text-[#888] uppercase">
+            {locale === 'fr' ? 'FRANCE (EUR €)' : 'UNITED KINGDOM (EUR €)'}
+          </span>
+          <span className="font-sans text-[11px] font-light text-[#888] uppercase">
+            {locale === 'fr' ? 'FRANÇAIS' : 'ENGLISH'}
+          </span>
+        </div>
+        <p className="font-sans text-[10px] font-light text-[#aaa]">© 2025 · KB HAIR PARIS</p>
       </div>
 
-      {/* Copyright */}
-      <p className="font-sans text-[10px] font-light tracking-[0.08em] uppercase text-[#aaa] mb-5">
-        © 2025 - KB HAIR PARIS
-      </p>
-
-      {/* Logos paiement — comme BHP exact */}
-      <div className="flex flex-wrap gap-2 items-center">
-        {['AMEX', 'Apple Pay', 'CB', 'Mastercard', 'PayPal', 'Shop Pay', 'VISA'].map(pay => (
-          <span
-            key={pay}
-            className="inline-flex items-center justify-center h-[26px] px-2.5 bg-white border border-[#e0e0e0] rounded-[3px] text-[9px] font-medium tracking-wide text-[#444]"
-          >
-            {pay}
+      <div className="flex flex-wrap gap-2 mt-4">
+        {['AMEX', 'Apple Pay', 'CB', 'Mastercard', 'PayPal', 'Shop Pay', 'VISA'].map(p => (
+          <span key={p} className="font-sans text-[9px] tracking-[0.1em] uppercase px-2 py-1 border border-[#e0e0e0] text-[#888]">
+            {p}
           </span>
         ))}
       </div>
