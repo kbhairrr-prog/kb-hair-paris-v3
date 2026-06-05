@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Variables CSS ─────────────────────────────────── */
+:root {
+  --font-cormorant: 'Cormorant Garamond', Georgia, serif;
+  --font-jost: 'Jost', system-ui, sans-serif;
+  --font-dm-mono: 'DM Mono', monospace;
+
+  --color-black:     #0A0A0A;
+  --color-white:     #FFFFFF;
+  --color-off-white: #FAFAF8;
+  --color-cream:     #F5F3EF;
+  --color-gold:      #C9A84C;
+  --color-gold-light:#E8D5A3;
+  --color-gray-200:  #E5E5E5;
+  --color-gray-500:  #737373;
+  --color-gray-700:  #404040;
+
+  --header-height: 72px;
+  --banner-height: 40px;
+}
+
+/* ─── Base ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-jost);
+  font-size: 15px;
+  color: var(--color-black);
+  background: var(--color-white);
+  line-height: 1.6;
+}
+
+/* ─── Typographie ───────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-jost);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.font-editorial {
+  font-family: var(--font-cormorant);
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* ─── Boutons ───────────────────────────────────────── */
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-3.5 
+           bg-kb-black text-kb-white text-label-md font-body font-medium
+           tracking-widest uppercase transition-all duration-300
+           hover:bg-kb-gold hover:text-kb-black
+           focus:outline-none focus:ring-2 focus:ring-kb-gold focus:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-8 py-3.5 
+           border border-kb-black text-kb-black text-label-md font-body font-medium
+           tracking-widest uppercase transition-all duration-300
+           hover:bg-kb-black hover:text-kb-white
+           focus:outline-none focus:ring-2 focus:ring-kb-black focus:ring-offset-2;
+  }
+
+  .btn-gold {
+    @apply inline-flex items-center justify-center px-8 py-3.5 
+           bg-kb-gold text-kb-black text-label-md font-body font-medium
+           tracking-widest uppercase transition-all duration-300
+           hover:bg-kb-gold-dark hover:text-kb-white
+           focus:outline-none focus:ring-2 focus:ring-kb-gold focus:ring-offset-2;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center px-8 py-3.5 
+           text-kb-black text-label-md font-body font-medium
+           tracking-widest uppercase transition-all duration-300
+           hover:text-kb-gold underline-offset-4 hover:underline;
+  }
+
+  /* ─── Input ─── */
+  .input-kb {
+    @apply w-full px-4 py-3 border border-kb-gray-200 bg-kb-white
+           text-kb-black text-sm font-body placeholder:text-kb-gray-500
+           transition-all duration-200
+           focus:outline-none focus:border-kb-black focus:ring-0;
+  }
+
+  /* ─── Badge ─── */
+  .badge-new {
+    @apply inline-block px-2 py-0.5 bg-kb-black text-kb-white 
+           text-label-sm font-body font-medium tracking-widest uppercase;
+  }
+
+  .badge-sale {
+    @apply inline-block px-2 py-0.5 bg-kb-gold text-kb-black 
+           text-label-sm font-body font-medium tracking-widest uppercase;
+  }
+
+  .badge-bestseller {
+    @apply inline-block px-2 py-0.5 border border-kb-black text-kb-black 
+           text-label-sm font-body font-medium tracking-widest uppercase;
+  }
+
+  /* ─── Section title ─── */
+  .section-title {
+    @apply text-display-md font-body font-light tracking-[0.12em] uppercase text-kb-black;
+  }
+
+  .section-subtitle {
+    @apply text-sm font-body font-light tracking-[0.15em] uppercase text-kb-gray-500 mt-2;
+  }
+
+  /* ─── Gold accent ─── */
+  .gold-line {
+    @apply w-12 h-px bg-kb-gold mx-auto;
+  }
+
+  .gold-line-left {
+    @apply w-12 h-px bg-kb-gold;
+  }
+
+  /* ─── Container ─── */
+  .container-kb {
+    @apply w-full max-w-site mx-auto px-5 md:px-10 lg:px-16;
+  }
+}
+
+/* ─── Scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-off-white); }
+::-webkit-scrollbar-thumb { background: var(--color-gray-200); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-gray-500); }
+
+/* ─── Selection ─────────────────────────────────────── */
+::selection {
+  background: var(--color-gold-light);
+  color: var(--color-black);
+}
+
+/* ─── Animations ────────────────────────────────────── */
+.animate-fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fade-up 0.7s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+
+@keyframes fade-up {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Product card hover ────────────────────────────── */
+.product-card-img {
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.product-card:hover .product-card-img {
+  transform: scale(1.04);
+}
+
+/* ─── Gold shimmer ──────────────────────────────────── */
+.gold-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201,168,76,0.3) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: gold-shimmer 2s linear infinite;
+}
+
+@keyframes gold-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ─── Announcement bar ──────────────────────────────── */
+.announcement-bar {
+  background: var(--color-black);
+  color: var(--color-gold);
+  height: var(--banner-height);
+  font-family: var(--font-jost);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* ─── Drawer overlay ────────────────────────────────── */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(2px);
+  z-index: 40;
+}
+
+/* ─── Image hover effect ────────────────────────────── */
+.img-hover-zoom {
+  overflow: hidden;
+}
+.img-hover-zoom img {
+  transition: transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.img-hover-zoom:hover img {
+  transform: scale(1.06);
+}
+
+/* ─── Scrollbar masquée ─────────────────────────────── */
+.scrollbar-hidden::-webkit-scrollbar { display: none; }
+.scrollbar-hidden { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ─── Ticker animation ──────────────────────────────── */
+@keyframes kb-ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ─── Quick Add Modal ───────────────────────────────── */
+@keyframes kb-slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+.animate-slide-up {
+  animation: kb-slide-up 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+@media (min-width: 1024px) {
+  .animate-slide-up { animation: none; }
+}
