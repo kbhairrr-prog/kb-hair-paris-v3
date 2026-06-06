@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect} from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronDown, ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { supabase } from '@/lib/supabase'
 import { useCartStore } from '@/store/cart'
 import { useWishlistStore } from '@/store/wishlist'
 import WishlistButton from '@/components/ui/WishlistButton'
@@ -19,6 +20,20 @@ interface ProductPageClientProps {
 
 export default function ProductPageClient({ product, related, locale }: ProductPageClientProps) {
   const [activeImg,     setActiveImg]     = useState(0)
+  const [freeThreshold, setFreeThreshold] = useState(230)
+  const [delayFr, setDelayFr] = useState('3 à 5 jours ouvrés')
+  const [delayEn, setDelayEn] = useState('3 to 5 business days')
+
+  useEffect(() => {
+    supabase.from('site_settings').select('*').eq('key', 'shipping').single()
+      .then(({ data }) => {
+        if (data?.value) {
+          setFreeThreshold(data.value.free_threshold ?? 230)
+          setDelayFr(data.value.delay_fr ?? '3 à 5 jours ouvrés')
+          setDelayEn(data.value.delay_en ?? '3 to 5 business days')
+        }
+      })
+  }, [])
   const [lightbox,      setLightbox]      = useState(false)
   const [selectedOpts,  setSelectedOpts]  = useState<Record<string, string>>({})
   const [qty,           setQty]           = useState(1)
@@ -321,8 +336,8 @@ export default function ProductPageClient({ product, related, locale }: ProductP
           {/* Livraison */}
           <p className="font-sans text-[11px] font-light text-[#888] text-center mt-3 tracking-[0.06em]">
             {locale === 'fr'
-              ? '✈ Livraison gratuite dès 230€ · 3 à 5 jours ouvrés'
-              : '✈ Free shipping from €230 · 3 to 5 business days'}
+              ? `✈ Livraison gratuite dès ${freeThreshold}€ · ${delayFr}`
+              : `✈ Free shipping from €${freeThreshold} · ${delayEn}`}
           </p>
 
           {/* Description */}
