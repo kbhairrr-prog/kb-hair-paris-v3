@@ -100,6 +100,10 @@ export default function AdminSettings() {
                   <label className={labelCls}>Seuil livraison gratuite (€)</label>
                   <input type="number" value={data.shipping?.free_threshold ?? 230} onChange={e => updateField('shipping', 'free_threshold', parseFloat(e.target.value))} className={inputCls} />
                 </div>
+                <div className="flex flex-col gap-1">
+                  <label className={labelCls}>Prix de livraison (€)</label>
+                  <input type="number" value={data.shipping?.shipping_cost ?? 25} onChange={e => updateField('shipping', 'shipping_cost', parseFloat(e.target.value))} className={inputCls} />
+                </div>
                 <div>
                   <label className={labelCls}>Délai FR</label>
                   <input value={data.shipping?.delay_fr ?? '3 à 5 jours ouvrés'} onChange={e => updateField('shipping', 'delay_fr', e.target.value)} className={inputCls} />

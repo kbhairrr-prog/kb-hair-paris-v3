@@ -106,11 +106,11 @@ export const useCartStore = create<CartState>()(
         return 0
       },
 
-      getShipping: () => {
+      getShipping: (shippingCost = 25, freeThreshold = 230) => {
         const subtotal = get().getSubtotal() - get().getDiscount()
         const promo = get().promoApplied
         if (promo?.type === 'free_shipping') return 0
-        return subtotal >= 230 ? 0 : 6.90
+        return subtotal >= freeThreshold ? 0 : shippingCost
       },
 
       getTotal: () =>

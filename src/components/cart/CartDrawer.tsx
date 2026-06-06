@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { X, Minus, Plus, ShoppingBag } from 'lucide-react'
+import { supabase } from '@/lib/supabase'
 import { useCartStore } from '@/store/cart'
 
 interface CartDrawerProps {
@@ -18,6 +19,18 @@ export default function CartDrawer({ locale }: CartDrawerProps) {
   const updateQty   = useCartStore(s => s.updateQuantity)
   const subtotal    = useCartStore(s => s.getSubtotal())
   const shipping    = useCartStore(s => s.getShipping())
+  const [shippingCost, setShippingCost] = useState(25)
+  const [freeThreshold, setFreeThreshold] = useState(230)
+
+  useEffect(() => {
+    supabase.from('site_settings').select('*').eq('key', 'shipping').single()
+      .then(({ data }) => {
+        if (data?.value) {
+          setShippingCost(data.value.shipping_cost ?? 25)
+          setFreeThreshold(data.value.free_threshold ?? 230)
+        }
+      })
+  }, [])
   const total       = useCartStore(s => s.getTotal())
   const itemCount   = useCartStore(s => s.getItemCount())
 
