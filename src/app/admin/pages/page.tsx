@@ -44,6 +44,10 @@ export default function AdminPages() {
   const handleSave = async () => {
     if (!selected) return
     setSaving(true)
+    if (selected.isNew) {
+      const { isNew, ...data } = selected
+      await supabase.from('pages').insert({ ...data, is_active: true })
+    } else {
     await supabase.from('pages').update({
       title_fr:    selected.title_fr,
       title_en:    selected.title_en,
@@ -57,6 +61,9 @@ export default function AdminPages() {
       updated_at:  new Date().toISOString(),
     }).eq('id', selected.id)
     setPages(ps => ps.map(p => p.id === selected.id ? selected : p))
+    }
+    const { data } = await supabase.from('pages').select('*').order('slug')
+    setPages(data ?? [])
     setSaving(false); setSaved(true)
     setTimeout(() => setSaved(false), 2000)
   }
@@ -79,6 +86,12 @@ export default function AdminPages() {
       <div className={(selected ? "hidden lg:flex lg:w-64" : "w-full lg:w-64") + " bg-white border-r border-[#e8e8e8] flex flex-col flex-shrink-0"}>
         <div className="px-4 py-4 border-b border-[#e8e8e8]">
           <h1 className="font-sans text-[13px] font-medium tracking-[0.1em] uppercase">Pages légales</h1>
+          <button onClick={() => {
+            setSelected({ slug: '', title_fr: '', title_en: '', content_fr: '', content_en: '', seo_title_fr: '', seo_title_en: '', seo_desc_fr: '', seo_desc_en: '', is_active: true, isNew: true })
+            setLang('fr')
+          }} className="flex items-center gap-1 mt-2 px-3 py-1.5 bg-black text-white font-sans text-[9px] tracking-[0.15em] uppercase border-none cursor-pointer hover:opacity-85">
+            <Plus size={11}/> Nouvelle page
+          </button>
         </div>
         <div className="flex-1 overflow-y-auto">
           {loading ? (
