@@ -9,3 +9,5 @@ export { OurWigs }            from './OurWigs'
 export { RawHairSection }     from './RawHairSection'
 export { NewsletterDark }     from './NewsletterDark'
 export { AvantagesCarousel }  from './AvantagesCarousel'
+
+export { GridCollections } from './GridCollections'

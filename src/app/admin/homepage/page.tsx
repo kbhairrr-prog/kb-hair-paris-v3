@@ -13,6 +13,8 @@ const SECTION_TYPES = [
   { type: 'text',         label: 'Bloc texte' },
   { type: 'testimonials', label: 'Avis clients' },
   { type: 'newsletter',   label: 'Newsletter' },
+  { type: 'luxe',         label: 'Luxe Experience' },
+  { type: 'raw_hair',     label: 'Raw Hair Section' },
 ]
 
 export default function AdminHomepage() {

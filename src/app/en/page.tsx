@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { supabase } from '@/lib/supabase'
 import HeroSection      from '@/components/home/HeroSection'
 import Ticker           from '@/components/ui/Ticker'
@@ -55,10 +57,10 @@ export default async function HomeEN() {
         locale="en"
         imageUrl={hero?.image_url}
         videoUrl={hero?.video_url}
-        title="GET THE BEST"
-        subtitle="RAW HAIR"
-        ctaLabel="SHOP NOW"
-        ctaUrl="/en/collections/wigs"
+        title={hero?.title_en ?? 'GET THE BEST'}
+        subtitle={hero?.subtitle_en ?? 'RAW HAIR'}
+        ctaLabel={hero?.cta_en ?? 'SHOP NOW'}
+        ctaUrl={hero?.cta_url ?? '/en/collections/wigs'}
       />
       <Ticker text="RAW HAIR ONLY" />
       <LuxeSection locale="en" />
