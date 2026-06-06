@@ -331,9 +331,7 @@ export default function ProductPageClient({ product, related, locale }: ProductP
               <p className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase text-black mb-3">
                 {locale === 'fr' ? 'DESCRIPTION' : 'DESCRIPTION'}
               </p>
-              <p className="font-sans text-[13px] font-light text-[#555] leading-relaxed">
-                {desc}
-              </p>
+              <div className="font-sans text-[13px] font-light text-[#555] leading-relaxed" dangerouslySetInnerHTML={{ __html: desc ?? '' }} />
             </div>
           )}
 

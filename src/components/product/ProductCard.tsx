@@ -18,8 +18,9 @@ export default function ProductCard({ product, locale, priority = false }: Produ
   const addItem = useCartStore(s => s.addItem)
 
   const name = locale === 'fr' ? product.name_fr : product.name_en
-  const primaryImg = product.images?.find(i => i.is_primary) ?? product.images?.[0]
-  const secondaryImg = product.images?.[1]
+  const imgs = product.images ?? []
+  const primaryImg = imgs.find(i => i.is_primary) ?? imgs[0]
+  const secondaryImg = imgs[1]
 
   const handlePlus = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -104,7 +105,7 @@ export default function ProductCard({ product, locale, priority = false }: Produ
           {name}
         </p>
         <p className="text-[11px] font-light tracking-[0.08em] uppercase text-[#888]">
-          {locale === 'fr' ? 'A PARTIR DE' : 'FROM'} €{product.price.toFixed(2).replace('.', ',')}
+          {locale === 'fr' ? 'A PARTIR DE' : 'FROM'} €{(product.price ?? 0).toFixed(2).replace('.', ',')}
         </p>
         {/* Rating si dispo */}
         {product.rating_count > 0 && (

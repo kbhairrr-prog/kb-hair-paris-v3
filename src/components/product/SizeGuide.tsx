@@ -55,7 +55,7 @@ const GUIDE_DATA = {
 
 export default function SizeGuide({ locale, type = 'general' }: SizeGuideProps) {
   const [open, setOpen] = useState(false)
-  const data = GUIDE_DATA[locale]
+  const data = GUIDE_DATA[locale] ?? GUIDE_DATA['fr']
 
   return (
     <>

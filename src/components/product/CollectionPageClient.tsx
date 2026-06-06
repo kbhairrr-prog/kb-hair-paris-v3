@@ -41,13 +41,13 @@ export default function CollectionPageClient({
 
   useEffect(() => {
     const copy = [...products]
-    if (sortBy === 'price_asc')  copy.sort((a, b) => a.price - b.price)
-    if (sortBy === 'price_desc') copy.sort((a, b) => b.price - a.price)
-    if (sortBy === 'popular')    copy.sort((a, b) => b.total_sold - a.total_sold)
+    if (sortBy === 'price_asc')  copy.sort((a, b) => (a.price ?? 0) - (b.price ?? 0))
+    if (sortBy === 'price_desc') copy.sort((a, b) => (b.price ?? 0) - (a.price ?? 0))
+    if (sortBy === 'popular')    copy.sort((a, b) => (b.total_sold ?? 0) - (a.total_sold ?? 0))
     setSorted(copy)
   }, [sortBy, products])
 
-  const sortOpts = SORT_OPTIONS[locale]
+  const sortOpts = SORT_OPTIONS[locale] ?? SORT_OPTIONS['fr']
 
   return (
     <div className="min-h-screen bg-white pt-[68px]">
@@ -160,7 +160,7 @@ export default function CollectionPageClient({
                       NEW
                     </span>
                   )}
-                  {product.compare_price && product.compare_price > product.price && (
+                  {product.compare_price && (product.compare_price ?? 0) > (product.price ?? 0) && (
                     <span className="absolute top-2 left-2 bg-black text-white text-[8px] tracking-widest uppercase px-1.5 py-0.5">
                       SALE
                     </span>
@@ -174,9 +174,9 @@ export default function CollectionPageClient({
                   </p>
                   <div className="flex items-center gap-2">
                     <p className="font-sans text-[11px] font-light tracking-[0.06em] uppercase text-[#888]">
-                      {locale === 'fr' ? 'A PARTIR DE' : 'FROM'} €{product.price.toFixed(2).replace('.', ',')}
+                      {locale === 'fr' ? 'A PARTIR DE' : 'FROM'} €{(product.price ?? 0).toFixed(2).replace('.', ',')}
                     </p>
-                    {product.compare_price && product.compare_price > product.price && (
+                    {product.compare_price && (product.compare_price ?? 0) > (product.price ?? 0) && (
                       <p className="font-sans text-[10px] line-through text-[#bbb]">
                         €{product.compare_price.toFixed(2).replace('.', ',')}
                       </p>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Eye, EyeOff, Edit2, Save, X, Plus, GripVertical } from 'lucide-react'
+import { Eye, EyeOff, Edit2, Save, X, Plus } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
 const SECTION_TYPES = [
@@ -21,6 +21,8 @@ export default function AdminHomepage() {
   const [editing,  setEditing]  = useState<string | null>(null)
   const [editData, setEditData] = useState<any>({})
   const [saving,   setSaving]   = useState(false)
+  const [uploadingKey, setUploadingKey] = useState<string | null>(null)
+  const [saveOk, setSaveOk] = useState(false)
 
   useEffect(() => {
     supabase.from('homepage_sections').select('*').order('position')
@@ -34,16 +36,47 @@ export default function AdminHomepage() {
 
   const startEdit = (section: any) => {
     setEditing(section.id)
-    setEditData(section.content)
+    setEditData(section.content ?? {})
+    setSaveOk(false)
   }
 
-  const saveEdit = async () => {
+  const saveEdit = async (dataToSave?: any) => {
     if (!editing) return
     setSaving(true)
-    await supabase.from('homepage_sections').update({ content: editData, updated_at: new Date().toISOString() }).eq('id', editing)
-    setSections(ss => ss.map(s => s.id === editing ? { ...s, content: editData } : s))
-    setEditing(null)
+    const payload = dataToSave ?? editData
+    const { error } = await supabase
+      .from('homepage_sections')
+      .update({ content: payload })
+      .eq('id', editing)
+    if (!error) {
+      setSections(ss => ss.map(s => s.id === editing ? { ...s, content: payload } : s))
+      setSaveOk(true)
+      setTimeout(() => setSaveOk(false), 3000)
+    } else {
+      alert('Erreur sauvegarde: ' + error.message)
+    }
     setSaving(false)
+  }
+
+  const handleUpload = async (key: string, file: File) => {
+    if (key === 'video_url' && file.size > 50 * 1024 * 1024) {
+      alert('Max 50Mo pour les vidéos')
+      return
+    }
+    setUploadingKey(key)
+    const ext  = file.name.split('.').pop()
+    const path = `homepage/${key}-${Date.now()}.${ext}`
+    const { error } = await supabase.storage.from('products').upload(path, file, { upsert: true })
+    if (error) {
+      alert('Erreur upload: ' + error.message)
+      setUploadingKey(null)
+      return
+    }
+    const { data } = supabase.storage.from('products').getPublicUrl(path)
+    const updated = { ...editData, [key]: data.publicUrl }
+    setEditData(updated)
+    setUploadingKey(null)
+    await saveEdit(updated)
   }
 
   const moveSection = async (id: string, dir: 'up' | 'down') => {
@@ -53,7 +86,6 @@ export default function AdminHomepage() {
     const next = [...sections]
     const swapIdx = dir === 'up' ? idx - 1 : idx + 1
     ;[next[idx], next[swapIdx]] = [next[swapIdx], next[idx]]
-    // Mettre à jour positions
     const updates = next.map((s, i) => supabase.from('homepage_sections').update({ position: i }).eq('id', s.id))
     await Promise.all(updates)
     setSections(next.map((s, i) => ({ ...s, position: i })))
@@ -62,10 +94,10 @@ export default function AdminHomepage() {
   const addSection = async (type: string) => {
     const position = sections.length
     const defaultContent: Record<string, any> = {
-      hero:    { title_fr: 'Nouveau hero', title_en: 'New hero', cta_url: '/fr/collections', image_url: '' },
-      banner:  { text_fr: 'Votre texte ici', text_en: 'Your text here', bg_color: '#1a1a1a', text_color: '#ffffff' },
-      video:   { video_url: '', caption_fr: '', caption_en: '' },
-      text:    { title_fr: '', title_en: '', content_fr: '', content_en: '' },
+      hero:   { title_fr: 'Nouveau hero', title_en: 'New hero', subtitle_fr: '', subtitle_en: '', cta_fr: 'Découvrir', cta_en: 'Shop Now', cta_url: '/fr/collections', image_url: '', video_url: '', overlay_opacity: 0.3 },
+      banner: { text_fr: 'Votre texte ici', text_en: 'Your text here', bg_color: '#1a1a1a', text_color: '#ffffff' },
+      video:  { video_url: '', caption_fr: '', caption_en: '' },
+      text:   { title_fr: '', title_en: '', content_fr: '', content_en: '' },
     }
     const { data } = await supabase.from('homepage_sections').insert({
       type, position, is_active: false,
@@ -92,8 +124,6 @@ export default function AdminHomepage() {
       </div>
 
       <div className="max-w-3xl mx-auto px-4 py-6 flex flex-col gap-3">
-
-        {/* Ajouter section */}
         <div className="bg-white border border-[#e8e8e8] px-4 py-4">
           <p className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase text-[#888] mb-3">Ajouter une section</p>
           <div className="flex flex-wrap gap-2">
@@ -106,7 +136,6 @@ export default function AdminHomepage() {
           </div>
         </div>
 
-        {/* Liste sections */}
         {loading ? (
           <p className="text-center font-sans text-[12px] text-[#aaa] py-8">Chargement...</p>
         ) : sections.map((section, idx) => (
@@ -131,11 +160,10 @@ export default function AdminHomepage() {
                   {section.is_active ? 'Visible' : 'Masquée'}
                 </button>
                 <button onClick={() => startEdit(section)} className="text-[#888] hover:text-black bg-transparent border-0 cursor-pointer"><Edit2 size={14}/></button>
-                <button onClick={() => deleteSection(section.id)} className="text-[#888] hover:text-red-600 bg-transparent border-0 cursor-pointer">×</button>
+                <button onClick={() => deleteSection(section.id)} className="text-[#888] hover:text-red-600 bg-transparent border-0 cursor-pointer text-lg leading-none">×</button>
               </div>
             </div>
 
-            {/* Éditeur inline */}
             {editing === section.id && (
               <div className="px-4 py-4">
                 <div className="flex flex-col gap-3">
@@ -143,24 +171,25 @@ export default function AdminHomepage() {
                     <div key={key}>
                       <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-[#888] mb-1 block">{key}</label>
                       {(key === 'image_url' || key === 'video_url') ? (
-                        <div className="flex gap-2">
-                          <input value={value as string}
-                            onChange={e => setEditData((d: any) => ({ ...d, [key]: e.target.value }))}
-                            placeholder="https://..." className={inputCls + ' flex-1'} />
-                          <label className="flex-shrink-0 flex items-center gap-1 px-3 border border-[#e0e0e0] font-sans text-[10px] uppercase cursor-pointer hover:border-black">
-                            {key === 'video_url' ? '↑ MP4' : '↑ Photo'}
-                            <input type="file" accept={key === 'video_url' ? 'video/*' : 'image/*'} className="hidden"
-                              onChange={async (e) => {
-                                const file = e.target.files?.[0]; if (!file) return
-                                if (key === 'video_url' && file.size > 50 * 1024 * 1024) { alert('Max 50Mo'); return }
-                                const { supabase: sb } = await import('@/lib/supabase')
-                                const path = 'homepage/' + key + '-' + Date.now() + '.' + file.name.split('.').pop()
-                                const { error } = await sb.storage.from('products').upload(path, file, { upsert: true })
-                                if (error) { alert('Erreur: ' + error.message); return }
-                                const { data } = sb.storage.from('products').getPublicUrl(path)
-                                setEditData((d: any) => ({ ...d, [key]: data.publicUrl }))
-                              }} />
-                          </label>
+                        <div className="flex flex-col gap-2">
+                          {key === 'image_url' && (value as string) && (
+                            <img src={value as string} alt="aperçu" className="w-full max-h-[200px] object-cover rounded border border-[#e0e0e0]" />
+                          )}
+                          <div className="flex gap-2">
+                            <input value={value as string}
+                              onChange={e => setEditData((d: any) => ({ ...d, [key]: e.target.value }))}
+                              placeholder="https://..." className={inputCls + ' flex-1'} />
+                            <label className={`flex-shrink-0 flex items-center gap-1 px-3 border font-sans text-[10px] uppercase cursor-pointer transition-colors ${uploadingKey === key ? 'border-black bg-black text-white' : 'border-[#e0e0e0] hover:border-black'}`}>
+                              {uploadingKey === key ? '⏳...' : key === 'video_url' ? '↑ MP4' : '↑ Photo'}
+                              <input type="file" accept={key === 'video_url' ? 'video/*' : 'image/*'} className="hidden"
+                                disabled={uploadingKey !== null}
+                                onChange={async (e) => {
+                                  const file = e.target.files?.[0]
+                                  if (!file) return
+                                  await handleUpload(key, file)
+                                }} />
+                            </label>
+                          </div>
                         </div>
                       ) : typeof value === 'string' && value.length > 60 ? (
                         <textarea value={value as string} rows={3}
@@ -177,15 +206,17 @@ export default function AdminHomepage() {
                     </div>
                   ))}
                 </div>
-                <div className="flex gap-2 mt-4">
-                  <button onClick={saveEdit} disabled={saving}
-                    className="flex items-center gap-1.5 bg-black text-white font-sans text-[10px] tracking-[0.15em] uppercase px-4 py-2.5 border-none cursor-pointer hover:opacity-85">
+                <div className="flex gap-2 mt-4 items-center">
+                  <button onClick={() => saveEdit()} disabled={saving || uploadingKey !== null}
+                    className="flex items-center gap-1.5 bg-black text-white font-sans text-[10px] tracking-[0.15em] uppercase px-4 py-2.5 border-none cursor-pointer hover:opacity-85 disabled:opacity-40">
                     <Save size={13}/> {saving ? 'Sauvegarde...' : 'Sauvegarder'}
                   </button>
                   <button onClick={() => setEditing(null)}
                     className="flex items-center gap-1.5 font-sans text-[10px] tracking-[0.15em] uppercase px-4 py-2.5 border border-[#e0e0e0] bg-white cursor-pointer hover:border-black">
                     <X size={13}/> Annuler
                   </button>
+                  {saveOk && <span className="font-sans text-[11px] text-green-600">✓ Sauvegardé !</span>}
+                  {uploadingKey && <span className="font-sans text-[11px] text-[#888]">⏳ Upload en cours...</span>}
                 </div>
               </div>
             )}
