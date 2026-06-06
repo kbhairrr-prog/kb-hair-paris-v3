@@ -22,7 +22,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function CollectionPage({ params }: Props) {
-  const { locale, slug } = params
+  const locale = 'en'
+  const { slug } = params
 
   const { data: category } = await supabase
     .from('categories')

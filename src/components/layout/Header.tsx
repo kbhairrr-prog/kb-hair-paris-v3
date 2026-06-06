@@ -67,16 +67,19 @@ export default function Header({ locale }: HeaderProps) {
         .order('position')
       if (items && items.length > 0) {
         const roots = items.filter((i: any) => !i.parent_id)
-        setDynamicNav(roots.map((r: any) => ({
-          label: locale === 'fr' ? r.label_fr : r.label_en,
-          href:  r.url,
-          children: items
+        setDynamicNav(roots.map((r: any) => {
+          const children = items
             .filter((i: any) => i.parent_id === r.id)
             .map((c: any) => ({
               label: locale === 'fr' ? c.label_fr : c.label_en,
               href:  c.url,
             }))
-        })))
+          return {
+            label: locale === 'fr' ? r.label_fr : r.label_en,
+            href:  r.url,
+            children: children.length > 0 ? children : undefined,
+          }
+        }))
       }
     }
     loadMenu()
