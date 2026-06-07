@@ -59,9 +59,6 @@ export default async function HomeFR() {
         ctaLabel={hero?.cta_fr ?? 'SHOP NOW'}
         ctaUrl={hero?.cta_url ?? '/fr/collections/wigs'}
       />
-      <div className="relative flex justify-center" style={{height:0, zIndex:30}}>
-        <button onClick={() => { const el = document.querySelector('[data-section="luxe"]'); if(el) el.scrollIntoView({behavior:'smooth'}) }} className="absolute -top-6 w-12 h-12 rounded-full bg-white flex items-center justify-center border-none cursor-pointer" style={{boxShadow:"0 0 0 4px rgba(255,255,255,0.3), 0 4px 20px rgba(0,0,0,0.4)"}}><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="#0A0A0A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
-      </div>
       <LuxeSection locale="fr" />
       <DecouvrezSection bundles={bundles} wigs={wigs} locale="fr" />
       <CollectionBanner locale="fr" label="NOS WIGS" href="/fr/collections/wigs" />
