@@ -56,6 +56,31 @@ export default function AdminCollections() {
     setCats(cs => cs.filter(c => c.id !== id))
   }
 
+  const [generatingCol, setGeneratingCol] = useState(false)
+
+  const generateColWithAI = async () => {
+    if (!editing?.image_url) { alert('Uploadez une image de collection en premier'); return }
+    setGeneratingCol(true)
+    try {
+      const res = await fetch('/api/ai/generate-collection', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageUrl: editing.image_url }),
+      })
+      const data = await res.json()
+      if (data.error) { alert('Erreur IA: ' + data.error); return }
+      setEditing((e: any) => ({
+        ...e,
+        name_fr: data.name_fr || e.name_fr,
+        name_en: data.name_en || e.name_en,
+        description_fr: data.description_fr || e.description_fr,
+        description_en: data.description_en || e.description_en,
+        slug: data.slug || e.slug,
+      }))
+    } catch { alert('Erreur generation') }
+    finally { setGeneratingCol(false) }
+  }
+
   const upd = (field: string, val: any) => setEditing((e: any) => ({ ...e, [field]: val }))
   const inputCls = "w-full px-3 py-2.5 border border-[#e0e0e0] bg-white font-sans text-[12px] outline-none focus:border-black"
   const labelCls = "font-sans text-[10px] tracking-[0.15em] uppercase text-[#888] mb-1 block"
@@ -92,9 +117,21 @@ export default function AdminCollections() {
 
         {editing && (
           <div className="bg-white border border-[#e8e8e8] px-5 py-5">
-            <p className="font-sans text-[11px] font-semibold tracking-[0.15em] uppercase text-black mb-4">
-              {isNew ? "Nouvelle collection" : "Modifier"}
-            </p>
+            <div className="flex items-center justify-between mb-4">
+              <p className="font-sans text-[11px] font-semibold tracking-[0.15em] uppercase text-black">
+                {isNew ? "Nouvelle collection" : "Modifier"}
+              </p>
+              <button
+                type="button"
+                onClick={generateColWithAI}
+                disabled={generatingCol || !editing?.image_url}
+                className="flex items-center gap-1.5 font-sans text-[10px] tracking-[0.1em] uppercase px-3 py-1.5 border-none cursor-pointer disabled:opacity-40 hover:opacity-80"
+                style={{backgroundColor:'#C9A84C', color:'white'}}
+                title={!editing?.image_url ? 'Uploadez une image dabord' : 'Generer avec IA'}
+              >
+                {generatingCol ? 'Generation...' : 'IA Collection'}
+              </button>
+            </div>
             <div className="flex flex-col gap-3">
               <div className="grid grid-cols-2 gap-2">
                 <div><label className={labelCls}>Nom FR *</label><input value={editing.name_fr} onChange={e => upd("name_fr", e.target.value)} className={inputCls}/></div>
