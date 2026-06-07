@@ -181,10 +181,6 @@ export default function AdminSettings() {
                 </button>
               </div>
             )}
-          </div>
-        )}
-
-            {/* ── PROMO BANNER ── */}
             {tab === 'promo' && (
               <div className="flex flex-col gap-4">
                 <p className="font-sans text-[11px] font-semibold tracking-[0.15em] uppercase text-black">Bande Promo Homepage</p>
