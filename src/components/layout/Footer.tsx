@@ -78,9 +78,13 @@ export default function Footer({ locale }: { locale: 'fr' | 'en' }) {
       <div className="border-t pt-6 mb-6" style={{borderColor:'rgba(255,255,255,0.1)'}}>
         <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-center mb-4" style={{color:'rgba(255,255,255,0.3)'}}>SECURE PAYMENT</p>
         <div className="flex flex-wrap gap-2 justify-center">
-          {['VISA','Mastercard','AMEX','Apple Pay','GPay','Stripe'].map(p => (
-            <span key={p} className="font-sans text-[9px] tracking-[0.1em] uppercase px-2 py-1 border" style={{borderColor:'rgba(255,255,255,0.15)',color:'rgba(255,255,255,0.4)'}}>{p}</span>
-          ))}
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" style={{height:'18px',filter:'brightness(0) invert(1)',opacity:0.7}} />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" style={{height:'22px',opacity:0.7}} />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" alt="Amex" style={{height:'18px',filter:'brightness(0) invert(1)',opacity:0.7}} />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="Apple Pay" style={{height:'18px',filter:'brightness(0) invert(1)',opacity:0.7}} />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg" alt="GPay" style={{height:'18px',opacity:0.7}} />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" alt="Stripe" style={{height:'18px',filter:'brightness(0) invert(1)',opacity:0.7}} />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" style={{height:'18px',opacity:0.7}} />
         </div>
       </div>
 
