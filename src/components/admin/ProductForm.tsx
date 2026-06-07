@@ -408,11 +408,33 @@ export default function ProductForm({ productId }: ProductFormProps) {
           ) : (
             <div className="flex flex-col gap-3">
               {variants.map((v, i) => (
-                <div key={i} className="border border-[#e8e8e8] p-3">
-                  <div className="grid grid-cols-3 gap-2 mb-2">
-                    <input value={v.sku ?? ''} onChange={e => updateVariant(i, 'sku', e.target.value)} placeholder="SKU variante" className={inputCls} />
-                    <input type="number" step="0.01" value={v.price ?? ''} onChange={e => updateVariant(i, 'price', e.target.value)} placeholder="Prix spécifique" className={inputCls} />
-                    <input type="number" value={v.stock ?? 0} onChange={e => updateVariant(i, 'stock', parseInt(e.target.value))} placeholder="Stock" className={inputCls} />
+                <div key={i} className="border border-[#e8e8e8] p-4">
+                  <div className="grid grid-cols-2 gap-2 mb-3">
+                    {variantTypes.map(vt => (
+                      <div key={vt.id}>
+                        <label className={labelCls}>{vt.name_fr}</label>
+                        <input
+                          value={v.selectedOptions?.[vt.id] ?? ''}
+                          onChange={e => updateVariant(i, 'selectedOptions', { ...v.selectedOptions, [vt.id]: e.target.value })}
+                          placeholder={vt.name_fr === 'Longueur' ? 'ex: 16 pouces' : vt.name_fr === 'Texture' ? 'ex: Straight' : vt.name_fr === 'Couleur' ? 'ex: Naturel' : vt.name_fr === 'Densité' ? 'ex: 150%' : 'ex: 13x4'}
+                          className={inputCls}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 mb-3">
+                    <div>
+                      <label className={labelCls}>Prix (€)</label>
+                      <input type="number" step="0.01" value={v.price ?? ''} onChange={e => updateVariant(i, 'price', e.target.value)} placeholder="0.00" className={inputCls} />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Stock</label>
+                      <input type="number" value={v.stock ?? 0} onChange={e => updateVariant(i, 'stock', parseInt(e.target.value))} placeholder="0" className={inputCls} />
+                    </div>
+                    <div>
+                      <label className={labelCls}>SKU variante</label>
+                      <input value={v.sku ?? ''} onChange={e => updateVariant(i, 'sku', e.target.value)} placeholder="KB-001-16" className={inputCls} />
+                    </div>
                   </div>
                   <div className="flex items-center justify-between">
                     <label className="flex items-center gap-2 cursor-pointer">
