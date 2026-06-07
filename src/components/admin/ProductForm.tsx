@@ -35,6 +35,41 @@ export default function ProductForm({ productId }: ProductFormProps) {
   const [variants, setVariants] = useState<any[]>([])
   const [faqs,     setFaqs]     = useState<any[]>([])
   const [uploading,setUploading]= useState(false)
+  const [generating, setGenerating] = useState(false)
+
+  const generateWithAI = async () => {
+    const firstImage = images[0]?.url
+    if (!firstImage) { alert('Uploadez une image en premier'); return }
+    setGenerating(true)
+    try {
+      const res = await fetch('/api/ai/generate-product', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageUrl: firstImage, categoryName: cats.find(c => c.id === form.category_id)?.name_fr ?? '' }),
+      })
+      const data = await res.json()
+      if (data.error) { alert('Erreur IA: ' + data.error); return }
+      setForm(f => ({
+        ...f,
+        name_fr: data.name_fr || f.name_fr,
+        name_en: data.name_en || f.name_en,
+        description_fr: data.description_fr || f.description_fr,
+        description_en: data.description_en || f.description_en,
+        short_desc_fr: data.short_desc_fr || f.short_desc_fr,
+        short_desc_en: data.short_desc_en || f.short_desc_en,
+        seo_title_fr: data.seo_title_fr || f.seo_title_fr,
+        seo_title_en: data.seo_title_en || f.seo_title_en,
+        seo_desc_fr: data.seo_desc_fr || f.seo_desc_fr,
+        seo_desc_en: data.seo_desc_en || f.seo_desc_en,
+        tags: data.tags || f.tags,
+        slug: (data.name_fr || f.name_fr).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+      }))
+    } catch (err) {
+      alert('Erreur lors de la generation')
+    } finally {
+      setGenerating(false)
+    }
+  }
 
   // Charger catégories et types de variantes
   useEffect(() => {
@@ -210,9 +245,21 @@ export default function ProductForm({ productId }: ProductFormProps) {
 
         {/* INFOS GÉNÉRALES */}
         <div className="bg-white border border-[#e8e8e8] px-5 py-5">
-          <p className="font-sans text-[11px] font-semibold tracking-[0.15em] uppercase text-black mb-4">
-            Informations générales
-          </p>
+          <div className="flex items-center justify-between mb-4">
+            <p className="font-sans text-[11px] font-semibold tracking-[0.15em] uppercase text-black">
+              Informations générales
+            </p>
+            <button
+              type="button"
+              onClick={generateWithAI}
+              disabled={generating || images.length === 0}
+              className="flex items-center gap-2 px-4 py-2 font-sans text-[10px] tracking-[0.12em] uppercase border-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-80"
+              style={{backgroundColor:'#C9A84C', color:'white'}}
+              title={images.length === 0 ? 'Uploadez une image dabord' : 'Generer avec IA'}
+            >
+              {generating ? 'Generation...' : 'Generer avec IA'}
+            </button>
+          </div>
           <div className="grid grid-cols-1 gap-4">
             <div className="grid grid-cols-2 gap-3">
               <div>
