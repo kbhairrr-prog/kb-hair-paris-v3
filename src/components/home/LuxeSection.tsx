@@ -18,7 +18,7 @@ export function LuxeSection({ locale }: { locale: 'fr' | 'en' }) {
   const imageUrl = content?.image_url ?? ''
 
   return (
-    <section style={{backgroundColor:'#111111', margin:0, padding:0}}>
+    <section style={{backgroundColor:'#111111', margin:0, padding:0, paddingTop:'28px'}}>
       {imageUrl && (
         <img
           src={imageUrl}
