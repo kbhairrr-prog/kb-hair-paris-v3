@@ -112,15 +112,7 @@ export default function HeroSection({
       </div>
 
       {/* ── FLÈCHE SCROLL ── cercle blanc comme BHP ── */}
-      <button
-        onClick={scrollDown}
-        aria-label="Défiler"
-        className="absolute -bottom-6 left-1/2 -translate-x-1/2 z-20 w-12 h-12 rounded-full bg-white flex items-center justify-center border-none cursor-pointer hover:scale-105 transition-transform" style={{boxShadow:"0 0 0 4px rgba(255,255,255,0.3), 0 4px 20px rgba(0,0,0,0.4)"}}
-      >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M3 6l5 5 5-5" stroke="#0A0A0A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </button>
+
     </section>
   )
 }
