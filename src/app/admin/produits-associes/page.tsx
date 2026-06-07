@@ -83,9 +83,9 @@ export default function AdminProduitsAssocies() {
   const getImg = (p: any) => p.images?.find((i: any) => i.is_primary)?.url ?? p.images?.[0]?.url
 
   return (
-    <div className="min-h-screen bg-[#f8f8f8] flex">
+    <div className="min-h-screen bg-[#f8f8f8] flex flex-col lg:flex-row">
       {/* Liste produits */}
-      <div className="w-64 bg-white border-r border-[#e8e8e8] flex flex-col flex-shrink-0">
+      <div className="w-full lg:w-64 bg-white border-b lg:border-b-0 lg:border-r border-[#e8e8e8] flex flex-col flex-shrink-0">
         <div className="px-4 py-4 border-b border-[#e8e8e8]">
           <h1 className="font-sans text-[13px] font-medium tracking-[0.1em] uppercase">Produits associés</h1>
           <p className="font-sans text-[10px] text-[#888] mt-0.5">Configurer les recommandations</p>
