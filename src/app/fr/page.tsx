@@ -62,14 +62,15 @@ export default async function HomeFR() {
         ctaLabel={hero?.cta_fr ?? 'SHOP NOW'}
         ctaUrl={hero?.cta_url ?? '/fr/collections/wigs'}
       />
-      <Ticker text="RAW HAIR ONLY" />
       <LuxeSection locale="fr" />
       <DecouvrezSection bundles={bundles} wigs={wigs} locale="fr" />
       <CollectionBanner locale="fr" label="NOS WIGS" href="/fr/collections/wigs" />
       <VideoSection locale="fr" />
       <Ticker text="RAW HAIR ONLY" />
       <HairProducts products={hairProducts} locale="fr" />
-      <OurWigs wigs={wigs} locale="fr" />
+      <div className="bg-[#1a1a1a] py-4 px-4 text-center">
+        <p className="font-sans text-[11px] tracking-[0.2em] uppercase" style={{color:'#C9A84C'}}>FREE WORLDWIDE SHIPPING FROM 230€ · 100% NATURAL CERTIFIED RAW HAIR · SECURE PAYMENT</p>
+      </div>
       <RawHairSection locale="fr" />
       <NewsletterDark locale="fr" />
       <AvantagesCarousel locale="fr" />

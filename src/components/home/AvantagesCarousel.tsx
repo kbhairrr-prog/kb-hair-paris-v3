@@ -21,10 +21,10 @@ export function AvantagesCarousel({ locale }: { locale: 'fr' | 'en' }) {
     <section className='bg-[#F5F5F5] py-14'>
       <div className='grid grid-cols-2 gap-0 max-w-screen-xl mx-auto'>
         {items.map((item, i) => (
-          <div key={i} className='flex flex-col items-center text-center px-6 py-10 border-[#e0e0e0]' style={{borderRight: i % 2 === 0 ? '1px solid #e0e0e0' : 'none', borderBottom: i < 2 ? '1px solid #e0e0e0' : 'none'}}>
-            <div className='text-3xl mb-4'>{item.icon}</div>
-            <p className='font-sans text-[11px] font-semibold tracking-[0.2em] uppercase text-black mb-2'>{item.title}</p>
-            <p className='font-sans text-[12px] font-light text-[#666] leading-relaxed max-w-[200px]'>{item.text}</p>
+          <div key={i} className='flex flex-col items-center text-center px-4 py-6 border-[#e0e0e0]' style={{borderRight: i % 2 === 0 ? '1px solid #e0e0e0' : 'none', borderBottom: i < 2 ? '1px solid #e0e0e0' : 'none'}}>
+            <div className='text-2xl mb-2'>{item.icon}</div>
+            <p className='font-sans text-[10px] font-semibold tracking-[0.2em] uppercase text-black mb-1'>{item.title}</p>
+            <p className='font-sans text-[11px] font-light text-[#666] leading-snug max-w-[160px]'>{item.text}</p>
           </div>
         ))}
       </div>
