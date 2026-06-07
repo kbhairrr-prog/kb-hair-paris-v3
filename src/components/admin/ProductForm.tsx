@@ -36,6 +36,37 @@ export default function ProductForm({ productId }: ProductFormProps) {
   const [faqs,     setFaqs]     = useState<any[]>([])
   const [uploading,setUploading]= useState(false)
   const [generating, setGenerating] = useState(false)
+  const [generatingFaq, setGeneratingFaq] = useState(false)
+
+  const generateFAQWithAI = async () => {
+    if (!form.name_fr && !form.description_fr) {
+      alert('Generez d abord la description du produit')
+      return
+    }
+    setGeneratingFaq(true)
+    try {
+      const res = await fetch('/api/ai/generate-faq', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name_fr: form.name_fr,
+          name_en: form.name_en,
+          description_fr: form.description_fr,
+          description_en: form.description_en,
+          categoryName: cats.find(c => c.id === form.category_id)?.name_fr ?? '',
+        }),
+      })
+      const data = await res.json()
+      if (data.error) { alert('Erreur IA: ' + data.error); return }
+      if (data.faqs && Array.isArray(data.faqs)) {
+        setFaqs(data.faqs)
+      }
+    } catch (err) {
+      alert('Erreur lors de la generation des FAQ')
+    } finally {
+      setGeneratingFaq(false)
+    }
+  }
 
   const generateWithAI = async () => {
     const firstImage = images[0]?.url
@@ -402,9 +433,20 @@ export default function ProductForm({ productId }: ProductFormProps) {
         <div className="bg-white border border-[#e8e8e8] px-5 py-5">
           <div className="flex items-center justify-between mb-4">
             <p className="font-sans text-[11px] font-semibold tracking-[0.15em] uppercase text-black">FAQ</p>
-            <button onClick={addFaq} className="flex items-center gap-1.5 font-sans text-[10px] tracking-[0.1em] uppercase text-black border border-black px-3 py-1.5 hover:bg-black hover:text-white transition-colors bg-transparent cursor-pointer">
-              <Plus size={12} /> Ajouter
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={generateFAQWithAI}
+                disabled={generatingFaq || (!form.name_fr && !form.description_fr)}
+                className="flex items-center gap-1.5 font-sans text-[10px] tracking-[0.1em] uppercase px-3 py-1.5 border-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-80"
+                style={{backgroundColor:'#C9A84C', color:'white'}}
+              >
+                {generatingFaq ? 'Generation...' : 'IA FAQ'}
+              </button>
+              <button onClick={addFaq} className="flex items-center gap-1.5 font-sans text-[10px] tracking-[0.1em] uppercase text-black border border-black px-3 py-1.5 hover:bg-black hover:text-white transition-colors bg-transparent cursor-pointer">
+                <Plus size={12} /> Ajouter
+              </button>
+            </div>
           </div>
           <div className="flex flex-col gap-4">
             {faqs.map((f, i) => (
