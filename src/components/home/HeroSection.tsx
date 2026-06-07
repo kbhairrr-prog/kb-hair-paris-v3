@@ -36,7 +36,7 @@ export default function HeroSection({
   }
 
   return (
-    <section className="relative w-full min-h-svh bg-[#1a1a1a] flex items-center justify-center overflow-hidden">
+    <section className="relative w-full min-h-svh bg-[#1a1a1a] flex items-center justify-center overflow-visible">
 
       {/* ── MEDIA : vidéo ou image ── */}
       {videoUrl ? (
