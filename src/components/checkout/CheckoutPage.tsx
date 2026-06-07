@@ -269,10 +269,43 @@ export default function CheckoutPage({ locale }: CheckoutPageProps) {
               <option value="GB">Royaume-Uni</option>
               <option value="US">États-Unis</option>
               <option value="CA">Canada</option>
+              <option value="AU">Australie</option>
+              <option value="JP">Japon</option>
+              <option value="BR">Brésil</option>
+              <option value="MX">Mexique</option>
               <option value="SN">Sénégal</option>
               <option value="CI">Côte d&apos;Ivoire</option>
               <option value="BJ">Bénin</option>
               <option value="CM">Cameroun</option>
+              <option value="GH">Ghana</option>
+              <option value="NG">Nigeria</option>
+              <option value="MA">Maroc</option>
+              <option value="TN">Tunisie</option>
+              <option value="DZ">Algérie</option>
+              <option value="GA">Gabon</option>
+              <option value="CG">Congo</option>
+              <option value="CD">RD Congo</option>
+              <option value="TG">Togo</option>
+              <option value="BF">Burkina Faso</option>
+              <option value="ML">Mali</option>
+              <option value="GN">Guinée</option>
+              <option value="MG">Madagascar</option>
+              <option value="RE">La Réunion</option>
+              <option value="GP">Guadeloupe</option>
+              <option value="MQ">Martinique</option>
+              <option value="GF">Guyane</option>
+              <option value="NC">Nouvelle-Calédonie</option>
+              <option value="PF">Polynésie française</option>
+              <option value="PT">Portugal</option>
+              <option value="AT">Autriche</option>
+              <option value="SE">Suède</option>
+              <option value="NO">Norvège</option>
+              <option value="DK">Danemark</option>
+              <option value="FI">Finlande</option>
+              <option value="IE">Irlande</option>
+              <option value="PL">Pologne</option>
+              <option value="RO">Roumanie</option>
+              <option value="GR">Grèce</option>
             </select>
             <input placeholder={locale === 'fr' ? 'Téléphone' : 'Phone'} value={form.phone} onChange={update('phone')} className={inputCls} />
           </div>
@@ -293,26 +326,11 @@ export default function CheckoutPage({ locale }: CheckoutPageProps) {
             )}
           </div>
 
-          {/* Choix méthode */}
-          <div className="flex gap-3 mb-5">
-            {(['stripe', 'paypal'] as const).map(method => (
-              <button
-                key={method}
-                onClick={() => setPayMethod(method)}
-                className={`flex-1 py-3 font-sans text-[11px] tracking-[0.1em] uppercase border transition-all cursor-pointer ${
-                  payMethod === method
-                    ? 'bg-black text-white border-black'
-                    : 'bg-white text-black border-[#e0e0e0] hover:border-black'
-                }`}
-              >
-                {method === 'stripe' ? '💳 Carte' : '🅿️ PayPal'}
-              </button>
-            ))}
-          </div>
+
 
           {/* CTA paiement */}
           <button
-            onClick={payMethod === 'stripe' ? handleStripeCheckout : handlePayPalCheckout}
+            onClick={handleStripeCheckout}
             disabled={loading || !form.email || !form.firstName || !form.address1}
             className={`
               w-full py-4 font-sans text-[11px] font-medium tracking-[0.22em] uppercase
