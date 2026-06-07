@@ -96,8 +96,25 @@ export default function DecouvrezSection({ bundles, wigs, locale }: DecouvrezSec
         <div className="flex-shrink-0 w-4" aria-hidden />
       </div>
 
+      {/* Indicateurs carousel */}
+      <div className="flex justify-center gap-2 mt-5 px-5">
+        {products.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i)}
+            className="border-none cursor-pointer p-0 transition-all duration-300"
+            style={{
+              height: '4px',
+              width: i === currentIndex ? '32px' : '12px',
+              borderRadius: '2px',
+              backgroundColor: i === currentIndex ? '#C9A84C' : 'rgba(201,168,76,0.3)',
+            }}
+          />
+        ))}
+      </div>
+
       {/* Bouton VIEW ALL — noir centré */}
-      <div className="flex justify-center mt-7 px-5">
+      <div className="flex justify-center mt-5 px-5">
         <Link
           href={viewAllHref}
           className="inline-block bg-black text-white text-[11px] font-normal tracking-[0.22em] uppercase px-12 py-4 hover:opacity-85 transition-opacity"
