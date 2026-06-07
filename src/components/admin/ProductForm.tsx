@@ -128,7 +128,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
   // Charger catégories et types de variantes
   useEffect(() => {
     supabase.from('categories').select('id,name_fr').eq('is_active',true).then(({data}) => setCats(data ?? []))
-    supabase.from('variant_types').select('*').eq('is_active',true).order('position').then(({data}) => setVariantTypes(data ?? []))
+    supabase.from('variant_types').select('*').eq('is_active',true).order('position').then(({data}) => { console.log('variantTypes loaded:', data); setVariantTypes(data ?? []) })
   }, [])
 
   // Charger produit si édition
