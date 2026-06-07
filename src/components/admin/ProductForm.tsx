@@ -37,6 +37,29 @@ export default function ProductForm({ productId }: ProductFormProps) {
   const [uploading,setUploading]= useState(false)
   const [generating, setGenerating] = useState(false)
   const [generatingFaq, setGeneratingFaq] = useState(false)
+  const [suggestingVariants, setSuggestingVariants] = useState(false)
+
+  const suggestVariantsWithAI = async () => {
+    const firstImage = images[0]?.url
+    if (!firstImage && !form.name_fr) { alert('Uploadez une image ou remplissez le nom'); return }
+    setSuggestingVariants(true)
+    try {
+      const res = await fetch('/api/ai/suggest-variants', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageUrl: firstImage ?? '', name_fr: form.name_fr, categoryName: cats.find(c => c.id === form.category_id)?.name_fr ?? '', variantTypes }),
+      })
+      const data = await res.json()
+      if (data.error) { alert('Erreur IA: ' + data.error); return }
+      if (data.variants && Array.isArray(data.variants)) {
+        setVariants(data.variants.map((v: any) => ({ ...v, price: '', stock: 0, is_active: true, sku: '' })))
+      }
+    } catch (err) {
+      alert('Erreur lors de la suggestion')
+    } finally {
+      setSuggestingVariants(false)
+    }
+  }
 
   const generateFAQWithAI = async () => {
     if (!form.name_fr && !form.description_fr) {
@@ -397,9 +420,14 @@ export default function ProductForm({ productId }: ProductFormProps) {
         <div className="bg-white border border-[#e8e8e8] px-5 py-5">
           <div className="flex items-center justify-between mb-4">
             <p className="font-sans text-[11px] font-semibold tracking-[0.15em] uppercase text-black">Variantes</p>
-            <button onClick={addVariant} className="flex items-center gap-1.5 font-sans text-[10px] tracking-[0.1em] uppercase text-black border border-black px-3 py-1.5 hover:bg-black hover:text-white transition-colors bg-transparent cursor-pointer">
-              <Plus size={12} /> Ajouter
-            </button>
+            <div className="flex items-center gap-2">
+              <button type="button" onClick={suggestVariantsWithAI} disabled={suggestingVariants} className="flex items-center gap-1.5 font-sans text-[10px] tracking-[0.1em] uppercase px-3 py-1.5 border-none cursor-pointer disabled:opacity-40 hover:opacity-80" style={{backgroundColor:'#C9A84C',color:'white'}}>
+                {suggestingVariants ? 'Analyse...' : 'IA Variantes'}
+              </button>
+              <button onClick={addVariant} className="flex items-center gap-1.5 font-sans text-[10px] tracking-[0.1em] uppercase text-black border border-black px-3 py-1.5 hover:bg-black hover:text-white transition-colors bg-transparent cursor-pointer">
+                <Plus size={12} /> Ajouter
+              </button>
+            </div>
           </div>
           {variants.length === 0 ? (
             <p className="font-sans text-[12px] text-[#aaa] text-center py-4">
