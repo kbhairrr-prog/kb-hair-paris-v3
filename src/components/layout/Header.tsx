@@ -230,39 +230,49 @@ export default function Header({ locale }: HeaderProps) {
       )}
 
       {/* ── PANNEAU MENU MOBILE ── fond blanc, style BHP exact ── */}
-      <div className={`
-        fixed top-0 left-0 bottom-0 z-[60] bg-white w-[85vw] max-w-[340px]
-        flex flex-col
-        transform transition-transform duration-300 ease-in-out
-        ${menuOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
+      <div className={`fixed top-0 left-0 bottom-0 z-[60] w-[85vw] max-w-[340px] flex flex-col transform transition-transform duration-300 ease-in-out ${menuOpen ? 'translate-x-0' : '-translate-x-full'}`} style={{backgroundColor:'#0A0A0A'}}>
 
-        {/* Fermer */}
-        <button
-          onClick={() => { setMenuOpen(false); setSubmenu(null) }}
-          className="absolute top-4 left-4 text-black text-2xl font-light p-1"
-          aria-label="Fermer"
-        >
-          <X size={22} strokeWidth={1.2} />
-        </button>
+        {/* Header menu — logo + fermer + langue */}
+        <div className="flex items-center justify-between px-5 pt-5 pb-4" style={{borderBottom:'1px solid rgba(255,255,255,0.08)'}}>
+          <div>
+            <span className="font-serif text-[18px] font-bold text-white tracking-tight">KB HAIR</span>
+            <span className="block font-serif text-[8px] font-light tracking-[0.4em] mt-0.5" style={{color:'rgba(255,255,255,0.4)'}}>PARIS</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => { setMenuOpen(false); window.location.href = locale === 'fr' ? '/en' : '/fr' }}
+              className="font-sans text-[10px] tracking-[0.15em] uppercase flex items-center gap-1 bg-transparent border-none cursor-pointer"
+              style={{color:'rgba(255,255,255,0.5)'}}
+            >
+              {locale === 'fr' ? '🇬🇧 EN' : '🇫🇷 FR'}
+            </button>
+            <button
+              onClick={() => { setMenuOpen(false); setSubmenu(null) }}
+              className="text-white bg-transparent border-none cursor-pointer"
+              aria-label="Fermer"
+            >
+              <X size={20} strokeWidth={1.2} />
+            </button>
+          </div>
+        </div>
 
         {/* ── SOUS-MENU (Closures/About) ── */}
         {submenu && (
-          <div className="absolute inset-0 bg-white flex flex-col px-7 pt-16 pb-8 z-10">
+          <div className="absolute inset-0 flex flex-col px-7 pt-16 pb-8 z-10" style={{backgroundColor:"#0A0A0A"}}>
             <button
               onClick={() => setSubmenu(null)}
-              className="flex items-center gap-2 text-[11px] tracking-[0.15em] uppercase text-gray-500 mb-6 self-start"
+              className="flex items-center gap-2 text-[11px] tracking-[0.15em] uppercase mb-6 self-start" style={{color:"rgba(255,255,255,0.5)"}}
             >
               <ChevronRight size={12} className="rotate-180" />
               {submenu}
             </button>
-            <div className="h-px bg-gray-100 mb-4" />
+            <div className="h-px mb-4" style={{backgroundColor:"rgba(255,255,255,0.08)"}} />
             {nav.find(n => n.label === submenu)?.children?.map((child: any) => (
               <Link
                 key={child.href}
                 href={child.href}
                 onClick={() => { setMenuOpen(false); setSubmenu(null) }}
-                className="py-4 text-[12px] font-normal tracking-[0.15em] uppercase text-black border-b border-gray-100 no-underline"
+                className="py-4 text-[12px] font-normal tracking-[0.15em] uppercase no-underline" style={{color:"white",borderBottom:"1px solid rgba(255,255,255,0.08)"}}
               >
                 {child.label}
               </Link>
@@ -277,17 +287,17 @@ export default function Header({ locale }: HeaderProps) {
               <button
                 key={item.label}
                 onClick={() => setSubmenu(item.label)}
-                className="flex items-center justify-between py-4 text-[12px] font-normal tracking-[0.15em] uppercase text-black border-b border-gray-100 w-full text-left bg-transparent"
+                className="flex items-center justify-between py-4 text-[12px] font-normal tracking-[0.15em] uppercase w-full text-left bg-transparent" style={{color:"white",borderBottom:"1px solid rgba(255,255,255,0.08)"}}
               >
                 {item.label}
-                <ChevronRight size={14} className="text-gray-400" />
+                <ChevronRight size={14} style={{color:"rgba(255,255,255,0.3)"}} />
               </button>
             ) : (
               <Link
                 key={item.label}
                 href={item.href!}
                 onClick={() => setMenuOpen(false)}
-                className="py-4 text-[12px] font-normal tracking-[0.15em] uppercase text-black border-b border-gray-100 no-underline block"
+                className="py-4 text-[12px] font-normal tracking-[0.15em] uppercase no-underline block" style={{color:"white",borderBottom:"1px solid rgba(255,255,255,0.08)"}}
               >
                 {item.label}
               </Link>
@@ -296,15 +306,15 @@ export default function Header({ locale }: HeaderProps) {
         </nav>
 
         {/* Footer menu — locale + langue, comme BHP */}
-        <div className="px-7 py-5 border-t border-gray-100 flex items-center gap-3">
+        <div className="px-7 py-5 flex items-center gap-3" style={{borderTop:"1px solid rgba(255,255,255,0.08)"}}>
           <span className="text-lg">🇫🇷</span>
-          <span className="text-[11px] font-normal tracking-[0.12em] uppercase text-black">
+          <span className="text-[11px] font-normal tracking-[0.12em] uppercase" style={{color:"rgba(255,255,255,0.5)"}}>
             EUR €
           </span>
-          <span className="text-gray-200">|</span>
+          <span className="" style={{color:"rgba(255,255,255,0.2)"}}>|</span>
           <Link
             href={locale === 'fr' ? '/en' : '/fr'}
-            className="text-[11px] font-normal tracking-[0.12em] uppercase text-black no-underline"
+            className="text-[11px] font-normal tracking-[0.12em] uppercase no-underline" style={{color:"rgba(255,255,255,0.5)"}}
           >
             {locale === 'fr' ? 'FRANÇAIS' : 'ENGLISH'}
           </Link>

@@ -1,21 +1,21 @@
 export default function Ticker({
   text = 'RAW HAIR ONLY',
-  speed = 20,
+  speed = 25,
 }: {
   text?: string
   speed?: number
 }) {
-  const items = Array.from({ length: 12 }, (_, i) => (
+  const items = Array.from({ length: 20 }, (_, i) => (
     <span
       key={i}
       style={{
-        fontFamily: "'Cormorant Garamond', serif",
-        fontSize: '28px',
+        fontFamily: "\'Cormorant Garamond\', serif",
+        fontSize: 'clamp(40px, 10vw, 72px)',
         fontWeight: 300,
         letterSpacing: '0.18em',
-        color: 'rgba(0,0,0,0.1)',
+        color: '#C9A84C33',
         textTransform: 'uppercase' as const,
-        paddingRight: '64px',
+        paddingRight: '48px',
         flexShrink: 0,
         display: 'inline-block',
       }}
@@ -26,7 +26,8 @@ export default function Ticker({
 
   return (
     <div
-      className="overflow-hidden bg-[#f0f0f0] border-y border-[#e0e0e0] py-3.5"
+      className="overflow-hidden bg-[#0a0a0a] border-y py-4"
+      style={{ borderColor: 'rgba(201,168,76,0.3)' }}
       aria-hidden="true"
     >
       <div
