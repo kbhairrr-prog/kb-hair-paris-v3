@@ -199,7 +199,17 @@ export default function ProductForm({ productId }: ProductFormProps) {
   const setPrimary  = (idx: number) => setImages(imgs => imgs.map((img, i) => ({ ...img, is_primary: i === idx })))
 
   // Variantes
-  const addVariant = () => setVariants(vs => [...vs, { sku: '', price: '', stock: 0, is_active: true, selectedOptions: {} }])
+  const addVariant = () => {
+    if (variantTypes.length === 0) {
+      supabase.from('variant_types').select('*').eq('is_active', true).order('position')
+        .then(({data}) => {
+          if (data) setVariantTypes(data)
+          setVariants(vs => [...vs, { sku: '', price: '', stock: 0, is_active: true, selectedOptions: {} }])
+        })
+    } else {
+      setVariants(vs => [...vs, { sku: '', price: '', stock: 0, is_active: true, selectedOptions: {} }])
+    }
+  }
   const removeVariant = (idx: number) => setVariants(vs => vs.filter((_, i) => i !== idx))
   const updateVariant = (idx: number, field: string, val: any) =>
     setVariants(vs => vs.map((v, i) => i === idx ? { ...v, [field]: val } : v))
