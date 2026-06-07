@@ -11,7 +11,7 @@ interface HairProductsProps {
 }
 
 export function HairProducts({ products, locale }: HairProductsProps) {
-  const { trackRef, handlers } = useCarousel({ itemsCount: products.length })
+  const { trackRef, currentIndex, goTo, handlers } = useCarousel({ itemsCount: products.length })
 
   return (
     <section className="bg-[#f0f0f0] pt-12 pb-10">
@@ -32,7 +32,24 @@ export function HairProducts({ products, locale }: HairProductsProps) {
         ))}
         <div className="flex-shrink-0 w-4" aria-hidden />
       </div>
-      <div className="flex justify-center mt-7 px-5">
+      {/* Indicateurs carousel */}
+      <div className="flex justify-center gap-2 mt-5 px-5">
+        {products.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i)}
+            className="border-none cursor-pointer p-0 transition-all duration-300"
+            style={{
+              height: '4px',
+              width: i === currentIndex ? '32px' : '12px',
+              borderRadius: '2px',
+              backgroundColor: i === currentIndex ? '#C9A84C' : 'rgba(201,168,76,0.3)',
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="flex justify-center mt-5 px-5">
         <Link
           href={`/${locale}/collections/produits`}
           className="inline-block bg-black text-white font-sans text-[11px] font-normal tracking-[0.22em] uppercase px-12 py-4 no-underline hover:opacity-85 transition-opacity"
