@@ -39,20 +39,17 @@ async function getData() {
   ])
   const { data: sections } = await supabase
     .from('homepage_sections').select('*').eq('is_active', true).order('position')
-  return { bundles, wigs, hairProducts, sections: sections ?? [] }
+  const { data: settingsData } = await supabase.from('site_settings').select('*').eq('key', 'promo_banner').single()
+  const promoBanner = settingsData?.value ?? null
+  return { bundles, wigs, hairProducts, sections: sections ?? [], promoBanner }
 }
 
 export default async function HomeFR() {
-  const { bundles, wigs, hairProducts, sections } = await getData()
+  const { bundles, wigs, hairProducts, sections, promoBanner } = await getData()
   const hero = sections.find(s => s.type === 'hero')?.content as Record<string, string> | undefined
 
   return (
     <main>
-      <div className="bg-[#f5f5f5] border-b border-[#e0e0e0] text-center py-2.5 px-4">
-        <p className="font-sans text-[11px] tracking-[0.12em] uppercase text-black">
-          PAYEZ EN PLUSIEURS FOIS AVEC <strong className="italic">STRIPE, PAYPAL</strong>
-        </p>
-      </div>
       <HeroSection
         locale="fr"
         imageUrl={hero?.image_url}
@@ -68,9 +65,11 @@ export default async function HomeFR() {
       <VideoSection locale="fr" />
       <Ticker text="RAW HAIR ONLY" />
       <HairProducts products={hairProducts} locale="fr" />
-      <div className="bg-[#1a1a1a] py-4 px-4 text-center">
-        <p className="font-sans text-[11px] tracking-[0.2em] uppercase" style={{color:'#C9A84C'}}>FREE WORLDWIDE SHIPPING FROM 230€ · 100% NATURAL CERTIFIED RAW HAIR · SECURE PAYMENT</p>
-      </div>
+      {promoBanner?.active && (
+        <div className="bg-[#1a1a1a] py-4 px-4 text-center">
+          <p className="font-sans text-[11px] tracking-[0.2em] uppercase" style={{color:'#C9A84C'}}>{promoBanner.text_fr}</p>
+        </div>
+      )}
       <RawHairSection locale="fr" />
       <NewsletterDark locale="fr" />
       <AvantagesCarousel locale="fr" />

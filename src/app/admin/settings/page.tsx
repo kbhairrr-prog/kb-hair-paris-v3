@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Save } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
-type Tab = 'brand' | 'shipping' | 'social' | 'seo'
+type Tab = 'brand' | 'shipping' | 'social' | 'seo' | 'promo'
 
 export default function AdminSettings() {
   const [tab,     setTab]     = useState<Tab>('brand')
@@ -44,6 +44,7 @@ export default function AdminSettings() {
     { key: 'shipping', label: 'Livraison' },
     { key: 'social',   label: 'Réseaux sociaux' },
     { key: 'seo',      label: 'SEO Global' },
+    { key: 'promo',    label: 'Bande Promo' },
   ]
 
   return (
@@ -176,6 +177,30 @@ export default function AdminSettings() {
                   </div>
                 ))}
                 <button onClick={() => save('seo')} disabled={saving} className="flex items-center gap-2 bg-black text-white font-sans text-[10px] tracking-[0.15em] uppercase px-5 py-2.5 border-none cursor-pointer hover:opacity-85 w-fit">
+                  <Save size={13}/> Sauvegarder
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+            {/* ── PROMO BANNER ── */}
+            {tab === 'promo' && (
+              <div className="flex flex-col gap-4">
+                <p className="font-sans text-[11px] font-semibold tracking-[0.15em] uppercase text-black">Bande Promo Homepage</p>
+                <div className="flex items-center gap-3">
+                  <input type="checkbox" checked={data.promo_banner?.active ?? true} onChange={e => updateField('promo_banner', 'active', e.target.checked)} className="w-4 h-4" />
+                  <label className="font-sans text-[12px] text-black">Afficher la bande promo</label>
+                </div>
+                <div>
+                  <label className={labelCls}>Texte FR</label>
+                  <input value={data.promo_banner?.text_fr ?? ''} onChange={e => updateField('promo_banner', 'text_fr', e.target.value)} className={inputCls} />
+                </div>
+                <div>
+                  <label className={labelCls}>Texte EN</label>
+                  <input value={data.promo_banner?.text_en ?? ''} onChange={e => updateField('promo_banner', 'text_en', e.target.value)} className={inputCls} />
+                </div>
+                <button onClick={() => save('promo_banner')} disabled={saving} className="flex items-center gap-2 bg-black text-white font-sans text-[10px] tracking-[0.15em] uppercase px-5 py-2.5 border-none cursor-pointer hover:opacity-85 w-fit">
                   <Save size={13}/> Sauvegarder
                 </button>
               </div>
