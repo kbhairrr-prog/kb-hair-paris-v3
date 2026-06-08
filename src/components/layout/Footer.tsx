@@ -13,9 +13,15 @@ export default function Footer({ locale }: { locale: 'fr' | 'en' }) {
     setSent(true)
   }
 
-  const collections = locale === 'fr'
-    ? [{ label: 'WIGS', href: '/fr/collections/wigs' }, { label: 'BUNDLES', href: '/fr/collections/bundles' }, { label: 'CLOSURES & FRONTALS', href: '/fr/collections/closures' }, { label: 'HAIR PRODUCTS', href: '/fr/collections/produits' }]
-    : [{ label: 'WIGS', href: '/en/collections/wigs' }, { label: 'BUNDLES', href: '/en/collections/bundles' }, { label: 'CLOSURES & FRONTALS', href: '/en/collections/closures' }, { label: 'HAIR PRODUCTS', href: '/en/collections/produits' }]
+  const [cats, setCats] = useState<any[]>([])
+  useEffect(() => {
+    supabase.from('categories').select('slug, name_fr, name_en').eq('is_active', true).order('position')
+      .then(({data}) => setCats(data ?? []))
+  }, [])
+  const collections = cats.map(c => ({
+    label: locale === 'fr' ? c.name_fr.toUpperCase() : c.name_en.toUpperCase(),
+    href: `/${locale}/collections/${c.slug}`
+  }))
 
   const [pages, setPages] = useState<any[]>([])
   useEffect(() => {
