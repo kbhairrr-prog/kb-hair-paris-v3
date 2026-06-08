@@ -230,7 +230,7 @@ export default function Header({ locale }: HeaderProps) {
       )}
 
       {/* ── PANNEAU MENU MOBILE ── fond blanc, style BHP exact ── */}
-      <div className={`fixed top-0 left-0 bottom-0 z-[60] w-[85vw] max-w-[340px] flex flex-col transform transition-transform duration-300 ease-in-out ${menuOpen ? 'translate-x-0' : '-translate-x-full'}`} style={{backgroundColor:'#0A0A0A'}}>
+      <div className={`fixed top-0 left-0 bottom-0 z-[60] w-[85vw] max-w-[340px] flex flex-col transform transition-transform duration-300 ease-in-out ${menuOpen ? 'translate-x-0' : '-translate-x-full'}`} style={{backgroundColor:'#0A0A0A', borderRight:'2px solid #C9A84C'}}>
 
         {/* Header menu — logo + fermer + langue */}
         <div className="flex items-center justify-between px-5 pt-5 pb-4" style={{borderBottom:'1px solid rgba(255,255,255,0.08)'}}>
@@ -297,7 +297,7 @@ export default function Header({ locale }: HeaderProps) {
                 key={item.label}
                 href={item.href!}
                 onClick={() => setMenuOpen(false)}
-                className="py-4 text-[12px] font-normal tracking-[0.15em] uppercase no-underline block" style={{color:"white",borderBottom:"1px solid rgba(255,255,255,0.08)"}}
+                className="py-4 text-[12px] font-normal tracking-[0.15em] uppercase no-underline block" style={{color: item.href === '/fr' || item.href === '/en' ? '#C9A84C' : 'white', borderBottom:"1px solid rgba(255,255,255,0.08)"}}
               >
                 {item.label}
               </Link>
