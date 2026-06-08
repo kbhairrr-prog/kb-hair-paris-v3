@@ -13,8 +13,16 @@ interface HeaderProps {
 const NAV_ITEMS = {
   fr: [
     { label: 'HOME',               href: '/fr' },
-    { label: 'WIGS',               href: '/fr/collections/wigs' },
-    { label: 'BUNDLES',            href: '/fr/collections/bundles' },
+    { label: 'NOS WIGS', href: null, children: [
+      { label: 'TOUTES NOS WIGS',   href: '/fr/collections/wigs' },
+      { label: 'WIGS BRAIDS',       href: '/fr/collections/wigs' },
+      { label: 'WIGS LISSES',       href: '/fr/collections/wigs' },
+    ]},
+    { label: 'BUNDLES', href: null, children: [
+      { label: 'TOUS NOS BUNDLES',  href: '/fr/collections/bundles' },
+      { label: 'BUNDLES INDIENS',   href: '/fr/collections/bundles' },
+      { label: 'BUNDLES BRÉSILIENS',href: '/fr/collections/bundles' },
+    ]},
     { label: 'CLOSURES & FRONTALES', href: null, children: [
       { label: 'NOS FRONTALES', href: '/fr/collections/frontales' },
       { label: 'NOS CLOSURES',  href: '/fr/collections/closures'  },
@@ -23,7 +31,7 @@ const NAV_ITEMS = {
     { label: 'NOS SERVICES',       href: '/fr/collections/services' },
     { label: 'VIP CARDS',          href: '/fr/collections/vip-cards' },
     { label: 'MES FAVORIS',        href: '/fr/wishlist' },
-    { label: 'À PROPOS DE NOUS',   href: null, children: [
+    { label: 'À PROPOS',           href: null, children: [
       { label: 'QUI SOMMES-NOUS', href: '/fr/pages/qui-sommes-nous' },
       { label: 'LA FONDATRICE',   href: '/fr/pages/la-fondatrice'   },
     ]},
@@ -31,8 +39,16 @@ const NAV_ITEMS = {
   ],
   en: [
     { label: 'HOME',               href: '/en' },
-    { label: 'WIGS',               href: '/en/collections/wigs' },
-    { label: 'BUNDLES',            href: '/en/collections/bundles' },
+    { label: 'OUR WIGS', href: null, children: [
+      { label: 'ALL WIGS',          href: '/en/collections/wigs' },
+      { label: 'BRAIDS WIGS',       href: '/en/collections/wigs' },
+      { label: 'STRAIGHT WIGS',     href: '/en/collections/wigs' },
+    ]},
+    { label: 'BUNDLES', href: null, children: [
+      { label: 'ALL BUNDLES',       href: '/en/collections/bundles' },
+      { label: 'INDIAN BUNDLES',    href: '/en/collections/bundles' },
+      { label: 'BRAZILIAN BUNDLES', href: '/en/collections/bundles' },
+    ]},
     { label: 'CLOSURES & FRONTALS',href: null, children: [
       { label: 'OUR FRONTALS', href: '/en/collections/frontales' },
       { label: 'OUR CLOSURES', href: '/en/collections/closures'  },
