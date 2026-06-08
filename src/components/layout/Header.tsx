@@ -101,7 +101,7 @@ export default function Header({ locale }: HeaderProps) {
     loadMenu()
   }, [locale])
 
-  const navItems = NAV_ITEMS[locale] ?? []
+  const navItems = dynamicNav.length > 0 ? dynamicNav : (NAV_ITEMS[locale] ?? [])
 
   const [menuOpen, setMenuOpen]           = useState(false)
   const [submenu, setSubmenu]             = useState<string | null>(null)
@@ -111,7 +111,7 @@ export default function Header({ locale }: HeaderProps) {
 
   const itemCount = useCartStore(s => s.getItemCount())
   const openCart  = useCartStore(s => s.openCart)
-  const nav       = NAV_ITEMS[locale] ?? []
+  const nav       = (dynamicNav.length > 0 ? dynamicNav : NAV_ITEMS[locale]) ?? []
 
   // Scroll header (optionnel: pas de changement sur BHP, reste noir)
   useEffect(() => {
