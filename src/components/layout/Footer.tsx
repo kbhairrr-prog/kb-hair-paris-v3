@@ -1,5 +1,6 @@
 'use client'
-import { useState } from 'react'
+import { supabase } from '@/lib/supabase'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 export default function Footer({ locale }: { locale: 'fr' | 'en' }) {
@@ -16,9 +17,15 @@ export default function Footer({ locale }: { locale: 'fr' | 'en' }) {
     ? [{ label: 'WIGS', href: '/fr/collections/wigs' }, { label: 'BUNDLES', href: '/fr/collections/bundles' }, { label: 'CLOSURES & FRONTALS', href: '/fr/collections/closures' }, { label: 'HAIR PRODUCTS', href: '/fr/collections/produits' }]
     : [{ label: 'WIGS', href: '/en/collections/wigs' }, { label: 'BUNDLES', href: '/en/collections/bundles' }, { label: 'CLOSURES & FRONTALS', href: '/en/collections/closures' }, { label: 'HAIR PRODUCTS', href: '/en/collections/produits' }]
 
-  const info = locale === 'fr'
-    ? [{ label: 'QUI SOMMES-NOUS', href: '/fr/pages/qui-sommes-nous' }, { label: 'LA FONDATRICE', href: '/fr/pages/la-fondatrice' }, { label: 'CGV', href: '/fr/pages/cgv' }, { label: 'LIVRAISON & RETOURS', href: '/fr/pages/livraison' }, { label: 'CONFIDENTIALITÉ', href: '/fr/pages/confidentialite' }]
-    : [{ label: 'ABOUT US', href: '/en/pages/qui-sommes-nous' }, { label: 'THE FOUNDER', href: '/en/pages/la-fondatrice' }, { label: 'TERMS', href: '/en/pages/cgv' }, { label: 'RETURN POLICY', href: '/en/pages/livraison' }, { label: 'PRIVACY POLICY', href: '/en/pages/confidentialite' }]
+  const [pages, setPages] = useState<any[]>([])
+  useEffect(() => {
+    supabase.from('pages').select('slug, title_fr, title_en').eq('is_active', true).order('slug')
+      .then(({data}) => setPages(data ?? []))
+  }, [])
+  const info = pages.map(p => ({
+    label: locale === 'fr' ? p.title_fr.toUpperCase() : p.title_en.toUpperCase(),
+    href: `/${locale}/pages/${p.slug}`
+  }))
 
   return (
     <footer style={{backgroundColor:'#0A0A0A'}} className="px-6 pt-12 pb-8">
