@@ -18,8 +18,8 @@ const TABS = {
     { key: 'wigs',    label_fr: 'NOS WIGS',    label_en: 'OUR WIGS',    href_fr: '/fr/collections/wigs',    href_en: '/en/collections/wigs'    },
   ],
   en: [
-    { key: 'bundles', label: 'OUR BUNDLES', href: '/en/collections/bundles' },
-    { key: 'wigs',    label: 'OUR WIGS',    href: '/en/collections/wigs'    },
+    { key: 'bundles', label_fr: 'OUR BUNDLES', label_en: 'OUR BUNDLES', href_fr: '/en/collections/bundles', href_en: '/en/collections/bundles' },
+    { key: 'wigs',    label_fr: 'OUR WIGS',    label_en: 'OUR WIGS',    href_fr: '/en/collections/wigs',    href_en: '/en/collections/wigs'    },
   ],
 }
 
