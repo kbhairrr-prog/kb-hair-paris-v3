@@ -17,7 +17,7 @@ export default function Footer({ locale }: { locale: 'fr' | 'en' }) {
     : [{ label: 'WIGS', href: '/en/collections/wigs' }, { label: 'BUNDLES', href: '/en/collections/bundles' }, { label: 'CLOSURES & FRONTALS', href: '/en/collections/closures' }, { label: 'HAIR PRODUCTS', href: '/en/collections/produits' }]
 
   const info = locale === 'fr'
-    ? [{ label: 'ABOUT US', href: '/fr/pages/qui-sommes-nous' }, { label: 'THE FOUNDER', href: '/fr/pages/la-fondatrice' }, { label: 'TERMS', href: '/fr/pages/cgv' }, { label: 'RETURN POLICY', href: '/fr/pages/livraison' }, { label: 'PRIVACY POLICY', href: '/fr/pages/confidentialite' }]
+    ? [{ label: 'QUI SOMMES-NOUS', href: '/fr/pages/qui-sommes-nous' }, { label: 'LA FONDATRICE', href: '/fr/pages/la-fondatrice' }, { label: 'CGV', href: '/fr/pages/cgv' }, { label: 'LIVRAISON & RETOURS', href: '/fr/pages/livraison' }, { label: 'CONFIDENTIALITÉ', href: '/fr/pages/confidentialite' }]
     : [{ label: 'ABOUT US', href: '/en/pages/qui-sommes-nous' }, { label: 'THE FOUNDER', href: '/en/pages/la-fondatrice' }, { label: 'TERMS', href: '/en/pages/cgv' }, { label: 'RETURN POLICY', href: '/en/pages/livraison' }, { label: 'PRIVACY POLICY', href: '/en/pages/confidentialite' }]
 
   return (
