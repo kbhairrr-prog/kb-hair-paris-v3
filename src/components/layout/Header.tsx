@@ -66,10 +66,11 @@ export default function Header({ locale }: HeaderProps) {
         .eq('is_active', true)
         .order('position')
       if (items && items.length > 0) {
-        const roots = items.filter((i: any) => !i.parent_id)
+        const activeItems = items.filter((i: any) => i.is_active)
+        const roots = activeItems.filter((i: any) => !i.parent_id)
         setDynamicNav(roots.map((r: any) => {
           const children = items
-            .filter((i: any) => i.parent_id === r.id)
+            .filter((i: any) => i.parent_id === r.id && i.is_active)
             .map((c: any) => ({
               label: locale === 'fr' ? c.label_fr : c.label_en,
               href:  c.url,
