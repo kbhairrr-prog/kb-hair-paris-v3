@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Save, Eye, Plus } from 'lucide-react'
+import { Save, Eye, Plus, Trash2 } from 'lucide-react'
 import RichEditor from '@/components/ui/RichEditor'
 import { supabase } from '@/lib/supabase'
 
@@ -45,6 +45,14 @@ export default function AdminPages() {
     finally { setGeneratingPage(false) }
   }
   const [lang,    setLang]    = useState<'fr' | 'en'>('fr')
+
+  const deletePage = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (!confirm('Supprimer cette page ?')) return
+    await supabase.from('pages').delete().eq('id', id)
+    setPages(ps => ps.filter(p => p.id !== id))
+    if (selected?.id === id) setSelected(null)
+  }
 
   const load = async () => {
     setLoading(true)
@@ -129,10 +137,13 @@ export default function AdminPages() {
             >
               <p className="font-sans text-[12px] font-medium text-black leading-snug">{page.title_fr}</p>
               <p className="font-sans text-[10px] text-[#888] mt-0.5">/{page.slug}</p>
-              <div className="flex items-center gap-2 mt-1">
+              <div className="flex items-center justify-between mt-1">
                 <span className={`font-sans text-[9px] tracking-[0.1em] uppercase px-1.5 py-0.5 rounded-full ${page.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
                   {page.is_active ? 'Active' : 'Inactive'}
                 </span>
+                <button onClick={(e) => deletePage(page.id, e)} className="text-[#aaa] hover:text-red-600 bg-transparent border-none cursor-pointer p-0">
+                  <Trash2 size={13} />
+                </button>
               </div>
             </button>
           ))}
