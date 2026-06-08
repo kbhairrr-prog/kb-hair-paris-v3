@@ -19,6 +19,31 @@ export default function AdminPages() {
   const [selected,setSelected]= useState<any | null>(null)
   const [saving,  setSaving]  = useState(false)
   const [saved,   setSaved]   = useState(false)
+  const [generatingPage, setGeneratingPage] = useState(false)
+
+  const generatePageWithAI = async () => {
+    if (!selected) return
+    setGeneratingPage(true)
+    try {
+      const res = await fetch('/api/ai/generate-page', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug: selected.slug, title_fr: selected.title_fr }),
+      })
+      const data = await res.json()
+      if (data.error) { alert('Erreur IA: ' + data.error); return }
+      setSelected((s: any) => ({
+        ...s,
+        content_fr: data.content_fr || s.content_fr,
+        content_en: data.content_en || s.content_en,
+        seo_title_fr: data.seo_title_fr || s.seo_title_fr,
+        seo_title_en: data.seo_title_en || s.seo_title_en,
+        seo_desc_fr: data.seo_desc_fr || s.seo_desc_fr,
+        seo_desc_en: data.seo_desc_en || s.seo_desc_en,
+      }))
+    } catch { alert('Erreur generation') }
+    finally { setGeneratingPage(false) }
+  }
   const [lang,    setLang]    = useState<'fr' | 'en'>('fr')
 
   const load = async () => {
@@ -134,6 +159,15 @@ export default function AdminPages() {
               </div>
               <div className="flex items-center gap-3">
                 {saved && <span className="font-sans text-[11px] text-green-600">✓ Sauvegardé</span>}
+                <button
+                  type="button"
+                  onClick={generatePageWithAI}
+                  disabled={generatingPage}
+                  className="flex items-center gap-1.5 font-sans text-[10px] tracking-[0.1em] uppercase px-3 py-2 border-none cursor-pointer disabled:opacity-40 hover:opacity-80"
+                  style={{backgroundColor:'#C9A84C', color:'white'}}
+                >
+                  {generatingPage ? 'Generation...' : 'IA Page'}
+                </button>
 
                 {/* Aperçu */}
                 <a href={`/fr/pages/${selected.slug}`} target="_blank"
