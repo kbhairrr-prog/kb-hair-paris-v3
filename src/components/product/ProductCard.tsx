@@ -81,7 +81,7 @@ export default function ProductCard({ product, locale, priority = false }: Produ
         <button
           onClick={handlePlus}
           className="absolute bottom-2.5 right-2.5 w-10 h-10 bg-white flex items-center justify-center text-2xl font-light text-black shadow-sm hover:bg-gray-50 transition-colors z-10"
-          aria-label="Ajouter au panier"
+          aria-label="Add to cart"
         >
           +
         </button>

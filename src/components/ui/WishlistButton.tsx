@@ -25,8 +25,8 @@ export default function WishlistButton({ product, className = '', size = 'md' }:
         ${isWished ? 'text-black scale-110' : 'text-[#ccc] hover:text-black'}
         ${className}
       `}
-      aria-label={isWished ? 'Retirer des favoris' : 'Ajouter aux favoris'}
-      title={isWished ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+      aria-label={isWished ? 'Remove from wishlist' : 'Add to wishlist'}
+      title={isWished ? 'Remove from wishlist' : 'Add to wishlist'}
     >
       {isWished ? '♥' : '♡'}
     </button>

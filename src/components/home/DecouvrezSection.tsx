@@ -14,8 +14,8 @@ interface DecouvrezSectionProps {
 
 const TABS = {
   fr: [
-    { key: 'bundles', label: 'NOS BUNDLES', href: '/fr/collections/bundles' },
-    { key: 'wigs',    label: 'NOS WIGS',    href: '/fr/collections/wigs'    },
+    { key: 'bundles', label_fr: 'NOS BUNDLES', label_en: 'OUR BUNDLES', href_fr: '/fr/collections/bundles', href_en: '/en/collections/bundles' },
+    { key: 'wigs',    label_fr: 'NOS WIGS',    label_en: 'OUR WIGS',    href_fr: '/fr/collections/wigs',    href_en: '/en/collections/wigs'    },
   ],
   en: [
     { key: 'bundles', label: 'OUR BUNDLES', href: '/en/collections/bundles' },
@@ -71,7 +71,7 @@ export default function DecouvrezSection({ bundles, wigs, locale }: DecouvrezSec
             `}
             style={{ borderBottomWidth: '2px', borderBottomStyle: 'solid' }}
           >
-            {tab.label}
+            {locale === 'fr' ? tab.label_fr : tab.label_en}
           </button>
         ))}
       </div>
