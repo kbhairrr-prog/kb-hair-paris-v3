@@ -63,7 +63,7 @@ export default function AdminMenus() {
       parent_id: parentId ?? null,
       label_fr:  'Nouveau lien',
       label_en:  'New link',
-      url:       '/fr',
+      url:       '',
       position,
       is_active: true,
     }).select().single()
@@ -271,9 +271,21 @@ export default function AdminMenus() {
                 <div>
                   <label className={labelCls}>URL *</label>
                   <input value={editing.url ?? ''} onChange={e => setEditing(ed => ed ? {...ed, url: e.target.value} : null)} placeholder="/fr/collections/wigs" className={inputCls} />
-                  <p className="font-sans text-[10px] text-[#aaa] mt-1">
+                  <p className="font-sans text-[10px] text-[#aaa] mt-1 mb-2">
                     URLs relatives : /fr/collections/wigs · Externes : https://instagram.com/...
                   </p>
+                  <div className="flex flex-wrap gap-1 mb-2">
+                      <button key="/fr/collections/wigs" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/collections/wigs"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">Wigs</button>
+                      <button key="/fr/collections/bundles" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/collections/bundles"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">Bundles</button>
+                      <button key="/fr/collections/frontales" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/collections/frontales"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">Frontales</button>
+                      <button key="/fr/collections/closures" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/collections/closures"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">Closures</button>
+                      <button key="/fr/collections/produits" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/collections/produits"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">Hair Products</button>
+                      <button key="/fr/collections/vip-cards" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/collections/vip-cards"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">VIP Cards</button>
+                      <button key="/fr/collections/services" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/collections/services"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">Services</button>
+                      <button key="/fr" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">Accueil</button>
+                      <button key="/fr/pages/cgv" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/pages/cgv"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">CGV</button>
+                      <button key="/fr/pages/livraison" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/pages/livraison"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">Livraison</button>
+                  </div>
                 </div>
                 <label className="flex items-center gap-2 cursor-pointer mt-1">
                   <input type="checkbox" checked={editing.is_active} onChange={e => setEditing(ed => ed ? {...ed, is_active: e.target.checked} : null)} />
