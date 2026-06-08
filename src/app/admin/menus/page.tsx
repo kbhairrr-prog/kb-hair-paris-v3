@@ -179,8 +179,8 @@ export default function AdminMenus() {
                     </div>
                     <div className="flex items-center gap-1.5 flex-shrink-0">
                       <button onClick={e => { e.stopPropagation(); toggleItem(item.id, item.is_active) }}
-                        className={`font-sans text-[9px] uppercase bg-transparent border-0 cursor-pointer ${item.is_active ? 'text-green-600' : 'text-[#ccc]'}`}>
-                        {item.is_active ? '●' : '○'}
+                        className={`font-sans text-[8px] uppercase px-1.5 py-0.5 border cursor-pointer bg-transparent ${item.is_active ? 'text-green-600 border-green-200' : 'text-[#aaa] border-[#e0e0e0]'}`}>
+                        {item.is_active ? 'Visible' : 'Masqué'}
                       </button>
                       <button onClick={e => { e.stopPropagation(); addItem(item.id) }}
                         className="text-[#ccc] hover:text-black bg-transparent border-0 cursor-pointer" title="Ajouter sous-lien">
