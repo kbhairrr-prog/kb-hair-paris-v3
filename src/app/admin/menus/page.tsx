@@ -21,6 +21,15 @@ export default function AdminMenus() {
   const [saving,  setSaving]  = useState(false)
   const [saved,   setSaved]   = useState(false)
   const [editing, setEditing] = useState<MenuItem | null>(null)
+  const [produits, setProduits] = useState<any[]>([])
+  const [pages, setPages] = useState<any[]>([])
+
+  useEffect(() => {
+    supabase.from('products').select('name_fr, slug').eq('is_active', true).order('name_fr')
+      .then(({data}) => setProduits(data ?? []))
+    supabase.from('pages').select('title_fr, slug').eq('is_active', true).order('slug')
+      .then(({data}) => setPages(data ?? []))
+  }, [])
 
   const load = async () => {
     setLoading(true)
@@ -275,16 +284,20 @@ export default function AdminMenus() {
                     URLs relatives : /fr/collections/wigs · Externes : https://instagram.com/...
                   </p>
                   <div className="flex flex-wrap gap-1 mb-2">
-                      <button key="/fr/collections/wigs" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/collections/wigs"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">Wigs</button>
-                      <button key="/fr/collections/bundles" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/collections/bundles"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">Bundles</button>
-                      <button key="/fr/collections/frontales" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/collections/frontales"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">Frontales</button>
-                      <button key="/fr/collections/closures" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/collections/closures"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">Closures</button>
-                      <button key="/fr/collections/produits" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/collections/produits"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">Hair Products</button>
-                      <button key="/fr/collections/vip-cards" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/collections/vip-cards"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">VIP Cards</button>
-                      <button key="/fr/collections/services" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/collections/services"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">Services</button>
-                      <button key="/fr" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">Accueil</button>
-                      <button key="/fr/pages/cgv" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/pages/cgv"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">CGV</button>
-                      <button key="/fr/pages/livraison" type="button" onClick={() => setEditing(ed => ed ? {...ed, url: "/fr/pages/livraison"} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">Livraison</button>
+                    <p className="w-full font-sans text-[9px] text-[#888] uppercase tracking-widest mb-1">Collections</p>
+                    {[{n:'Wigs',u:'/fr/collections/wigs'},{n:'Bundles',u:'/fr/collections/bundles'},{n:'Frontales',u:'/fr/collections/frontales'},{n:'Closures',u:'/fr/collections/closures'},{n:'Hair Products',u:'/fr/collections/produits'},{n:'VIP Cards',u:'/fr/collections/vip-cards'},{n:'Services',u:'/fr/collections/services'},{n:'Accueil',u:'/fr'}].map(s => (
+                      <button key={s.u} type="button" onClick={() => setEditing(ed => ed ? {...ed, url: s.u} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">{s.n}</button>
+                    ))}
+                    <p className="w-full font-sans text-[9px] text-[#888] uppercase tracking-widest mb-1 mt-2">Produits</p>
+                    {produits.map(p => (
+                      <button key={p.slug} type="button" onClick={() => setEditing(ed => ed ? {...ed, url: `/fr/produits/${p.slug}`} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">{p.name_fr}</button>
+                    ))}
+                    <p className="w-full font-sans text-[9px] text-[#888] uppercase tracking-widest mb-1 mt-2">Pages</p>
+                    {pages.map(p => (
+                      <button key={p.slug} type="button" onClick={() => setEditing(ed => ed ? {...ed, url: `/fr/pages/${p.slug}`} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">{p.title_fr}</button>
+                    ))}
+                    <p className="w-full font-sans text-[9px] text-[#888] uppercase tracking-widest mb-1 mt-2">Groupe sans lien</p>
+                    <button type="button" onClick={() => setEditing(ed => ed ? {...ed, url: '#'} : null)} className="font-sans text-[9px] px-2 py-1 border border-[#e0e0e0] bg-white cursor-pointer hover:bg-black hover:text-white transition-colors">Titre groupe (#)</button>
                   </div>
                 </div>
                 <label className="flex items-center gap-2 cursor-pointer mt-1">
