@@ -89,7 +89,7 @@ export default function Footer({ locale }: { locale: 'fr' | 'en' }) {
       </div>
 
       <div className="border-t pt-4 text-center" style={{borderColor:'rgba(255,255,255,0.1)'}}>
-        <p className="font-sans text-[10px]" style={{color:'rgba(255,255,255,0.3)'}}>© 2026 KB Hair Paris. All rights reserved.</p>
+        <p className="font-sans text-[10px]" style={{color:'rgba(255,255,255,0.3)'}}>{locale === 'fr' ? '© 2026 KB Hair Paris. Tous droits réservés.' : '© 2026 KB Hair Paris. All rights reserved.'}</p>
         <p className="font-sans text-[10px] tracking-[0.2em] uppercase mt-1" style={{color:'rgba(255,255,255,0.2)'}}>RAW HAIR ONLY</p>
       </div>
     </footer>
