@@ -356,6 +356,21 @@ export default function ProductForm({ productId }: ProductFormProps) {
                   <option value="">— Choisir —</option>
                   {cats.map(c => <option key={c.id} value={c.id}>{c.name_fr}</option>)}
                 </select>
+                {form.category_id && (() => {
+                  const catDescriptions: Record<string, string> = {
+                    'wigs': 'Perruques lace front, full lace, 360°, tressées ou colorées.',
+                    'bundles': 'Tissages raw hair cambodgien, indien, brésilien. Cheveux non traités.',
+                    'frontales': 'Frontales 13x4 ou 13x6. Se pose sur le front avec colle lace.',
+                    'closures': 'Closures 4x4 ou 5x5. Finition du dessus de tête.',
+                    'produits': 'Produits d entretien pour extensions : shampoings, soins, colles.',
+                    'accessoires': 'Accessoires capillaires : outils, filets, bonnets, aiguilles.',
+                    'vip-cards': 'Cartes fidélité VIP avec avantages exclusifs pour les clientes.',
+                    'services': 'Services proposés en boutique : pose, entretien, conseil.',
+                  }
+                  const selectedCat = cats.find(c => c.id === form.category_id)
+                  const desc = selectedCat ? catDescriptions[selectedCat.slug] : null
+                  return desc ? <p className="font-sans text-[10px] text-[#888] mt-1 italic">{desc}</p> : null
+                })()}
               </div>
               <div>
                 <label className={labelCls}>SKU</label>
