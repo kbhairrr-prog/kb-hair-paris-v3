@@ -1,4 +1,20 @@
 import type { Metadata } from 'next'
+import { Cormorant_Garamond, Jost } from 'next/font/google'
+
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['300', '400'],
+  style: ['normal', 'italic'],
+  variable: '--font-cormorant',
+  display: 'swap',
+})
+
+const jost = Jost({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  variable: '--font-jost',
+  display: 'swap',
+})
 import '@/styles/globals.css'
 
 export const metadata: Metadata = {
@@ -34,14 +50,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap"
-          rel="stylesheet"
-        />
+
       </head>
-      <body className="font-body antialiased">{children}</body>
+      <body className={`font-body antialiased ${cormorant.variable} ${jost.variable}`}>{children}</body>
     </html>
   )
 }
