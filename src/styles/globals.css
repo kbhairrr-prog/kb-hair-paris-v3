@@ -50,6 +50,15 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.1;
 }
 
+.kb-content h2, .kb-content h3 {
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-size: 1.9rem;
+  font-weight: 300;
+  margin-top: 2rem;
+  margin-bottom: 0.8rem;
+}
+
 .font-editorial {
   font-family: var(--font-cormorant);
   font-style: italic;
