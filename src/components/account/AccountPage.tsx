@@ -31,7 +31,7 @@ export default function AccountPage({ locale }: AccountPageProps) {
       if (!user) { window.location.href = `/${locale}/compte/connexion`; return }
 
       const { data: cust } = await supabase.from('customers').select('*').eq('supabase_uid', user.id).single()
-      const { data: ords } = await supabase.from('orders').select('*, items:order_items(*)').eq('customer_id', cust?.id).order('created_at', { ascending: false }).limit(10)
+      const { data: ords } = cust?.id ? await supabase.from('orders').select('*, items:order_items(*)').eq('customer_id', cust.id).order('created_at', { ascending: false }).limit(10) : { data: [] }
       setCustomer(cust)
       setOrders(ords ?? [])
       setLoading(false)
