@@ -14,31 +14,31 @@ export function LuxeSection({ locale }: { locale: 'fr' | 'en' }) {
     : content?.text_en ?? 'Our luxury hair extensions are carefully selected.'
   const imageUrl = content?.image_url ?? ''
   return (
-    <section className="relative w-full" style={{backgroundColor:'#111111', minHeight:'70vh'}}>
+    <section style={{backgroundColor:'#111111', margin:0, padding:0}}>
       {imageUrl && (
         <img
           src={imageUrl}
           alt="KB Hair"
           className="w-full block"
           style={{
-            filter: 'grayscale(40%)',
+            filter: 'grayscale(30%)',
             width: '100%',
-            height: '70vh',
             objectFit: 'cover',
             objectPosition: 'center top',
             display: 'block',
+            margin: 0,
+            padding: 0,
           }}
         />
       )}
-      <div className="absolute inset-0 bg-black/40" />
-      <div className="absolute inset-0 flex flex-col items-center justify-end pb-14 px-6 text-center">
+      <div className="text-center px-6 py-12">
         <h2 className="font-serif text-[28px] font-light tracking-[0.2em] uppercase mb-4"
           style={{color:'#C9A84C'}}>
           {title}
         </h2>
         <div className="w-10 h-px mx-auto mb-6" style={{backgroundColor:'#C9A84C'}} />
         <p className="font-sans text-[13px] font-light leading-relaxed max-w-2xl mx-auto"
-          style={{color:'rgba(255,255,255,0.85)'}}>
+          style={{color:'rgba(255,255,255,0.7)'}}>
           {text}
         </p>
       </div>
