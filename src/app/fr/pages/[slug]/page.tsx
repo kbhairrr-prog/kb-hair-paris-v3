@@ -22,27 +22,14 @@ export default async function PageLegaleFR({ params }: Props) {
     <>
       <Header locale={locale} />
       <main className="min-h-screen bg-white pt-[68px]">
-
-        {/* Hero titre style ancienne version */}
-        <div className="bg-white px-5 py-14 text-center">
-          <h1 className="font-serif text-[42px] sm:text-[52px] font-light tracking-[0.18em] uppercase text-black">
+        <div className="bg-white px-5 py-12 text-center">
+          <h1 className="font-serif text-[28px] sm:text-[38px] font-light tracking-[0.15em] uppercase text-black leading-tight">
             {title}
           </h1>
-          <div className="mx-auto mt-4 w-10 h-[1px] bg-[#C9A84C]" />
+          <div className="mx-auto mt-5 w-10 h-[1px] bg-[#C9A84C]" />
         </div>
-
         <div className="border-t border-[#e8e8e8]" />
-
         <div className="max-w-2xl mx-auto px-6 py-14">
-
-          {/* Citation dorée */}
-          {page.quote_fr && (
-            <p className="font-serif text-[22px] italic text-[#C9A84C] leading-snug mb-8">
-              &ldquo;{page.quote_fr}&rdquo;
-            </p>
-          )}
-
-          {/* Image optionnelle */}
           {page.image_url && (
             <div className="mb-10 flex justify-center">
               <img
@@ -53,23 +40,35 @@ export default async function PageLegaleFR({ params }: Props) {
               />
             </div>
           )}
-
-          {/* Contenu principal - style prose serif */}
+          <style dangerouslySetInnerHTML={{ __html: `
+            .kb-content p:first-child {
+              font-family: inherit;
+              font-size: 1.25rem;
+              font-style: italic;
+              color: #C9A84C;
+              line-height: 1.4;
+              margin-bottom: 2rem;
+            }
+            .kb-content h2 {
+              font-family: inherit;
+              font-size: 2rem;
+              font-weight: 300;
+              color: #000;
+              margin-top: 2.5rem;
+              margin-bottom: 1rem;
+            }
+            .kb-content p {
+              font-size: 1rem;
+              font-weight: 300;
+              color: #000;
+              line-height: 1.9;
+              margin-bottom: 1rem;
+            }
+          ` }} />
           <div
-            className="
-              font-serif text-[17px] font-light text-black leading-[1.95]
-              prose prose-lg max-w-none
-              prose-headings:font-serif prose-headings:font-light prose-headings:text-black
-              prose-h2:text-[32px] prose-h2:tracking-normal prose-h2:mt-10 prose-h2:mb-4
-              prose-h3:text-[24px] prose-h3:mt-8 prose-h3:mb-3
-              prose-p:text-[17px] prose-p:leading-[1.95] prose-p:text-black
-              prose-strong:font-semibold prose-strong:text-black
-              prose-a:text-[#C9A84C] prose-a:no-underline hover:prose-a:underline
-            "
+            className="kb-content font-serif"
             dangerouslySetInnerHTML={{ __html: content ?? '' }}
           />
-
-          {/* Bouton Découvrir la Fondatrice si page about */}
           {slug === 'qui-sommes-nous' && (
             <div className="mt-14">
               <a
@@ -80,7 +79,6 @@ export default async function PageLegaleFR({ params }: Props) {
               </a>
             </div>
           )}
-
         </div>
       </main>
       <Footer locale={locale} />
