@@ -32,12 +32,7 @@ export default async function PageLegaleEN({ params }: Props) {
         <div className="max-w-2xl mx-auto px-6 py-14">
           {page.image_url && (
             <div className="mb-10 flex justify-center">
-              <img
-                src={page.image_url}
-                alt={title}
-                className="w-full max-w-sm rounded-sm object-cover object-top"
-                style={{ maxHeight: '500px' }}
-              />
+              <img src={page.image_url} alt={title} className="w-full max-w-sm rounded-sm object-cover object-top" style={{ maxHeight: '500px' }} />
             </div>
           )}
           <style dangerouslySetInnerHTML={{ __html: `
@@ -57,17 +52,10 @@ export default async function PageLegaleEN({ params }: Props) {
               margin-bottom: 1rem;
             }
           ` }} />
-          <div
-            id="kb-page-content-en"
-            className="kb-content-en font-serif"
-            dangerouslySetInnerHTML={{ __html: content ?? '' }}
-          />
+          <div id="kb-page-content-en" className="kb-content-en font-serif" dangerouslySetInnerHTML={{ __html: content ?? '' }} />
           {slug === 'who-we-are' && (
             <div className="mt-14">
-              
-                href="/en/pages/the-founder"
-                className="block w-full bg-black text-white text-center py-5 text-[11px] tracking-[0.25em] uppercase font-light hover:bg-[#111] transition-colors"
-              >
+              <a href="/en/pages/the-founder" className="block w-full bg-black text-white text-center py-5 text-[11px] tracking-[0.25em] uppercase font-light transition-colors">
                 Discover the Founder
               </a>
             </div>
