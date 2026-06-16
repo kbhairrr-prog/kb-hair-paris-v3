@@ -27,9 +27,14 @@ export async function POST(req: NextRequest) {
       quantity: item.quantity,
     }))
 
-    // Frais de livraison
+    // Frais de livraison depuis Supabase
     const subtotal = items.reduce((s: number, i: any) => s + i.total_price, 0)
-    const shipping  = subtotal >= 230 ? 0 : 6.90
+    const { createClient } = await import('@supabase/supabase-js')
+    const supabaseAdmin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+    const { data: shippingSettings } = await supabaseAdmin.from('site_settings').select('value').eq('key', 'shipping').single()
+    const shippingCost = shippingSettings?.value?.shipping_cost ?? 25
+    const freeThreshold = shippingSettings?.value?.free_threshold ?? 230
+    const shipping = subtotal >= freeThreshold ? 0 : shippingCost
 
     if (shipping > 0) {
       lineItems.push({
