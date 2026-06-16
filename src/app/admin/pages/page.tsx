@@ -86,6 +86,7 @@ export default function AdminPages() {
       title_en:    selected.title_en,
       content_fr:  selected.content_fr,
       content_en:  selected.content_en,
+      image_url:   selected.image_url,
       seo_title_fr: selected.seo_title_fr,
       seo_title_en: selected.seo_title_en,
       seo_desc_fr:  selected.seo_desc_fr,
