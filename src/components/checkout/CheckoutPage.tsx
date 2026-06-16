@@ -306,6 +306,29 @@ export default function CheckoutPage({ locale }: CheckoutPageProps) {
               <option value="PL">Pologne</option>
               <option value="RO">Roumanie</option>
               <option value="GR">Grèce</option>
+              <option value="CZ">Tchéquie</option>
+              <option value="HU">Hongrie</option>
+              <option value="SK">Slovaquie</option>
+              <option value="SI">Slovénie</option>
+              <option value="HR">Croatie</option>
+              <option value="BG">Bulgarie</option>
+              <option value="LT">Lituanie</option>
+              <option value="LV">Lettonie</option>
+              <option value="EE">Estonie</option>
+              <option value="CY">Chypre</option>
+              <option value="MT">Malte</option>
+              <option value="IS">Islande</option>
+              <option value="MC">Monaco</option>
+              <option value="AD">Andorre</option>
+              <option value="RS">Serbie</option>
+              <option value="UA">Ukraine</option>
+              <option value="AE">Émirats Arabes Unis</option>
+              <option value="QA">Qatar</option>
+              <option value="SA">Arabie Saoudite</option>
+              <option value="NZ">Nouvelle-Zélande</option>
+              <option value="ZA">Afrique du Sud</option>
+              <option value="KE">Kenya</option>
+              <option value="ET">Éthiopie</option>
             </select>
             <input placeholder={locale === 'fr' ? 'Téléphone' : 'Phone'} value={form.phone} onChange={update('phone')} className={inputCls} />
           </div>
