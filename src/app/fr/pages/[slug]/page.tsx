@@ -49,7 +49,7 @@ export default async function PageLegaleFR({ params }: Props) {
               line-height: 1.4;
               margin-bottom: 2rem;
             }
-            .kb-content h2, .kb-content h2 * {
+            #kb-page-content h2, #kb-page-content h2 * {
               font-family: inherit;
               font-size: 2rem;
               font-weight: 300;
@@ -70,6 +70,7 @@ export default async function PageLegaleFR({ params }: Props) {
             }
           ` }} />
           <div
+            id="kb-page-content"
             className="kb-content font-serif"
             dangerouslySetInnerHTML={{ __html: content ?? '' }}
           />
