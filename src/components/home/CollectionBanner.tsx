@@ -29,7 +29,7 @@ export function CollectionBanner({ locale, label: defaultLabel, href: defaultHre
           <p className='font-sans text-[10px] tracking-[0.4em] uppercase text-[#888] mb-3'>{discover}</p>
           <h2 className='font-serif text-[32px] font-light tracking-[0.15em] uppercase text-black'>{label}</h2>
         </div>
-        <div className='relative overflow-hidden cursor-pointer' onClick={() => window.location.href = href} style={{aspectRatio:'16/9',maxHeight:'500px'}}>
+        <div className='relative overflow-hidden cursor-pointer' onClick={() => window.location.href = href} style={{aspectRatio:'16/9',minHeight:'60vh'}}>
           {imageUrl ? (<Image src={imageUrl} alt={label} fill className='object-cover' style={{objectPosition:'center top'}} sizes='100vw' />) : (<div className='w-full h-full bg-[#222]' />)}
           <div className='absolute inset-0 bg-black/30 flex items-end p-8'>
             <p className='font-serif text-[32px] md:text-[48px] text-white font-light tracking-[0.12em] uppercase'>{label}</p>
