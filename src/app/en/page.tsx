@@ -62,7 +62,6 @@ export default async function HomeEN() {
         ctaLabel={hero?.cta_en ?? 'SHOP NOW'}
         ctaUrl={hero?.cta_url ?? '/en/collections/wigs'}
       />
-      <Ticker text="RAW HAIR ONLY" />
       <div className="bg-black h-16 w-full" />
       <LuxeSection locale="en" />
       <DecouvrezSection bundles={bundles} wigs={wigs} locale="en" />
