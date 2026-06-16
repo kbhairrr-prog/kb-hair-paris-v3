@@ -56,8 +56,9 @@ export default async function PageLegaleFR({ params }: Props) {
               color: #000;
               margin-top: 2.5rem;
               margin-bottom: 1rem;
-              text-transform: none;
-              letter-spacing: 0;
+              text-transform: none !important;
+              letter-spacing: normal !important;
+              font-size: 2rem !important;
             }
             .kb-content p {
               font-size: 1rem;
