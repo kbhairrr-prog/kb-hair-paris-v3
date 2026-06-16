@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
@@ -29,7 +30,7 @@ export function CollectionBanner({ locale, label: defaultLabel, href: defaultHre
           <h2 className='font-serif text-[32px] font-light tracking-[0.15em] uppercase text-black'>{label}</h2>
         </div>
         <div className='relative overflow-hidden cursor-pointer' onClick={() => window.location.href = href} style={{aspectRatio:'16/9',maxHeight:'500px'}}>
-          {imageUrl ? (<img src={imageUrl} alt={label} className='w-full h-full object-cover' style={{objectPosition:'center top'}} />) : (<div className='w-full h-full bg-[#222]' />)}
+          {imageUrl ? (<Image src={imageUrl} alt={label} fill className='object-cover' style={{objectPosition:'center top'}} sizes='100vw' />) : (<div className='w-full h-full bg-[#222]' />)}
           <div className='absolute inset-0 bg-black/30 flex items-end p-8'>
             <p className='font-serif text-[32px] md:text-[48px] text-white font-light tracking-[0.12em] uppercase'>{label}</p>
           </div>

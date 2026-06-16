@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
@@ -19,7 +20,7 @@ export function VideoSection({ locale }: { locale: 'fr' | 'en' }) {
   return (
     <section className='relative w-full bg-black overflow-hidden' style={{minHeight:'500px'}}>
       {thumbnailUrl ? (
-        <img src={thumbnailUrl} alt='video' className='absolute inset-0 w-full h-full object-cover opacity-70 grayscale' />
+        <Image src={thumbnailUrl} alt='video' fill className='object-cover opacity-70 grayscale' sizes='100vw' />
       ) : (
         <div className='absolute inset-0 bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a]' />
       )}

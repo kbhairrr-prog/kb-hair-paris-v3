@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
@@ -20,7 +21,7 @@ export function RawHairSection({ locale }: { locale: 'fr' | 'en' }) {
   return (
     <section className="bg-black px-6 py-14 text-center">
       {imageUrl ? (
-        <img src={imageUrl} alt={label} className="w-full mb-8 object-cover" style={{ aspectRatio: '16/9' }} />
+        <div className="relative w-full mb-8" style={{ aspectRatio: '16/9' }}><Image src={imageUrl} alt={label} fill className="object-cover" sizes="100vw" /></div>
       ) : (
         <div className="w-full mb-8 bg-[#1a1510]" style={{ aspectRatio: '16/9' }} />
       )}
