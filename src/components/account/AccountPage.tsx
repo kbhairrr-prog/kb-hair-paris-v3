@@ -32,7 +32,7 @@ export default function AccountPage({ locale }: AccountPageProps) {
 
       const [{ data: cust }, { data: ords }] = await Promise.all([
         supabase.from('customers').select('*').eq('supabase_uid', user.id).single(),
-        supabase.from('orders').select('*, items:order_items(*)').eq('customer_id', user.id)
+        supabase.from('orders').select('*, items:order_items(*)').eq('customer_id', cust?.id)
                 .order('created_at', { ascending: false }).limit(10),
       ])
       setCustomer(cust)
@@ -69,7 +69,7 @@ export default function AccountPage({ locale }: AccountPageProps) {
         <div className="flex items-center justify-between">
           <div>
             <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-[#888] mb-1">
-              {locale === 'fr' ? 'Bonjour,' : 'Hello,'}
+              {locale === 'fr' ? `Bonjour${customer?.first_name ? ' ' + customer.first_name : ''},` : `Hello${customer?.first_name ? ' ' + customer.first_name : ''},`}
             </p>
             <p className="font-sans text-[16px] font-light tracking-[0.06em] text-black">
               {customer?.first_name ? `${customer.first_name} ${customer.last_name ?? ''}`.trim() : customer?.email}
