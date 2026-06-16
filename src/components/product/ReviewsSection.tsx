@@ -23,15 +23,17 @@ export default function ReviewsSection({ productId, locale }: ReviewsSectionProp
 
   useEffect(() => {
     const load = async () => {
-      const [{ data: rv }, { data: { user } }] = await Promise.all([
-        supabase.from('product_reviews').select('*, customer:customers(first_name,last_name)').eq('product_id', productId).eq('is_approved', true).order('created_at', { ascending: false }),
-        supabase.auth.getUser(),
-      ])
-      setReviews(rv ?? [])
-      if (user) {
-        const { data: cust } = await supabase.from('customers').select('id,first_name').eq('supabase_uid', user.id).single()
-        setCustomer(cust)
-      }
+      try {
+        const { data: rv } = await supabase.from('product_reviews').select('*, customer:customers(first_name,last_name)').eq('product_id', productId).eq('is_approved', true).order('created_at', { ascending: false })
+        setReviews(rv ?? [])
+      } catch(e) { setReviews([]) }
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          const { data: cust } = await supabase.from('customers').select('id,first_name').eq('supabase_uid', user.id).single()
+          setCustomer(cust)
+        }
+      } catch(e) {}
       setLoading(false)
     }
     load()
