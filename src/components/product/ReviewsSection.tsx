@@ -54,7 +54,7 @@ export default function ReviewsSection({ productId, locale }: ReviewsSectionProp
   }
 
   const avgRating = reviews.length > 0 ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : 0
-  const fmtDate = (d: string) => new Date(d).toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-GB', { month: 'long', year: 'numeric' })
+  const fmtDate = (d: string) => { const dt = new Date(d); return dt.getDate() + '/' + (dt.getMonth()+1) + '/' + dt.getFullYear() }
 
   const StarRow = ({ value, interactive = false }: { value: number; interactive?: boolean }) => (
     <div className="flex gap-0.5">

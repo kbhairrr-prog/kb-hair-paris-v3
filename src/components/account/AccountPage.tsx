@@ -45,7 +45,7 @@ export default function AccountPage({ locale }: AccountPageProps) {
   }
 
   const fmt = (n: number) => `€${n.toFixed(2).replace('.', ',')}`
-  const fmtDate = (d: string) => new Date(d).toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-GB')
+  const fmtDate = (d: string) => { const dt = new Date(d); return dt.getDate() + '/' + (dt.getMonth()+1) + '/' + dt.getFullYear() }
 
   const VIP_NEXT_THRESHOLD: Record<string, number> = { none: 200, bronze: 500, silver: 1000 }
   const nextThreshold = customer ? VIP_NEXT_THRESHOLD[customer.vip_level] : 200
