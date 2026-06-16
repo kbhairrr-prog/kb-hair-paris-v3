@@ -180,9 +180,7 @@ export default function Header({ locale }: HeaderProps) {
             aria-label="Panier"
           >
             <ShoppingBag size={20} strokeWidth={1.5} />
-            {itemCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-2 h-2 bg-white rounded-full" />
-            )}
+            <span className="absolute -top-1 -right-1 w-2 h-2 bg-white rounded-full" style={{opacity: itemCount > 0 ? 1 : 0}} suppressHydrationWarning />
           </button>
         </div>
       </header>
