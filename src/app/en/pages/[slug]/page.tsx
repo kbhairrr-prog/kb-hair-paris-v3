@@ -34,6 +34,11 @@ export default async function PageLegaleEN({ params }: Props) {
           </h1>
         </div>
         <div className="max-w-2xl mx-auto px-5 py-12">
+          {page.image_url && (
+            <div className="mb-8 flex justify-center">
+              <img src={page.image_url} alt={title} className="w-full max-w-sm rounded-sm object-cover" style={{maxHeight:'400px'}} />
+            </div>
+          )}
           <div
             className="font-sans text-[13px] font-light text-[#444] leading-[1.9] prose prose-sm max-w-none"
             dangerouslySetInnerHTML={{ __html: content ?? '' }}
