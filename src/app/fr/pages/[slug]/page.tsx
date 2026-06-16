@@ -49,7 +49,7 @@ export default async function PageLegaleFR({ params }: Props) {
               line-height: 1.4;
               margin-bottom: 2rem;
             }
-            .kb-content h2 {
+            .kb-content h2, .kb-content h2 * {
               font-family: inherit;
               font-size: 2rem;
               font-weight: 300;
@@ -57,8 +57,9 @@ export default async function PageLegaleFR({ params }: Props) {
               margin-top: 2.5rem;
               margin-bottom: 1rem;
               text-transform: none !important;
-              letter-spacing: normal !important;
-              font-size: 2rem !important;
+              letter-spacing: 0.01em !important;
+              font-size: 1.9rem !important;
+              font-weight: 300 !important;
             }
             .kb-content p {
               font-size: 1rem;
