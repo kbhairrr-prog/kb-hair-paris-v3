@@ -164,10 +164,10 @@ export default function AccountPage({ locale }: AccountPageProps) {
           <div className="text-center py-12">
             <MapPin size={36} strokeWidth={1} className="text-[#999] mx-auto mb-3" />
             <p className="font-sans text-[12px] tracking-[0.1em] uppercase text-[#666]">
-              {locale === 'fr' ? 'Aucune adresse enregistrée' : 'No saved addresses'}
+              Aucune adresse
             </p>
             <p className="font-sans text-[11px] font-light text-[#888] mt-2">
-              {locale === 'fr' ? 'Vos adresses seront sauvegardees lors de votre prochain achat.' : 'Your shipping addresses will be saved on your next purchase.'}
+              Vos adresses seront sauvegardees lors de votre prochain achat.
             </p>
           </div>
         )}
