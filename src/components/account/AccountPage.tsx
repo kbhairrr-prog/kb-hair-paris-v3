@@ -167,7 +167,7 @@ export default function AccountPage({ locale }: AccountPageProps) {
               {locale === 'fr' ? 'Aucune adresse enregistrée' : 'No saved addresses'}
             </p>
             <p className="font-sans text-[11px] font-light text-[#888] mt-2">
-              {locale === 'fr' ? 'Vos adresses de livraison seront sauvegardées lors de votre prochain achat.' : 'Your shipping addresses will be saved on your next purchase.'}
+              {locale === 'fr' ? 'Vos adresses seront sauvegardees lors de votre prochain achat.' : 'Your shipping addresses will be saved on your next purchase.'}
             </p>
           </div>
         )}
