@@ -160,6 +160,18 @@ export default function AccountPage({ locale }: AccountPageProps) {
         )}
 
         {/* ── VIP ── */}
+        {tab === 'addresses' && (
+          <div className="text-center py-12">
+            <MapPin size={36} strokeWidth={1} className="text-[#ddd] mx-auto mb-3" />
+            <p className="font-sans text-[12px] tracking-[0.1em] uppercase text-[#aaa]">
+              {locale === 'fr' ? 'Aucune adresse enregistrée' : 'No saved addresses'}
+            </p>
+            <p className="font-sans text-[11px] font-light text-[#bbb] mt-2">
+              {locale === 'fr' ? 'Vos adresses de livraison seront sauvegardées lors de votre prochain achat.' : 'Your shipping addresses will be saved on your next purchase.'}
+            </p>
+          </div>
+        )}
+
         {tab === 'vip' && (
           <div>
             {/* Carte VIP */}
