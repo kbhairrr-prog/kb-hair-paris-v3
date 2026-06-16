@@ -121,7 +121,7 @@ export default function AccountPage({ locale }: AccountPageProps) {
                 <p className="font-sans text-[12px] tracking-[0.1em] uppercase text-[#aaa]">
                   {locale === 'fr' ? 'Aucune commande' : 'No orders yet'}
                 </p>
-                <Link href={`/${locale}/collections/wigs`} className="font-sans text-[11px] tracking-[0.15em] uppercase underline underline-offset-4 text-black mt-3 inline-block no-underline">
+                <Link href={`/${locale}/search`} className="font-sans text-[11px] tracking-[0.15em] uppercase underline underline-offset-4 text-black mt-3 inline-block no-underline">
                   {locale === 'fr' ? 'Commencer mes achats' : 'Start shopping'}
                 </Link>
               </div>
