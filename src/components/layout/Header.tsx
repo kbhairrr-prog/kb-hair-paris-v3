@@ -73,11 +73,11 @@ export default function Header({ locale }: HeaderProps) {
             .filter((i: any) => i.parent_id === r.id && i.is_active)
             .map((c: any) => ({
               label: locale === 'fr' ? c.label_fr : c.label_en,
-              href:  c.url,
+              href:  c.url ? c.url.replace('/fr/', `/${locale}/`).replace(/^\/fr$/, `/${locale}`) : c.url,
             }))
           return {
             label: locale === 'fr' ? r.label_fr : r.label_en,
-            href:  r.url,
+            href:  r.url ? r.url.replace('/fr/', `/${locale}/`).replace(/^\/fr$/, `/${locale}`) : r.url,
             children: children.length > 0 ? children : undefined,
           }
         }))
