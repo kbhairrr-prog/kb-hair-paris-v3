@@ -43,7 +43,7 @@ export default async function PageLegaleFR({ params }: Props) {
           <style dangerouslySetInnerHTML={{ __html: `
             .kb-content p:first-child {
               font-family: inherit;
-              font-size: 1.25rem;
+              font-size: 1.4rem;
               font-style: italic;
               color: #C9A84C;
               line-height: 1.4;
@@ -56,6 +56,8 @@ export default async function PageLegaleFR({ params }: Props) {
               color: #000;
               margin-top: 2.5rem;
               margin-bottom: 1rem;
+              text-transform: none;
+              letter-spacing: 0;
             }
             .kb-content p {
               font-size: 1rem;
