@@ -36,7 +36,7 @@ export default async function PageLegaleFR({ params }: Props) {
         <div className="max-w-2xl mx-auto px-5 py-12">
           {page.image_url && (
             <div className="mb-8 flex justify-center">
-              <img src={page.image_url} alt={title} className="w-full max-w-sm rounded-sm object-cover" style={{maxHeight:'400px'}} />
+              <img src={page.image_url} alt={title} className="w-full max-w-sm rounded-sm object-cover object-top" style={{maxHeight:'500px'}} />
             </div>
           )}
           <div
