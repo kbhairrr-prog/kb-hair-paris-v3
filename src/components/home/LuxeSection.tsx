@@ -14,7 +14,7 @@ export function LuxeSection({ locale }: { locale: 'fr' | 'en' }) {
     : content?.text_en ?? 'Our luxury hair extensions are carefully selected.'
   const imageUrl = content?.image_url ?? ''
   return (
-    <section style={{backgroundColor:'#111111', margin:0, padding:0}}>
+    <section className="w-full" style={{backgroundColor:'#111111', margin:0, padding:0}}>
       {imageUrl && (
         <img
           src={imageUrl}
