@@ -107,12 +107,13 @@ export default function CartDrawer({ locale }: CartDrawerProps) {
               <p className="text-[11px] tracking-[0.15em] uppercase text-gray-400">
                 {locale === 'fr' ? 'Votre panier est vide' : 'Your cart is empty'}
               </p>
-              <button
+              <a
+                href={`/${locale}/search`}
                 onClick={closeCart}
                 className="text-[11px] tracking-[0.2em] uppercase underline underline-offset-4 text-black"
               >
                 {locale === 'fr' ? 'Continuer mes achats' : 'Continue shopping'}
-              </button>
+              </a>
             </div>
           ) : (
             items.map(item => (
