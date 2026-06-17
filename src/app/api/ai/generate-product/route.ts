@@ -20,35 +20,23 @@ export async function POST(req: NextRequest) {
     const catKey = (categoryName || '').toLowerCase().replace(/\s+/g, '-')
     const catGuide = categoryGuide[catKey] || 'extensions capillaires premium raw hair - analyser precisement ce qui est visible sur la photo'
 
-    const prompt = `Tu es une experte en extensions capillaires premium avec 10 ans d experience. Tu rediges pour KB Hair Paris, marque fondee a Paris specialisee en Raw Hair authentique provenant du Cambodge, de l Inde et du Bresil.
-
-MISSION E-E-A-T GOOGLE :
-- Experience : decris ce que la cliente vivra concretement en portant ce produit
-- Expertise : utilise les vrais termes techniques du secteur capillaire
-- Authoritativeness : positionne KB Hair Paris comme LA reference Raw Hair a Paris
-- Trust : mentionne l authenticite du cheveu, la tracabilite, les garanties
+    const prompt = `Tu es une experte en extensions capillaires premium avec 10 ans d'experience. Tu rediges pour KB Hair Paris, marque parisienne specialisee en Raw Hair authentique provenant principalement du Vietnam.
 
 CATEGORIE : ${categoryName || 'extensions capillaires'}
 GUIDE CATEGORIE : ${catGuide}
 
-REGLES DE TON HUMAIN :
-- Ecris comme une vraie experte qui parle a une amie, pas comme un robot
-- Commence chaque description differemment, jamais par Decouvrez ou Bienvenue
-- Melange phrases courtes percutantes et phrases descriptives detaillees
-- Decris des details concrets visibles sur la photo : texture, longueur estimee, couleur, brillance
-- INTERDITS ABSOLUS : de qualite, produit excellent, vous serez satisfait, n hesitez pas, incontournable, ideal pour
-- Chaque affirmation doit etre justifiee par un detail concret
+TON :
+Ecris comme une experte qui decrit ce produit a une cliente en boutique - directe, precise, jamais ronflante.
+Varie vraiment la longueur des phrases : certaines tres courtes (5-8 mots), d'autres plus developpees.
+Decris 2-3 details concrets et specifiques visibles sur la photo (texture exacte, longueur, couleur, finition) plutot que des qualites generales.
+Une seule mention de KB Hair Paris suffit si elle est bien placee. Pas besoin de forcer Paris ou France plusieurs fois.
 
-REGLES SEO STRICTES :
-- Description FR : MINIMUM 245 mots, MAXIMUM 260 mots
-- Description EN : MINIMUM 245 mots, MAXIMUM 260 mots
-- Titre SEO FR : entre 55 et 60 caracteres exactement
-- Titre SEO EN : entre 55 et 60 characters exactly
-- Meta description FR : entre 150 et 160 caracteres exactement
-- Meta description EN : entre 150 et 160 characters exactly
-- KB Hair Paris mentionne au moins 3 fois naturellement dans chaque description
-- Paris ou France mentionne au moins 2 fois
-- Mots-cles naturels : raw hair, extensions capillaires, ${categoryName}, Paris
+INTERDITS ABSOLUS : de qualite, produit excellent, vous serez satisfaite, n hesitez pas, incontournable, ideal pour, decouvrez, plebiscite par, et toute phrase qui pourrait s appliquer a n importe quel produit capillaire sans rien changer.
+
+LONGUEUR :
+- Description FR et EN : 120-170 mots chacune, prose naturelle, pas de remplissage
+- Titre SEO FR/EN : 55-60 caracteres avec mot-cle principal
+- Meta description FR/EN : 150-160 caracteres, incitative
 
 Reponds UNIQUEMENT en JSON valide sans markdown :
 {
@@ -56,8 +44,8 @@ Reponds UNIQUEMENT en JSON valide sans markdown :
   "name_en": "name 3-6 words precise description of what we see",
   "short_desc_fr": "1-2 phrases percutantes max 150 caracteres accrocheuses et vraies",
   "short_desc_en": "1-2 punchy sentences max 150 characters catchy and real",
-  "description_fr": "description experte 245-260 mots ton humain E-E-A-T naturel",
-  "description_en": "expert description 245-260 words human tone E-E-A-T natural",
+  "description_fr": "description experte 120-170 mots ton humain naturel",
+  "description_en": "expert description 120-170 words natural human tone",
   "seo_title_fr": "titre SEO 55-60 caracteres avec mot-cle principal",
   "seo_title_en": "SEO title 55-60 characters with main keyword",
   "seo_desc_fr": "meta 150-160 caracteres incitative avec KB Hair Paris",
