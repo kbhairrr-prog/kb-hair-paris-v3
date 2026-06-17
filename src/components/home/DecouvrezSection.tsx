@@ -79,7 +79,7 @@ export default function DecouvrezSection({ bundles, wigs, locale }: DecouvrezSec
       {/* Carousel — swipeable, 1.5 produit visible */}
       <div
         ref={trackRef}
-        className="flex gap-3 px-5 overflow-x-auto [scrollbar-hide::-webkit-scrollbar]:hidden cursor-grab select-none"
+        className="flex gap-3 px-5 overflow-x-auto [scrollbar-hide::-webkit-scrollbar]:hidden cursor-grab select-none lg:justify-center"
         style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}
         {...handlers}
       >
