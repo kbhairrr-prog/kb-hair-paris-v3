@@ -24,7 +24,7 @@ export function CollectionBanner({ locale, label: defaultLabel, href: defaultHre
   const imageUrl = content?.image_url || defaultImageUrl
   return (
     <section className='bg-[#F5F5F5] py-16'>
-      <div className='max-w-screen-xl mx-auto px-4'>
+      <div className='max-w-[1600px] mx-auto px-4'>
         <div className='text-center mb-8'>
           <p className='font-sans text-[10px] tracking-[0.4em] uppercase text-[#888] mb-3'>{discover}</p>
           <h2 className='font-serif text-[32px] font-light tracking-[0.15em] uppercase text-black'>{label}</h2>
