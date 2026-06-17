@@ -11,15 +11,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { data } = await supabase
     .from('products').select('*').eq('slug', params.slug).single()
   if (!data) return {}
-  const title = params.locale === 'fr'
-    ? data.seo_title_fr || data.name_fr
-    : data.seo_title_en || data.name_en
-  const desc = params.locale === 'fr' ? data.seo_desc_fr : data.seo_desc_en
+  const title = data.seo_title_fr || data.name_fr
+  const desc = data.seo_desc_fr
   return { title, description: desc }
 }
 
 export default async function ProductPage({ params }: Props) {
-  const { locale, slug } = params
+  const { slug } = params
+  const locale = 'fr' as const
 
   const { data: product } = await supabase
     .from('products')

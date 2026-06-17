@@ -15,8 +15,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .single()
 
   if (!cat) return {}
-  const title = params.locale === 'en' ? cat.seo_title_fr || cat.name_fr : cat.seo_title_en || cat.name_en
-  const desc  = params.locale === 'en' ? cat.seo_description_fr : cat.seo_description_en
+  const title = cat.seo_title_en || cat.name_en
+  const desc  = cat.seo_description_en
 
   return { title, description: desc }
 }
