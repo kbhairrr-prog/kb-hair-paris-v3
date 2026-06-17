@@ -23,7 +23,7 @@ export function HairProducts({ products, locale }: HairProductsProps) {
       </h2>
       <div
         ref={trackRef}
-        className="flex gap-3 px-5 overflow-x-auto cursor-grab select-none"
+        className="flex gap-3 px-5 overflow-x-auto cursor-grab select-none lg:justify-center"
         style={{ scrollSnapType: 'x mandatory', msOverflowStyle: 'none', scrollbarWidth: 'none' }}
         {...handlers}
       >
