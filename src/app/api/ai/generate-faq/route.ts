@@ -18,8 +18,8 @@ REGLES STRICTES :
 - Genere exactement 6 FAQ
 - Chaque question doit etre naturelle, comme une vraie cliente qui se pose une vraie question
 - Chaque reponse doit etre coherente avec la description fournie — jamais inventer
-- Mentionner KB Hair Paris au moins 3 fois au total dans les reponses
-- Mentionner Paris ou France au moins 2 fois
+- Mentionner KB Hair Paris naturellement 1 a 2 fois au total, jamais force
+- Pas besoin de repeter Paris ou France dans chaque reponse
 - Ton premium, humain, chaleureux — pas robotique
 - Eviter absolument : "n hesitez pas", "excellent produit", "vous serez satisfait", "de qualite"
 - Les reponses doivent etre specifiques au produit, pas generiques
