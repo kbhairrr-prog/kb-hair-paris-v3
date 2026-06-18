@@ -561,17 +561,36 @@ export default function ProductForm({ productId, initialVariantTypes = [] }: Pro
               {variants.map((v, i) => (
                 <div key={i} className="border border-[#e8e8e8] p-4">
                   <div className="grid grid-cols-2 gap-2 mb-3">
-                    {variantTypes.map(vt => (
-                      <div key={vt.id}>
-                        <label className={labelCls}>{vt.name_fr}</label>
-                        <input
-                          value={v.selectedOptions?.[vt.id] ?? ''}
-                          onChange={e => updateVariant(i, 'selectedOptions', { ...v.selectedOptions, [vt.id]: e.target.value })}
-                          placeholder={vt.name_fr === 'Longueur' ? 'ex: 16 pouces' : vt.name_fr === 'Texture' ? 'ex: Straight' : vt.name_fr === 'Couleur' ? 'ex: Naturel' : vt.name_fr === 'Densité' ? 'ex: 150%' : 'ex: 13x4'}
-                          className={inputCls}
-                        />
-                      </div>
-                    ))}
+                    {variantTypes.map(vt => {
+                      const current = v.selectedOptions?.[vt.id]
+                      const isBilingual = current && typeof current === 'object' && 'fr' in current
+                      const valFr = isBilingual ? current.fr : (current ?? '')
+                      const valEn = isBilingual ? current.en : (current ?? '')
+                      const placeholderFr = vt.name_fr === 'Longueur' ? 'ex: 16 pouces' : vt.name_fr === 'Texture' ? 'ex: Straight' : vt.name_fr === 'Couleur' ? 'ex: Naturel' : vt.name_fr === 'Densité' ? 'ex: 150%' : 'ex: 13x4'
+                      const placeholderEn = vt.name_fr === 'Longueur' ? 'ex: 16 inches' : vt.name_fr === 'Texture' ? 'ex: Straight' : vt.name_fr === 'Couleur' ? 'ex: Natural' : vt.name_fr === 'Densité' ? 'ex: 150%' : 'ex: 13x4'
+                      return (
+                        <div key={vt.id} className="grid grid-cols-2 gap-1 col-span-2">
+                          <div>
+                            <label className={labelCls}>{vt.name_fr} (FR)</label>
+                            <input
+                              value={valFr}
+                              onChange={e => updateVariant(i, 'selectedOptions', { ...v.selectedOptions, [vt.id]: { fr: e.target.value, en: valEn } })}
+                              placeholder={placeholderFr}
+                              className={inputCls}
+                            />
+                          </div>
+                          <div>
+                            <label className={labelCls}>{vt.name_en ?? vt.name_fr} (EN)</label>
+                            <input
+                              value={valEn}
+                              onChange={e => updateVariant(i, 'selectedOptions', { ...v.selectedOptions, [vt.id]: { fr: valFr, en: e.target.value } })}
+                              placeholder={placeholderEn}
+                              className={inputCls}
+                            />
+                          </div>
+                        </div>
+                      )
+                    })}
                   </div>
                   <div className="grid grid-cols-3 gap-2 mb-3">
                     <div>
