@@ -157,7 +157,25 @@ export default function ProductForm({ productId }: ProductFormProps) {
           specs_fr: data.specs_fr ?? '', specs_en: data.specs_en ?? '',
         })
         setImages(data.images?.sort((a: any, b: any) => a.position - b.position) ?? [])
-        setVariants(data.variants ?? [])
+        // Reconstruire selectedOptions a partir des options chargees depuis la base
+        const loadedVariants = (data.variants ?? []).map((v: any) => {
+          const selectedOptions: Record<string, string> = {}
+          ;(v.options ?? []).forEach((po: any) => {
+            const opt = po.option
+            if (opt?.variant_type_id) {
+              selectedOptions[opt.variant_type_id] = opt.value_fr ?? ''
+            }
+          })
+          return {
+            id: v.id,
+            sku: v.sku ?? '',
+            price: v.price != null ? String(v.price) : '',
+            stock: v.stock ?? 0,
+            is_active: v.is_active,
+            selectedOptions,
+          }
+        })
+        setVariants(loadedVariants)
         setFaqs(data.faqs?.sort((a: any, b: any) => a.position - b.position) ?? [])
       })
   }, [productId])
@@ -273,6 +291,56 @@ export default function ProductForm({ productId }: ProductFormProps) {
         await supabase.from('product_faqs').insert(
           faqs.map((f, i) => ({ ...f, product_id: pid, position: i }))
         )
+      }
+
+      // Sauvegarder variantes (et leurs options liees)
+      await supabase.from('product_variants').delete().eq('product_id', pid)
+      if (variants.length > 0) {
+        for (let i = 0; i < variants.length; i++) {
+          const v = variants[i]
+          const { data: newVariant } = await supabase.from('product_variants').insert({
+            product_id: pid,
+            sku: v.sku || null,
+            price: v.price ? parseFloat(v.price) : null,
+            stock: v.stock ?? 0,
+            is_active: v.is_active ?? true,
+            position: i,
+          }).select().single()
+
+          if (!newVariant) continue
+
+          const optionIds: string[] = []
+          for (const [typeId, rawValue] of Object.entries(v.selectedOptions ?? {})) {
+            const valStr = String(rawValue).trim()
+            if (!valStr) continue
+
+            const { data: existingOpt } = await supabase
+              .from('variant_options')
+              .select('id')
+              .eq('variant_type_id', typeId)
+              .eq('value_fr', valStr)
+              .maybeSingle()
+
+            let optId = existingOpt?.id
+
+            if (!optId) {
+              const { data: createdOpt } = await supabase
+                .from('variant_options')
+                .insert({ variant_type_id: typeId, value_fr: valStr, value_en: valStr, is_active: true })
+                .select()
+                .single()
+              optId = createdOpt?.id
+            }
+
+            if (optId) optionIds.push(optId)
+          }
+
+          if (optionIds.length > 0) {
+            await supabase.from('product_variant_options').insert(
+              optionIds.map(oid => ({ variant_id: newVariant.id, option_id: oid }))
+            )
+          }
+        }
       }
 
       router.push('/admin/produits')
@@ -413,11 +481,11 @@ export default function ProductForm({ productId }: ProductFormProps) {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className={labelCls}>Caracteristiques FR</label>
-              <textarea value={form.specs_fr} onChange={updateField('specs_fr')} rows={4} placeholder={"Longueur : 20 pouces\nTexture : Lisse\nOrigine : Vietnam"} className={inputCls} />
+              <textarea value={form.specs_fr} onChange={updateField('specs_fr')} rows={4} placeholder={"Longueur : 20 pouces\nTexture : Lisse\nCouleur : Naturel\nDensite : 150%\nType de lace : 13x4\nOrigine : Vietnam"} className={inputCls} />
             </div>
             <div>
               <label className={labelCls}>Caracteristiques EN</label>
-              <textarea value={form.specs_en} onChange={updateField('specs_en')} rows={4} placeholder={"Length: 20 inches\nTexture: Straight\nOrigin: Vietnam"} className={inputCls} />
+              <textarea value={form.specs_en} onChange={updateField('specs_en')} rows={4} placeholder={"Length: 20 inches\nTexture: Straight\nColor: Natural\nDensity: 150%\nLace type: 13x4\nOrigin: Vietnam"} className={inputCls} />
             </div>
           </div>
         </div>

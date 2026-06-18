@@ -16,6 +16,25 @@ import {
   AvantagesCarousel,
 } from '@/components/home/HomeComponents'
 import type { Product } from '@/types'
+import type { Metadata } from 'next'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { data } = await supabase.from('site_settings').select('value').eq('key', 'seo').single()
+  const seo = data?.value ?? {}
+  return {
+    title: seo.title_en || 'KB Hair Paris',
+    description: seo.description_en || 'Premium raw hair extensions and wigs.',
+    openGraph: {
+      title: seo.title_en || 'KB Hair Paris',
+      description: seo.description_en || 'Premium raw hair extensions and wigs.',
+      images: seo.og_image ? [seo.og_image] : undefined,
+      locale: 'en_US',
+      type: 'website',
+      siteName: 'KB Hair Paris',
+    },
+  }
+}
+
 
 async function getData() {
   const getCatId = async (slug: string) => {

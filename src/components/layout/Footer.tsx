@@ -33,6 +33,20 @@ export default function Footer({ locale }: { locale: 'fr' | 'en' }) {
     href: `/${locale}/pages/${p.slug}`
   }))
 
+  const [contactEmail, setContactEmail] = useState('')
+  const [contactWhatsapp, setContactWhatsapp] = useState('')
+  useEffect(() => {
+    supabase.from('site_settings').select('key, value').in('key', ['brand', 'social'])
+      .then(({ data }) => {
+        const brand  = data?.find(d => d.key === 'brand')?.value ?? {}
+        const social = data?.find(d => d.key === 'social')?.value ?? {}
+        setContactEmail(brand.email || social.email || '')
+        setContactWhatsapp(social.whatsapp || brand.whatsapp || '')
+      })
+  }, [])
+
+  const whatsappLink = contactWhatsapp ? `https://wa.me/${contactWhatsapp.replace(/[^0-9]/g, '')}` : ''
+
   return (
     <footer style={{backgroundColor:'#0A0A0A'}} className="px-6 pt-12 pb-8">
       <div className="mb-8">
@@ -45,9 +59,16 @@ export default function Footer({ locale }: { locale: 'fr' | 'en' }) {
           <a href="https://instagram.com/kbhairparis" target="_blank" rel="noopener" className="w-9 h-9 border flex items-center justify-center" style={{borderColor:'rgba(255,255,255,0.2)'}}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="white"/></svg>
           </a>
-          <a href="mailto:kbhairr@gmail.com" className="w-9 h-9 border flex items-center justify-center" style={{borderColor:'rgba(255,255,255,0.2)'}}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          </a>
+          {contactEmail && (
+            <a href={`mailto:${contactEmail}`} className="w-9 h-9 border flex items-center justify-center" style={{borderColor:'rgba(255,255,255,0.2)'}}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </a>
+          )}
+          {whatsappLink && (
+            <a href={whatsappLink} target="_blank" rel="noopener" className="w-9 h-9 border flex items-center justify-center" style={{borderColor:'rgba(255,255,255,0.2)'}}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M17.6 6.32A8.86 8.86 0 0 0 12.05 4a8.94 8.94 0 0 0-7.74 13.4L3 21l3.7-1.28a8.9 8.9 0 0 0 5.36 1.62h0a8.93 8.93 0 0 0 7.95-13.02zM12.06 19.6a7.4 7.4 0 0 1-3.78-1.04l-.27-.16-2.79.96.94-2.7-.18-.28a7.45 7.45 0 1 1 13.85-3.92 7.4 7.4 0 0 1-7.77 7.14zm4.08-5.56c-.22-.11-1.31-.65-1.52-.72-.2-.08-.35-.11-.5.11-.15.22-.57.72-.7.87-.13.15-.26.16-.48.05a6 6 0 0 1-1.79-1.1 6.7 6.7 0 0 1-1.24-1.54c-.13-.22 0-.34.12-.46.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.07-.11-.62-1.5-.85-2.05-.22-.54-.45-.46-.62-.47-.16-.01-.35-.01-.54-.01a1.04 1.04 0 0 0-.75.35 3.16 3.16 0 0 0-.99 2.35c0 1.39 1.01 2.73 1.15 2.92.14.19 1.96 2.99 4.74 4.07a5.3 5.3 0 0 0 2 .38 1.8 1.8 0 0 0 1.5-.7 2.1 2.1 0 0 0 .47-1.43c-.07-.13-.2-.2-.42-.31z"/></svg>
+            </a>
+          )}
         </div>
       </div>
 
@@ -71,6 +92,16 @@ export default function Footer({ locale }: { locale: 'fr' | 'en' }) {
             </li>
           ))}
         </ul>
+        {(contactEmail || contactWhatsapp) && (
+          <div className="mt-4 flex flex-col gap-1.5">
+            {contactEmail && (
+              <a href={`mailto:${contactEmail}`} className="font-sans text-[12px] font-light no-underline" style={{color:'rgba(255,255,255,0.5)'}}>{contactEmail}</a>
+            )}
+            {contactWhatsapp && (
+              <a href={whatsappLink} target="_blank" rel="noopener" className="font-sans text-[12px] font-light no-underline" style={{color:'rgba(255,255,255,0.5)'}}>{contactWhatsapp}</a>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="mb-8">
