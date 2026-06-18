@@ -51,15 +51,13 @@ export default function ReviewsSection({ productId, locale }: ReviewsSectionProp
     setCheckingGuest(true)
     setGuestError('')
     try {
-      const { data: orders } = await supabase
-        .from('orders')
-        .select('id, guest_email, payment_status, order_items(product_id)')
-        .eq('guest_email', guestEmail)
-        .eq('payment_status', 'paid')
-      const hasPurchased = (orders ?? []).some((o: any) =>
-        (o.order_items ?? []).some((it: any) => it.product_id === productId)
-      )
-      if (hasPurchased) {
+      const res = await fetch('/api/verify-purchase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: guestEmail, productId }),
+      })
+      const data = await res.json()
+      if (data.verified) {
         setGuestVerified(true)
         setShowForm(true)
       } else {
