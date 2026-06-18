@@ -22,11 +22,13 @@ export default function ReviewsSection({ productId, locale }: ReviewsSectionProp
   const [customer,  setCustomer]  = useState<any>(null)
 
   useEffect(() => {
-    const load = async () => {
+    const loadReviews = async () => {
       try {
         const { data: rv } = await supabase.from('product_reviews').select('*, customer:customers(first_name,last_name)').eq('product_id', productId).eq('is_approved', true).order('created_at', { ascending: false })
         setReviews(rv ?? [])
       } catch(e) { setReviews([]) }
+    }
+    const loadCustomer = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser()
         if (user) {
@@ -34,9 +36,8 @@ export default function ReviewsSection({ productId, locale }: ReviewsSectionProp
           setCustomer(cust)
         }
       } catch(e) {}
-      setLoading(false)
     }
-    load()
+    Promise.all([loadReviews(), loadCustomer()]).finally(() => setLoading(false))
   }, [productId])
 
   const submitReview = async () => {
@@ -62,7 +63,8 @@ export default function ReviewsSection({ productId, locale }: ReviewsSectionProp
     <div className="flex gap-0.5">
       {[1,2,3,4,5].map(i => (
         <button key={i}
-          onClick={() => interactive && setRating(i)}
+          type="button"
+          onClick={(e) => { e.preventDefault(); if (interactive) setRating(i) }}
           onMouseEnter={() => interactive && setHoverStar(i)}
           onMouseLeave={() => interactive && setHoverStar(0)}
           className={`text-base transition-colors ${interactive ? 'cursor-pointer bg-transparent border-none' : 'cursor-default bg-transparent border-none'} ${i <= (interactive ? hoverStar || rating : value) ? 'text-black' : 'text-[#ddd]'}`}
