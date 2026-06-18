@@ -59,7 +59,6 @@ export default function ProductForm({ productId }: ProductFormProps) {
       alert('Erreur lors de la suggestion')
     } finally {
       setSuggestingVariants(false)
-      await supabase.auth.refreshSession()
     }
   }
 
@@ -90,7 +89,6 @@ export default function ProductForm({ productId }: ProductFormProps) {
       alert('Erreur lors de la generation des FAQ')
     } finally {
       setGeneratingFaq(false)
-      await supabase.auth.refreshSession()
     }
   }
 
@@ -125,8 +123,6 @@ export default function ProductForm({ productId }: ProductFormProps) {
       alert('Erreur lors de la generation')
     } finally {
       setGenerating(false)
-      // Refresh session apres generation IA pour eviter expiration
-      await supabase.auth.refreshSession()
     }
   }
 
@@ -248,8 +244,6 @@ export default function ProductForm({ productId }: ProductFormProps) {
   const handleSave = async () => {
     setSaving(true)
     try {
-      // Refresh session avant sauvegarde pour eviter les erreurs 401
-      await supabase.auth.refreshSession()
       const productData = {
         name_fr: form.name_fr, name_en: form.name_en || form.name_fr,
         slug: form.slug,
