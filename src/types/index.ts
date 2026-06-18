@@ -15,6 +15,8 @@ export interface Product {
   description_en?: string
   short_desc_fr?: string
   short_desc_en?: string
+  specs_fr?: string
+  specs_en?: string
   category_id?: string
   category?: Category
   price: number

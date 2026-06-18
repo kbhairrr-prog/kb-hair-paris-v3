@@ -43,6 +43,7 @@ export default function ProductPageClient({ product, related, locale }: ProductP
 
   const name  = locale === 'fr' ? product.name_fr  : product.name_en
   const desc  = locale === 'fr' ? product.description_fr : product.description_en
+  const specs = locale === 'fr' ? product.specs_fr : product.specs_en
   const imgs  = product.images ?? []
 
   // Grouper options par type
@@ -350,6 +351,19 @@ export default function ProductPageClient({ product, related, locale }: ProductP
             </div>
           )}
 
+          {specs && (
+            <div className="mt-7 pt-7 border-t border-[#e8e8e8]">
+              <p className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase text-black mb-3">CARACTERISTIQUES</p>
+              <ul className="font-sans text-[13px] font-light text-[#555] leading-relaxed list-none">
+                {specs.split("\n").filter(Boolean).map((line, i) => (
+                  <li key={i} className="flex items-start gap-2 mb-1.5">
+                    <span className="text-[#C9A84C]">-</span>
+                    <span>{line}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           {/* FAQ accordéon */}
           {product.faqs && product.faqs.length > 0 && (
             <div className="mt-7 pt-7 border-t border-[#e8e8e8]">

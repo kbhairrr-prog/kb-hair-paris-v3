@@ -29,6 +29,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
     track_inventory: true, allow_backorder: false,
     seo_title_fr: '', seo_title_en: '', seo_desc_fr: '', seo_desc_en: '',
     tags: '',
+    specs_fr: '', specs_en: '',
   })
 
   const [images,   setImages]   = useState<any[]>([])
@@ -153,6 +154,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
           seo_title_fr: data.seo_title_fr ?? '', seo_title_en: data.seo_title_en ?? '',
           seo_desc_fr: data.seo_desc_fr ?? '', seo_desc_en: data.seo_desc_en ?? '',
           tags: (data.tags ?? []).join(', '),
+          specs_fr: data.specs_fr ?? '', specs_en: data.specs_en ?? '',
         })
         setImages(data.images?.sort((a: any, b: any) => a.position - b.position) ?? [])
         setVariants(data.variants ?? [])
@@ -239,6 +241,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
         seo_title_fr: form.seo_title_fr, seo_title_en: form.seo_title_en,
         seo_desc_fr: form.seo_desc_fr, seo_desc_en: form.seo_desc_en,
         tags: form.tags.split(',').map(t => t.trim()).filter(Boolean),
+        specs_fr: form.specs_fr || null, specs_en: form.specs_en || null,
         updated_at: new Date().toISOString(),
       }
 
@@ -403,6 +406,21 @@ export default function ProductForm({ productId }: ProductFormProps) {
           </div>
         </div>
 
+        {/* CARACTERISTIQUES */}
+        <div className="bg-white border border-[#e8e8e8] px-5 py-5">
+          <p className="font-sans text-[11px] font-semibold tracking-[0.15em] uppercase text-black mb-4">Caracteristiques (optionnel)</p>
+          <p className="font-sans text-[11px] text-[#888] mb-3">Une info par ligne, ex: Longueur : 20 pouces</p>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className={labelCls}>Caracteristiques FR</label>
+              <textarea value={form.specs_fr} onChange={updateField('specs_fr')} rows={4} placeholder={"Longueur : 20 pouces\nTexture : Lisse\nOrigine : Vietnam"} className={inputCls} />
+            </div>
+            <div>
+              <label className={labelCls}>Caracteristiques EN</label>
+              <textarea value={form.specs_en} onChange={updateField('specs_en')} rows={4} placeholder={"Length: 20 inches\nTexture: Straight\nOrigin: Vietnam"} className={inputCls} />
+            </div>
+          </div>
+        </div>
         {/* IMAGES */}
         <div className="bg-white border border-[#e8e8e8] px-5 py-5">
           <p className="font-sans text-[11px] font-semibold tracking-[0.15em] uppercase text-black mb-4">Images</p>
