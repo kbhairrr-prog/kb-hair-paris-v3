@@ -558,6 +558,9 @@ export default function ProductForm({ productId, initialVariantTypes = [] }: Pro
             </p>
           ) : (
             <div className="flex flex-col gap-3">
+              <p className="font-sans text-[11px] text-[#888] italic">
+                Remplissez uniquement les champs pertinents pour ce produit (ex: une Closure n'a pas besoin de Longueur). Laissez les autres vides.
+              </p>
               {variants.map((v, i) => (
                 <div key={i} className="border border-[#e8e8e8] p-4">
                   <div className="grid grid-cols-2 gap-2 mb-3">
