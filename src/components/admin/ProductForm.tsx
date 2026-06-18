@@ -553,7 +553,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                       <div key={vt.id}>
                         <label className={labelCls}>{vt.name_fr}</label>
                         <input
-                          value={v.selectedOptions?.[vt.id] ?? ''}
+                          value={(() => { const v2 = v.selectedOptions?.[vt.id]; return v2 && typeof v2 === 'object' && 'fr' in v2 ? (v2 as any).fr : v2 ?? '' })()}
                           onChange={e => updateVariant(i, 'selectedOptions', { ...v.selectedOptions, [vt.id]: e.target.value })}
                           placeholder={vt.name_fr === 'Longueur' ? 'ex: 16 pouces' : vt.name_fr === 'Texture' ? 'ex: Straight' : vt.name_fr === 'Couleur' ? 'ex: Naturel' : vt.name_fr === 'Densité' ? 'ex: 150%' : 'ex: 13x4'}
                           className={inputCls}
