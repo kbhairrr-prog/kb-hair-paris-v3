@@ -19,20 +19,21 @@ REGLES STRICTES :
 - Chaque variante doit avoir des options coherentes entre elles
 - Ne mets PAS de prix ni de stock — le gestionnaire les remplira lui-meme
 - Les variantes doivent correspondre a ce qu on voit sur la photo
-Reponds UNIQUEMENT en JSON valide sans markdown :
+Les IDs des types de variantes sont (utilise EXACTEMENT ces UUIDs comme cles) :
+${variantTypes.map((vt: any) => `${vt.name_fr} -> "${vt.id}"`).join('\n')}
+
+Reponds UNIQUEMENT en JSON valide sans markdown, en utilisant les vrais UUIDs ci-dessus comme cles :
 {
   "variants": [
     {
       "selectedOptions": {
-        "ID_TYPE_LONGUEUR": { "fr": "16 pouces", "en": "16 inches" },
-        "ID_TYPE_TEXTURE": { "fr": "Straight", "en": "Straight" },
-        "ID_TYPE_COULEUR": { "fr": "Naturel", "en": "Natural" }
+        "UUID_REEL_DU_TYPE_LONGUEUR": { "fr": "16 pouces", "en": "16 inches" },
+        "UUID_REEL_DU_TYPE_TEXTURE": { "fr": "Straight", "en": "Straight" },
+        "UUID_REEL_DU_TYPE_COULEUR": { "fr": "Naturel", "en": "Natural" }
       }
     }
   ]
 }
-Les IDs des types de variantes sont :
-${variantTypes.map((vt: any) => `${vt.name_fr} -> "${vt.id}"`).join('\n')}
 `
     const messages: any[] = []
     
