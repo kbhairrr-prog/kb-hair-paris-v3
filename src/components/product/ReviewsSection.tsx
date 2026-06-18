@@ -20,6 +20,12 @@ export default function ReviewsSection({ productId, locale }: ReviewsSectionProp
   const [submitting,setSubmitting]= useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [customer,  setCustomer]  = useState<any>(null)
+  const [guestEmail, setGuestEmail] = useState('')
+  const [guestName,  setGuestName]  = useState('')
+  const [guestVerified, setGuestVerified] = useState(false)
+  const [checkingGuest, setCheckingGuest] = useState(false)
+  const [guestError, setGuestError] = useState('')
+  const [showGuestCheck, setShowGuestCheck] = useState(false)
 
   useEffect(() => {
     const loadReviews = async () => {
@@ -40,15 +46,44 @@ export default function ReviewsSection({ productId, locale }: ReviewsSectionProp
     Promise.all([loadReviews(), loadCustomer()]).finally(() => setLoading(false))
   }, [productId])
 
+  const checkGuestPurchase = async () => {
+    if (!guestEmail) return
+    setCheckingGuest(true)
+    setGuestError('')
+    try {
+      const { data: orders } = await supabase
+        .from('orders')
+        .select('id, guest_email, payment_status, order_items(product_id)')
+        .eq('guest_email', guestEmail)
+        .eq('payment_status', 'paid')
+      const hasPurchased = (orders ?? []).some((o: any) =>
+        (o.order_items ?? []).some((it: any) => it.product_id === productId)
+      )
+      if (hasPurchased) {
+        setGuestVerified(true)
+        setShowForm(true)
+      } else {
+        setGuestError(locale === 'fr' ? "Aucun achat verifie trouve avec cet email pour ce produit." : 'No verified purchase found with this email for this product.')
+      }
+    } catch (e) {
+      setGuestError(locale === 'fr' ? 'Erreur de verification.' : 'Verification error.')
+    } finally {
+      setCheckingGuest(false)
+    }
+  }
+
   const submitReview = async () => {
-    if (!customer) return
+    if (!customer && !guestVerified) return
     setSubmitting(true)
     await supabase.from('product_reviews').insert({
       product_id:  productId,
-      customer_id: customer.id,
+      customer_id: customer?.id ?? null,
+      guest_email: customer ? null : guestEmail,
+      guest_name:  customer ? null : guestName,
       rating,
       title,
       body,
+      is_verified: !!customer || guestVerified,
       is_approved: false, // Modération admin
     })
     setSubmitted(true)
@@ -90,16 +125,39 @@ export default function ReviewsSection({ productId, locale }: ReviewsSectionProp
             </div>
           )}
         </div>
-        {customer && !submitted && (
-          <button onClick={() => setShowForm(s => !s)}
+        {!submitted && (
+          <button onClick={() => customer ? setShowForm(s => !s) : setShowGuestCheck(s => !s)}
             className="font-sans text-[10px] tracking-[0.15em] uppercase underline underline-offset-4 text-black bg-transparent border-none cursor-pointer">
             {locale === 'fr' ? 'Laisser un avis' : 'Write a review'}
           </button>
         )}
       </div>
 
+      {/* Verification email invite */}
+      {showGuestCheck && !customer && !guestVerified && (
+        <div className="bg-[#f8f8f8] border border-[#e8e8e8] p-4 mb-5">
+          <p className="font-sans text-[11px] font-medium tracking-[0.15em] uppercase text-black mb-3">
+            {locale === 'fr' ? 'Vérifiez votre achat' : 'Verify your purchase'}
+          </p>
+          <p className="font-sans text-[11px] text-[#888] mb-3">
+            {locale === 'fr' ? "Entrez l'email utilisé lors de votre commande." : 'Enter the email used for your order.'}
+          </p>
+          <input value={guestName} onChange={e => setGuestName(e.target.value)}
+            placeholder={locale === 'fr' ? 'Votre prénom' : 'Your first name'}
+            className="w-full px-3 py-2.5 border border-[#e0e0e0] bg-white font-sans text-[12px] outline-none focus:border-black mb-2" />
+          <input value={guestEmail} onChange={e => setGuestEmail(e.target.value)} type="email"
+            placeholder={locale === 'fr' ? 'Votre email' : 'Your email'}
+            className="w-full px-3 py-2.5 border border-[#e0e0e0] bg-white font-sans text-[12px] outline-none focus:border-black mb-2" />
+          {guestError && <p className="font-sans text-[11px] text-red-500 mb-2">{guestError}</p>}
+          <button onClick={checkGuestPurchase} disabled={checkingGuest || !guestEmail || !guestName}
+            className="bg-black text-white font-sans text-[10px] tracking-[0.2em] uppercase px-6 py-3 border-none cursor-pointer hover:opacity-85 disabled:opacity-40">
+            {checkingGuest ? '...' : locale === 'fr' ? 'VÉRIFIER' : 'VERIFY'}
+          </button>
+        </div>
+      )}
+
       {/* Formulaire */}
-      {showForm && customer && (
+      {showForm && (customer || guestVerified) && (
         <div className="bg-[#f8f8f8] border border-[#e8e8e8] p-4 mb-5">
           <p className="font-sans text-[11px] font-medium tracking-[0.15em] uppercase text-black mb-4">
             {locale === 'fr' ? 'Votre avis' : 'Your review'}
@@ -165,7 +223,7 @@ export default function ReviewsSection({ productId, locale }: ReviewsSectionProp
               {review.body && <p className="font-sans text-[12px] font-light text-[#555] leading-relaxed mb-2">{review.body}</p>}
               <div className="flex items-center gap-2">
                 <span className="font-sans text-[11px] font-medium text-black">
-                  {review.customer?.first_name ?? 'Client'} {review.customer?.last_name ? review.customer.last_name[0] + '.' : ''}
+                  {review.customer?.first_name ?? review.guest_name ?? 'Client'} {review.customer?.last_name ? review.customer.last_name[0] + '.' : ''}
                 </span>
                 {review.is_verified && (
                   <span className="font-sans text-[9px] tracking-[0.1em] uppercase text-green-600 bg-green-50 px-1.5 py-0.5">
