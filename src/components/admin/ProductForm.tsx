@@ -59,6 +59,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
       alert('Erreur lors de la suggestion')
     } finally {
       setSuggestingVariants(false)
+      await supabase.auth.refreshSession()
     }
   }
 
@@ -89,6 +90,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
       alert('Erreur lors de la generation des FAQ')
     } finally {
       setGeneratingFaq(false)
+      await supabase.auth.refreshSession()
     }
   }
 
@@ -123,6 +125,8 @@ export default function ProductForm({ productId }: ProductFormProps) {
       alert('Erreur lors de la generation')
     } finally {
       setGenerating(false)
+      // Refresh session apres generation IA pour eviter expiration
+      await supabase.auth.refreshSession()
     }
   }
 
