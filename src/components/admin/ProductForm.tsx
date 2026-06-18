@@ -9,14 +9,15 @@ import { supabase } from '@/lib/supabase'
 
 interface ProductFormProps {
   productId?: string // undefined = nouveau produit
+  initialVariantTypes?: any[]
 }
 
-export default function ProductForm({ productId }: ProductFormProps) {
+export default function ProductForm({ productId, initialVariantTypes = [] }: ProductFormProps) {
   const router  = useRouter()
   const isNew   = !productId
   const [saving, setSaving] = useState(false)
   const [cats,   setCats]   = useState<any[]>([])
-  const [variantTypes, setVariantTypes] = useState<any[]>([])
+  const [variantTypes, setVariantTypes] = useState<any[]>(initialVariantTypes)
 
   // Form state
   const [form, setForm] = useState({
@@ -133,7 +134,9 @@ export default function ProductForm({ productId }: ProductFormProps) {
   useEffect(() => {
     supabase.auth.refreshSession().then(() => {
       supabase.from('categories').select('id,name_fr').eq('is_active',true).then(({data}) => setCats(data ?? []))
-      supabase.from('variant_types').select('*').order('position').then(({data}) => { console.log('variantTypes loaded:', data); setVariantTypes(data ?? []) })
+      if (initialVariantTypes.length === 0) {
+        supabase.from('variant_types').select('*').order('position').then(({data}) => { console.log('variantTypes loaded:', data); setVariantTypes(data ?? []) })
+      }
     })
   }, [])
 
