@@ -59,6 +59,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
       alert('Erreur lors de la suggestion')
     } finally {
       setSuggestingVariants(false)
+      await supabase.auth.refreshSession()
     }
   }
 
@@ -89,6 +90,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
       alert('Erreur lors de la generation des FAQ')
     } finally {
       setGeneratingFaq(false)
+      await supabase.auth.refreshSession()
     }
   }
 
@@ -123,6 +125,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
       alert('Erreur lors de la generation')
     } finally {
       setGenerating(false)
+      await supabase.auth.refreshSession()
     }
   }
 
@@ -244,6 +247,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
   const handleSave = async () => {
     setSaving(true)
     try {
+      await supabase.auth.refreshSession()
       const productData = {
         name_fr: form.name_fr, name_en: form.name_en || form.name_fr,
         slug: form.slug,
@@ -311,14 +315,17 @@ export default function ProductForm({ productId }: ProductFormProps) {
 
           const optionIds: string[] = []
           for (const [typeId, rawValue] of Object.entries(v.selectedOptions ?? {})) {
-            const valStr = String(rawValue).trim()
-            if (!valStr) continue
+            // Support format {fr, en} (IA) ou string simple (manuel)
+            const isBilingual = rawValue && typeof rawValue === 'object' && 'fr' in (rawValue as any)
+            const valFr = isBilingual ? String((rawValue as any).fr).trim() : String(rawValue).trim()
+            const valEn = isBilingual ? String((rawValue as any).en).trim() : String(rawValue).trim()
+            if (!valFr) continue
 
             const { data: existingOpt } = await supabase
               .from('variant_options')
               .select('id')
               .eq('variant_type_id', typeId)
-              .eq('value_fr', valStr)
+              .eq('value_fr', valFr)
               .maybeSingle()
 
             let optId = existingOpt?.id
@@ -326,7 +333,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
             if (!optId) {
               const { data: createdOpt } = await supabase
                 .from('variant_options')
-                .insert({ variant_type_id: typeId, value_fr: valStr, value_en: valStr, is_active: true })
+                .insert({ variant_type_id: typeId, value_fr: valFr, value_en: valEn, is_active: true })
                 .select()
                 .single()
               optId = createdOpt?.id
@@ -553,7 +560,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                       <div key={vt.id}>
                         <label className={labelCls}>{vt.name_fr}</label>
                         <input
-                          value={(() => { const v2 = v.selectedOptions?.[vt.id]; return v2 && typeof v2 === 'object' && 'fr' in v2 ? (v2 as any).fr : v2 ?? '' })()}
+                          value={v.selectedOptions?.[vt.id] ?? ''}
                           onChange={e => updateVariant(i, 'selectedOptions', { ...v.selectedOptions, [vt.id]: e.target.value })}
                           placeholder={vt.name_fr === 'Longueur' ? 'ex: 16 pouces' : vt.name_fr === 'Texture' ? 'ex: Straight' : vt.name_fr === 'Couleur' ? 'ex: Naturel' : vt.name_fr === 'Densité' ? 'ex: 150%' : 'ex: 13x4'}
                           className={inputCls}
