@@ -252,7 +252,6 @@ export default function ProductForm({ productId, initialVariantTypes = [] }: Pro
   const handleSave = async () => {
     setSaving(true)
     try {
-      await supabase.auth.refreshSession()
       const productData = {
         name_fr: form.name_fr, name_en: form.name_en || form.name_fr,
         slug: form.slug,
@@ -272,87 +271,25 @@ export default function ProductForm({ productId, initialVariantTypes = [] }: Pro
         updated_at: new Date().toISOString(),
       }
 
-      let pid = productId
-      if (isNew) {
-        const { data } = await supabase.from('products').insert(productData).select().single()
-        pid = data?.id
-      } else {
-        await supabase.from('products').update(productData).eq('id', pid)
-      }
+      const res = await fetch('/api/admin/save-product', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productId,
+          isNew,
+          productData,
+          images,
+          faqs,
+          variants,
+        }),
+      })
 
-      if (!pid) throw new Error('Product ID missing')
+      const result = await res.json()
 
-      // Sauvegarder images
-      await supabase.from('product_images').delete().eq('product_id', pid)
-      if (images.length > 0) {
-        await supabase.from('product_images').insert(
-          images.map((img, i) => ({
-            product_id: pid, url: img.url, position: i,
-            is_primary: img.is_primary, type: img.type ?? 'image',
-            alt_fr: img.alt_fr, alt_en: img.alt_en,
-          }))
-        )
-      }
-
-      // Sauvegarder FAQs
-      await supabase.from('product_faqs').delete().eq('product_id', pid)
-      if (faqs.length > 0) {
-        await supabase.from('product_faqs').insert(
-          faqs.map((f, i) => ({ ...f, product_id: pid, position: i }))
-        )
-      }
-
-      // Sauvegarder variantes (et leurs options liees)
-      await supabase.from('product_variants').delete().eq('product_id', pid)
-      if (variants.length > 0) {
-        for (let i = 0; i < variants.length; i++) {
-          const v = variants[i]
-          const { data: newVariant } = await supabase.from('product_variants').insert({
-            product_id: pid,
-            sku: v.sku || null,
-            price: v.price ? parseFloat(v.price) : null,
-            stock: v.stock ?? 0,
-            is_active: v.is_active ?? true,
-            position: i,
-          }).select().single()
-
-          if (!newVariant) continue
-
-          const optionIds: string[] = []
-          for (const [typeId, rawValue] of Object.entries(v.selectedOptions ?? {})) {
-            // Support format {fr, en} (IA) ou string simple (manuel)
-            const isBilingual = rawValue && typeof rawValue === 'object' && 'fr' in (rawValue as any)
-            const valFr = isBilingual ? String((rawValue as any).fr).trim() : String(rawValue).trim()
-            const valEn = isBilingual ? String((rawValue as any).en).trim() : String(rawValue).trim()
-            if (!valFr) continue
-
-            const { data: existingOpt } = await supabase
-              .from('variant_options')
-              .select('id')
-              .eq('variant_type_id', typeId)
-              .eq('value_fr', valFr)
-              .maybeSingle()
-
-            let optId = existingOpt?.id
-
-            if (!optId) {
-              const { data: createdOpt } = await supabase
-                .from('variant_options')
-                .insert({ variant_type_id: typeId, value_fr: valFr, value_en: valEn, is_active: true })
-                .select()
-                .single()
-              optId = createdOpt?.id
-            }
-
-            if (optId) optionIds.push(optId)
-          }
-
-          if (optionIds.length > 0) {
-            await supabase.from('product_variant_options').insert(
-              optionIds.map(oid => ({ variant_id: newVariant.id, option_id: oid }))
-            )
-          }
-        }
+      if (!res.ok || result.error) {
+        alert('Erreur lors de la sauvegarde: ' + (result.error ?? 'erreur inconnue'))
+        setSaving(false)
+        return
       }
 
       router.push('/admin/produits')
