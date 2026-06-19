@@ -206,7 +206,7 @@ export default function ProductPageClient({ product, related, locale }: ProductP
             {name}
           </h1>
 
-          <div className="flex items-center gap-3 mb-5">
+          <div className="flex items-center gap-3 mb-2">
             <span className="font-sans text-[18px] font-light text-black">{fmt(price)}</span>
             {disc > 0 && comparePrice && (
               <>
@@ -217,6 +217,13 @@ export default function ProductPageClient({ product, related, locale }: ProductP
               </>
             )}
           </div>
+          {Object.keys(variantTypeMap).length > 0 && !selectedVariant && (
+            <p className="font-sans text-[11px] text-[#888] italic mb-5">
+              {locale === 'fr'
+                ? 'Selectionnez toutes les options ci-dessous pour voir le prix exact.'
+                : 'Select all options below to see the exact price.'}
+            </p>
+          )}
 
           {product.rating_count > 0 && (
             <div className="flex items-center gap-2 mb-5">
