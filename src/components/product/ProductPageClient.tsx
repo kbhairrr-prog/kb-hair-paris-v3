@@ -67,12 +67,16 @@ export default function ProductPageClient({ product, related, locale }: ProductP
   // Trouver la variante correspondant aux options sélectionnées
   const findVariant = useCallback((): ProductVariant | undefined => {
     if (!product.variants?.length) return undefined
+    const requiredTypeIds = Object.keys(variantTypeMap)
+    if (requiredTypeIds.length === 0) return undefined
+    const allSelected = requiredTypeIds.every(typeId => selectedOpts[typeId])
+    if (!allSelected) return undefined
     return product.variants.find(v =>
-      Object.entries(selectedOpts).every(([typeId, optId]) =>
-        v.options?.some(o => o.variant_type_id === typeId && o.id === optId)
+      requiredTypeIds.every(typeId =>
+        v.options?.some(o => o.variant_type_id === typeId && o.id === selectedOpts[typeId])
       )
     )
-  }, [selectedOpts, product.variants])
+  }, [selectedOpts, product.variants, variantTypeMap])
 
   const selectedVariant = findVariant()
   const price = selectedVariant?.price ?? product.price
