@@ -8,17 +8,26 @@ Analyse ce produit capillaire et suggere des variantes realistes et coherentes.
 PRODUIT : ${name_fr}
 CATEGORIE : ${categoryName}
 TYPES DE VARIANTES DISPONIBLES : ${variantTypesList}
+
+REGLE LA PLUS IMPORTANTE - TRADUCTION OBLIGATOIRE :
+Le champ "en" de chaque option DOIT TOUJOURS etre une vraie traduction anglaise du champ "fr".
+Le champ "en" ne doit JAMAIS etre identique au champ "fr", SAUF pour les valeurs numeriques/codes qui sont universels (ex: "150%", "13x4", "360 Lace").
+Exemples de traductions correctes a appliquer pour TOUTE couleur que tu choisis, meme si elle n'est pas dans la liste ci-dessous :
+Naturel->Natural, Noir->Black, Brun->Brown, Blond->Blonde, Rouge->Red, Bordeaux->Burgundy, Caramel->Caramel, Châtain->Chestnut, Gris->Grey, Rose->Pink, Bleu->Blue, Violet->Purple, Ombre->Ombre, Doré->Golden, Cuivré->Copper.
+Si tu utilises une couleur absente de cette liste, traduis-la toi-meme en anglais correct - ne la laisse jamais identique au francais.
+
 REGLES STRICTES :
 - Suggere uniquement des variantes que ce type de produit peut reellement avoir
 - Pour les longueurs : FR "16 pouces", EN "16 inches" (utilise 12, 14, 16, 18, 20, 22, 24)
-- Pour les textures : FR et EN identiques : Straight, Body Wave, Deep Wave, Curly, Kinky Curly
-- Pour les couleurs : FR Naturel/Ombre/Blond/Brun/Noir, EN Natural/Ombre/Blonde/Brown/Black
-- Pour la densite : FR et EN identiques : 150%, 180%, 200%, 250%
-- Pour le type de lace : FR et EN identiques : 13x4, 13x6, 5x5, 360 Lace
+- Pour les textures : FR et EN identiques uniquement pour les mots techniques universels : Straight, Body Wave, Deep Wave, Curly, Kinky Curly
+- Pour la densite : FR et EN identiques (valeur numerique) : 150%, 180%, 200%, 250%
+- Pour le type de lace : FR et EN identiques (code technique) : 13x4, 13x6, 5x5, 360 Lace
 - Genere entre 3 et 6 variantes representatives — pas toutes les combinaisons possibles
+- INTERDICTION ABSOLUE DE DOUBLON : chaque combinaison de valeurs (longueur+couleur+texture etc) doit etre UNIQUE dans la liste. Ne genere jamais deux fois la meme combinaison exacte.
 - Chaque variante doit avoir des options coherentes entre elles
 - Ne mets PAS de prix ni de stock — le gestionnaire les remplira lui-meme
 - Les variantes doivent correspondre a ce qu on voit sur la photo
+
 Les IDs des types de variantes sont (utilise EXACTEMENT ces UUIDs comme cles) :
 ${variantTypes.map((vt: any) => `${vt.name_fr} -> "${vt.id}"`).join('\n')}
 
@@ -28,8 +37,8 @@ Reponds UNIQUEMENT en JSON valide sans markdown, en utilisant les vrais UUIDs ci
     {
       "selectedOptions": {
         "UUID_REEL_DU_TYPE_LONGUEUR": { "fr": "16 pouces", "en": "16 inches" },
-        "UUID_REEL_DU_TYPE_TEXTURE": { "fr": "Straight", "en": "Straight" },
-        "UUID_REEL_DU_TYPE_COULEUR": { "fr": "Naturel", "en": "Natural" }
+        "UUID_REEL_DU_TYPE_TEXTURE": { "fr": "Body Wave", "en": "Body Wave" },
+        "UUID_REEL_DU_TYPE_COULEUR": { "fr": "Rouge", "en": "Red" }
       }
     }
   ]
