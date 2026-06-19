@@ -77,7 +77,8 @@ export default function ProductPageClient({ product, related, locale }: ProductP
   const selectedVariant = findVariant()
   const price = selectedVariant?.price ?? product.price
   const comparePrice = selectedVariant?.compare_price ?? product.compare_price
-  const stock = selectedVariant?.stock ?? 999
+  // Si une variante est selectionnee, on utilise son stock. Sinon on retombe sur le stock du produit principal (fallback).
+  const stock = selectedVariant ? (selectedVariant.stock ?? 0) : (product.stock ?? 999)
   const inStock = stock > 0 || product.allow_backorder
 
   const handleAdd = async () => {
@@ -135,7 +136,6 @@ export default function ProductPageClient({ product, related, locale }: ProductP
                 sizes="100vw"
                 onClick={() => setLightbox(true)}
               />
-              {/* Flèches navigation */}
               {imgs.length > 1 && (
                 <>
                   <button
@@ -152,7 +152,6 @@ export default function ProductPageClient({ product, related, locale }: ProductP
                   </button>
                 </>
               )}
-              {/* Dots */}
               {imgs.length > 1 && (
                 <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5">
                   {imgs.map((_, i) => (
@@ -172,7 +171,6 @@ export default function ProductPageClient({ product, related, locale }: ProductP
           )}
         </div>
 
-        {/* Miniatures */}
         {imgs.length > 1 && (
           <div className="flex gap-2 px-4 py-3 overflow-x-auto [scrollbar-hide::-webkit-scrollbar]:hidden bg-[#f5f5f5]">
             {imgs.map((img, i) => (
@@ -189,10 +187,8 @@ export default function ProductPageClient({ product, related, locale }: ProductP
           </div>
         )}
 
-        {/* ── INFOS ACHAT ── */}
         <div className="px-5 py-6">
 
-          {/* Catégorie */}
           {product.category && (
             <Link
               href={`/${locale}/collections/${product.category.slug}`}
@@ -202,12 +198,10 @@ export default function ProductPageClient({ product, related, locale }: ProductP
             </Link>
           )}
 
-          {/* Nom */}
           <h1 className="font-sans text-[18px] font-light tracking-[0.1em] uppercase text-black mb-4 leading-snug">
             {name}
           </h1>
 
-          {/* Prix */}
           <div className="flex items-center gap-3 mb-5">
             <span className="font-sans text-[18px] font-light text-black">{fmt(price)}</span>
             {disc > 0 && comparePrice && (
@@ -220,7 +214,6 @@ export default function ProductPageClient({ product, related, locale }: ProductP
             )}
           </div>
 
-          {/* Rating */}
           {product.rating_count > 0 && (
             <div className="flex items-center gap-2 mb-5">
               <span className="text-black text-sm">{'★'.repeat(Math.round(product.rating_avg))}{'☆'.repeat(5 - Math.round(product.rating_avg))}</span>
@@ -228,7 +221,6 @@ export default function ProductPageClient({ product, related, locale }: ProductP
             </div>
           )}
 
-          {/* Variantes */}
           {Object.entries(variantTypeMap).map(([typeId, { typeName, options }]) => (
             <div key={typeId} className="mb-5">
               <p className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase text-black mb-2.5">
@@ -275,7 +267,6 @@ export default function ProductPageClient({ product, related, locale }: ProductP
             </div>
           ))}
 
-          {/* Quantité */}
           <div className="flex items-center gap-4 mb-5">
             <p className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase text-black">
               {locale === 'fr' ? 'QUANTITÉ' : 'QUANTITY'}
@@ -293,26 +284,21 @@ export default function ProductPageClient({ product, related, locale }: ProductP
             </div>
           </div>
 
-          {/* Stock */}
-          {selectedVariant && (
-            <p className={`font-sans text-[11px] tracking-[0.08em] mb-4 ${
-              stock > 5 ? 'text-green-700' : stock > 0 ? 'text-orange-600' : 'text-red-600'
-            }`}>
-              {stock > 5
-                ? (locale === 'fr' ? '✓ En stock' : '✓ In stock')
-                : stock > 0
-                ? (locale === 'fr' ? `Plus que ${stock} en stock` : `Only ${stock} left`)
-                : (locale === 'fr' ? 'Rupture de stock' : 'Out of stock')}
-            </p>
-          )}
+          <p className={`font-sans text-[11px] tracking-[0.08em] mb-4 ${
+            stock > 5 ? 'text-green-700' : stock > 0 ? 'text-orange-600' : 'text-red-600'
+          }`}>
+            {stock > 5
+              ? (locale === 'fr' ? '✓ En stock' : '✓ In stock')
+              : stock > 0
+              ? (locale === 'fr' ? `Plus que ${stock} en stock` : `Only ${stock} left`)
+              : (locale === 'fr' ? 'Rupture de stock' : 'Out of stock')}
+          </p>
 
-          {/* Guide des longueurs + Wishlist */}
           <div className="flex items-center justify-between mt-2 mb-5">
             <SizeGuide locale={locale} />
             <WishlistButton product={product} size="sm" />
           </div>
 
-          {/* Bouton ajouter */}
           <button
             onClick={handleAdd}
             disabled={!inStock || adding}
@@ -334,14 +320,12 @@ export default function ProductPageClient({ product, related, locale }: ProductP
                 : (locale === 'fr' ? 'INDISPONIBLE' : 'UNAVAILABLE')}
           </button>
 
-          {/* Livraison */}
           <p className="font-sans text-[11px] font-light text-[#888] text-center mt-3 tracking-[0.06em]">
             {locale === 'fr'
               ? `✈ Livraison gratuite dès ${freeThreshold}€ · ${delayFr}`
               : `✈ Free shipping from €${freeThreshold} · ${delayEn}`}
           </p>
 
-          {/* Description */}
           {desc && (
             <div className="mt-7 pt-7 border-t border-[#e8e8e8]">
               <p className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase text-black mb-3">
@@ -364,7 +348,6 @@ export default function ProductPageClient({ product, related, locale }: ProductP
               </ul>
             </div>
           )}
-          {/* FAQ accordéon */}
           {product.faqs && product.faqs.length > 0 && (
             <div className="mt-7 pt-7 border-t border-[#e8e8e8]">
               <p className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase text-black mb-4">
@@ -393,12 +376,10 @@ export default function ProductPageClient({ product, related, locale }: ProductP
               </div>
             </div>
           )}
-          {/* Avis clients */}
           <ReviewsSection productId={product.id} locale={locale} />
         </div>
       </div>
 
-      {/* ── PRODUITS ASSOCIÉS ── */}
       {related.length > 0 && (
         <section className="bg-[#f0f0f0] pt-10 pb-10 mt-4">
           <p className="text-center font-sans text-[10px] tracking-[0.3em] uppercase text-[#888] mb-2">

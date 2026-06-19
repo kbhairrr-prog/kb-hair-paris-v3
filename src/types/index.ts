@@ -20,6 +20,7 @@ export interface Product {
   category_id?: string
   category?: Category
   price: number
+  stock?: number
   compare_price?: number
   sku?: string
   track_inventory: boolean
