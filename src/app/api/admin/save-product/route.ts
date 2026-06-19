@@ -63,6 +63,7 @@ export async function POST(req: NextRequest) {
           const isBilingual = rawValue && typeof rawValue === 'object' && 'fr' in (rawValue as any)
           const valFr = isBilingual ? String((rawValue as any).fr).trim() : String(rawValue).trim()
           const valEn = isBilingual ? String((rawValue as any).en).trim() : String(rawValue).trim()
+          const valColor = isBilingual ? ((rawValue as any).color ?? null) : null
           if (!valFr) continue
 
           const { data: existingOpt } = await supabaseAdmin
@@ -77,10 +78,12 @@ export async function POST(req: NextRequest) {
           if (!optId) {
             const { data: createdOpt } = await supabaseAdmin
               .from('variant_options')
-              .insert({ variant_type_id: typeId, value_fr: valFr, value_en: valEn, is_active: true })
+              .insert({ variant_type_id: typeId, value_fr: valFr, value_en: valEn, color_hex: valColor, is_active: true })
               .select()
               .single()
             optId = createdOpt?.id
+          } else if (valColor) {
+            await supabaseAdmin.from('variant_options').update({ color_hex: valColor }).eq('id', optId)
           }
 
           if (optId) optionIds.push(optId)

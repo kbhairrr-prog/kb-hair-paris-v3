@@ -506,6 +506,8 @@ export default function ProductForm({ productId, initialVariantTypes = [] }: Pro
                       const isBilingual = current && typeof current === 'object' && 'fr' in current
                       const valFr = isBilingual ? current.fr : (current ?? '')
                       const valEn = isBilingual ? current.en : (current ?? '')
+                      const valColor = isBilingual ? (current.color ?? '#000000') : '#000000'
+                      const isColorType = vt.name_fr === 'Couleur'
                       const placeholderFr = vt.name_fr === 'Longueur' ? 'ex: 16 pouces' : vt.name_fr === 'Texture' ? 'ex: Straight' : vt.name_fr === 'Couleur' ? 'ex: Naturel' : vt.name_fr === 'Densité' ? 'ex: 150%' : 'ex: 13x4'
                       const placeholderEn = vt.name_fr === 'Longueur' ? 'ex: 16 inches' : vt.name_fr === 'Texture' ? 'ex: Straight' : vt.name_fr === 'Couleur' ? 'ex: Natural' : vt.name_fr === 'Densité' ? 'ex: 150%' : 'ex: 13x4'
                       return (
@@ -514,19 +516,33 @@ export default function ProductForm({ productId, initialVariantTypes = [] }: Pro
                             <label className={labelCls}>{vt.name_fr} (FR)</label>
                             <input
                               value={valFr}
-                              onChange={e => updateVariant(i, 'selectedOptions', { ...v.selectedOptions, [vt.id]: { fr: e.target.value, en: valEn } })}
+                              onChange={e => updateVariant(i, 'selectedOptions', { ...v.selectedOptions, [vt.id]: { fr: e.target.value, en: valEn, color: valColor } })}
                               placeholder={placeholderFr}
                               className={inputCls}
                             />
                           </div>
-                          <div>
-                            <label className={labelCls}>{vt.name_en ?? vt.name_fr} (EN)</label>
-                            <input
-                              value={valEn}
-                              onChange={e => updateVariant(i, 'selectedOptions', { ...v.selectedOptions, [vt.id]: { fr: valFr, en: e.target.value } })}
-                              placeholder={placeholderEn}
-                              className={inputCls}
-                            />
+                          <div className={isColorType ? "flex gap-1" : ""}>
+                            <div className="flex-1">
+                              <label className={labelCls}>{vt.name_en ?? vt.name_fr} (EN)</label>
+                              <input
+                                value={valEn}
+                                onChange={e => updateVariant(i, 'selectedOptions', { ...v.selectedOptions, [vt.id]: { fr: valFr, en: e.target.value, color: valColor } })}
+                                placeholder={placeholderEn}
+                                className={inputCls}
+                              />
+                            </div>
+                            {isColorType && (
+                              <div>
+                                <label className={labelCls}>Couleur visuelle</label>
+                                <input
+                                  type="color"
+                                  value={valColor}
+                                  onChange={e => updateVariant(i, 'selectedOptions', { ...v.selectedOptions, [vt.id]: { fr: valFr, en: valEn, color: e.target.value } })}
+                                  className="w-10 h-[42px] border border-[#e0e0e0] cursor-pointer"
+                                  title="Choisir la couleur affichee sur le site"
+                                />
+                              </div>
+                            )}
                           </div>
                         </div>
                       )
