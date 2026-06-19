@@ -20,14 +20,17 @@ function SearchPageFRInner() {
   const addItem = useCartStore(s => s.addItem)
 
   const doSearch = useCallback(async (q: string) => {
-    if (!q.trim()) { setResults([]); return }
     setLoading(true)
-    const { data } = await supabase
+    let req = supabase
       .from('products')
       .select('*, images:product_images(*), category:categories(name_fr,slug)')
       .eq('is_active', true)
-      .or(`name_fr.ilike.%${q}%,name_en.ilike.%${q}%,description_fr.ilike.%${q}%,tags.cs.{${q}}`)
-      .limit(24)
+    if (q.trim()) {
+      req = req.or(`name_fr.ilike.%${q}%,name_en.ilike.%${q}%,description_fr.ilike.%${q}%,tags.cs.{${q}}`)
+    }
+    const { data } = await req
+      .order('created_at', { ascending: false })
+      .limit(q.trim() ? 24 : 60)
     setResults(data ?? [])
     setLoading(false)
   }, [])
