@@ -25,9 +25,10 @@ export default function TestimonialsSection({ locale }: { locale: 'fr' | 'en' })
         .from('homepage_sections')
         .select('is_active')
         .eq('type', 'testimonials')
-        .single()
+        .eq('is_active', true)
+        .maybeSingle()
 
-      const isActive = section?.is_active ?? false
+      const isActive = !!section
       setSectionActive(isActive)
 
       if (!isActive) { setLoaded(true); return }
