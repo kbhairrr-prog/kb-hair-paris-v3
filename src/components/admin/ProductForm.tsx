@@ -24,7 +24,7 @@ export default function ProductForm({ productId, initialVariantTypes = [] }: Pro
     name_fr: '', name_en: '', slug: '',
     description_fr: '', description_en: '',
     short_desc_fr: '', short_desc_en: '',
-    price: '', compare_price: '', cost_price: '', stock: '',
+    price: '', compare_price: '', cost_price: '', stock: '', display_order: '',
     sku: '', category_id: '',
     is_active: true, is_featured: false, is_new: false, is_bestseller: false,
     track_inventory: true, allow_backorder: false,
@@ -154,7 +154,7 @@ export default function ProductForm({ productId, initialVariantTypes = [] }: Pro
           description_en: data.description_en ?? '',
           short_desc_fr: data.short_desc_fr ?? '', short_desc_en: data.short_desc_en ?? '',
           price: String(data.price ?? ''), compare_price: String(data.compare_price ?? ''),
-          cost_price: String(data.cost_price ?? ''), stock: String(data.stock ?? ''), sku: data.sku ?? '',
+          cost_price: String(data.cost_price ?? ''), stock: String(data.stock ?? ''), display_order: String(data.display_order ?? ''), sku: data.sku ?? '',
           category_id: data.category_id ?? '',
           is_active: data.is_active, is_featured: data.is_featured,
           is_new: data.is_new, is_bestseller: data.is_bestseller,
@@ -261,6 +261,7 @@ export default function ProductForm({ productId, initialVariantTypes = [] }: Pro
         compare_price: form.compare_price ? parseFloat(form.compare_price) : null,
         cost_price: form.cost_price ? parseFloat(form.cost_price) : null,
         stock: form.stock ? parseInt(form.stock) : 0,
+        display_order: form.display_order ? parseInt(form.display_order) : 0,
         sku: form.sku || null, category_id: form.category_id || null,
         is_active: form.is_active, is_featured: form.is_featured,
         is_new: form.is_new, is_bestseller: form.is_bestseller,
@@ -408,7 +409,7 @@ export default function ProductForm({ productId, initialVariantTypes = [] }: Pro
         {/* PRIX */}
         <div className="bg-white border border-[#e8e8e8] px-5 py-5">
           <p className="font-sans text-[11px] font-semibold tracking-[0.15em] uppercase text-black mb-4">Prix</p>
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-5 gap-3">
             <div>
               <label className={labelCls}>Prix de vente (€) *</label>
               <input type="number" step="0.01" value={form.price} onChange={updateField('price')} placeholder="0.00" className={inputCls} />
@@ -424,7 +425,12 @@ export default function ProductForm({ productId, initialVariantTypes = [] }: Pro
             <div>
               <label className={labelCls}>Stock</label>
               <input type="number" value={form.stock} onChange={updateField('stock')} placeholder="0" className={inputCls} />
-              <p className="font-sans text-[10px] text-[#aaa] mt-1">Si le produit a des variantes avec leur propre stock, ce champ sert de stock global de secours.</p>
+              <p className="font-sans text-[10px] text-[#aaa] mt-1">Stock global de secours si pas de variantes.</p>
+            </div>
+            <div>
+              <label className={labelCls}>Ordre d'affichage</label>
+              <input type="number" value={form.display_order} onChange={updateField('display_order')} placeholder="0" className={inputCls} />
+              <p className="font-sans text-[10px] text-[#aaa] mt-1">Plus petit = affiche en premier dans les carrousels homepage.</p>
             </div>
           </div>
         </div>
