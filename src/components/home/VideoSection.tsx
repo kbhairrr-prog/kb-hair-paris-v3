@@ -27,14 +27,16 @@ export function VideoSection({ locale }: { locale: 'fr' | 'en' }) {
       <div className='absolute inset-0 bg-black/40' />
       {videoUrl && playing ? (
         <video src={videoUrl} autoPlay controls className='absolute inset-0 w-full h-full object-cover' />
-      ) : (
-        <button onClick={() => videoUrl && setPlaying(true)} className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-[60px] h-[60px] rounded-full bg-white/90 flex items-center justify-center border-none cursor-pointer' aria-label='Lire la vidéo'>
+      ) : videoUrl ? (
+        <button onClick={() => setPlaying(true)} className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-[60px] h-[60px] rounded-full bg-white/90 flex items-center justify-center border-none cursor-pointer' aria-label='Lire la vidéo'>
           <span style={{display:'block',width:0,height:0,borderTop:'10px solid transparent',borderBottom:'10px solid transparent',borderLeft:'18px solid #1a1a1a',marginLeft:'4px'}} />
         </button>
+      ) : null}
+      {videoUrl && (
+        <div className='absolute bottom-6 left-0 right-0 text-center z-10'>
+          <p className='font-sans text-[10px] font-normal tracking-[0.35em] uppercase text-white/60'>{clickText}</p>
+        </div>
       )}
-      <div className='absolute bottom-6 left-0 right-0 text-center z-10'>
-        <p className='font-sans text-[10px] font-normal tracking-[0.35em] uppercase text-white/60'>{clickText}</p>
-      </div>
     </section>
   )
 }
