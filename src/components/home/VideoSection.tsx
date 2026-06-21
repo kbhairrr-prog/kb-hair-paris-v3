@@ -2,21 +2,19 @@
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
-
 export function VideoSection({ locale }: { locale: 'fr' | 'en' }) {
   const [playing, setPlaying] = useState(false)
   const [content, setContent] = useState<any>(null)
-
+  const [loaded, setLoaded] = useState(false)
   useEffect(() => {
     supabase.from('homepage_sections').select('content')
       .eq('type', 'video').eq('is_active', true).single()
-      .then(({ data }) => { if (data) setContent(data.content) })
+      .then(({ data }) => { if (data) setContent(data.content); setLoaded(true) })
   }, [])
-
+  if (loaded && !content) return null
   const videoUrl = content?.video_url ?? ''
   const thumbnailUrl = content?.image_url ?? ''
   const clickText = locale === 'fr' ? 'CLIQUEZ POUR VOIR LA VIDÉO' : 'CLICK TO WATCH THE VIDEO'
-
   return (
     <section className='relative w-full bg-black overflow-hidden' style={{minHeight:'500px'}}>
       {thumbnailUrl ? (

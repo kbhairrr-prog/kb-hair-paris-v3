@@ -3,21 +3,21 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
-
 interface CollectionBannerProps {
   locale: 'fr' | 'en'
   label?: string
   href?: string
   imageUrl?: string
 }
-
 export function CollectionBanner({ locale, label: defaultLabel, href: defaultHref, imageUrl: defaultImageUrl }: CollectionBannerProps) {
   const [content, setContent] = useState<any>(null)
+  const [loaded, setLoaded] = useState(false)
   useEffect(() => {
     supabase.from('homepage_sections').select('content')
       .eq('type', 'banner').eq('is_active', true).single()
-      .then(({ data }) => { if (data) setContent(data.content) })
+      .then(({ data }) => { if (data) setContent(data.content); setLoaded(true) })
   }, [])
+  if (loaded && !content) return null
   const label = locale === 'fr' ? (content?.label_fr ?? defaultLabel ?? 'NOS WIGS') : (content?.label_en ?? defaultLabel ?? 'OUR WIGS')
   const href = locale === 'fr' ? (content?.href_fr ?? defaultHref ?? '/fr/collections/wigs') : (content?.href_en ?? defaultHref ?? '/en/collections/wigs')
   const discover = locale === 'fr' ? 'DECOUVREZ' : 'DISCOVER'
