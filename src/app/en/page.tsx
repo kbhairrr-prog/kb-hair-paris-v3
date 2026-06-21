@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { supabase } from '@/lib/supabase'
 import HeroSection      from '@/components/home/HeroSection'
+import ProductCarousel  from '@/components/home/ProductCarousel'
 import Ticker           from '@/components/ui/Ticker'
 import DecouvrezSection from '@/components/home/DecouvrezSection'
 import Footer           from '@/components/layout/Footer'
@@ -50,7 +51,7 @@ async function getData() {
       .from('products')
       .select('*, images:product_images(*), variants:product_variants(*)')
       .eq('category_id', catId).eq('is_active', true)
-      .order('created_at', { ascending: false }).limit(6)
+      .order('display_order', { ascending: true }).order('created_at', { ascending: false }).limit(6)
     return (data as Product[]) ?? []
   }
   const [bundles, wigs, hairProducts] = await Promise.all([
@@ -87,7 +88,15 @@ export default async function HomeEN() {
       <CollectionBanner locale="en" label="OUR WIGS" href="/en/collections/wigs" />
       <VideoSection locale="en" />
       <Ticker text="RAW HAIR ONLY" />
-      <HairProducts products={hairProducts} locale="en" />
+      <ProductCarousel
+        products={hairProducts}
+        locale="en"
+        eyebrow="KB HAIR PARIS"
+        title="HAIR PRODUCTS"
+        viewAllHref="/en/collections/produits"
+        viewAllLabel="VIEW ALL"
+        bgClassName="bg-[#f0f0f0]"
+      />
       <OurWigs wigs={wigs} locale="en" />
       <RawHairSection locale="en" />
       <NewsletterDark locale="en" />
