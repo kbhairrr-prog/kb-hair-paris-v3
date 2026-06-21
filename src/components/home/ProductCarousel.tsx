@@ -1,47 +1,104 @@
 'use client'
+import { useState, useCallback } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import ProductCard from '@/components/product/ProductCard'
 import { useCarousel } from '@/hooks/useCarousel'
 import type { Product } from '@/types'
 
-interface ProductCarouselProps {
+interface CarouselTab {
+  key: string
+  label: string
   products: Product[]
+  href: string
+}
+
+interface ProductCarouselProps {
+  // Mode simple (un seul jeu de produits, type HairProducts)
+  products?: Product[]
+  viewAllHref?: string
+
+  // Mode tabs (plusieurs jeux de produits basculables, type DecouvrezSection)
+  tabs?: CarouselTab[]
+  defaultTabKey?: string
+
   locale: 'fr' | 'en'
   title?: string
   eyebrow?: string
-  viewAllHref?: string
   viewAllLabel?: string
   bgClassName?: string
 }
 
 export default function ProductCarousel({
-  products,
+  products: simpleProducts,
+  viewAllHref: simpleViewAllHref,
+  tabs,
+  defaultTabKey,
   locale,
   title,
   eyebrow,
-  viewAllHref,
   viewAllLabel,
   bgClassName = 'bg-[#f0f0f0]',
 }: ProductCarouselProps) {
+  const isTabMode = !!tabs && tabs.length > 0
+  const [activeTabKey, setActiveTabKey] = useState(defaultTabKey ?? tabs?.[0]?.key ?? '')
+
+  const activeTab = isTabMode ? tabs!.find(t => t.key === activeTabKey) ?? tabs![0] : undefined
+  const products = isTabMode ? (activeTab?.products ?? []) : (simpleProducts ?? [])
+  const viewAllHref = isTabMode ? activeTab?.href : simpleViewAllHref
+
   const { trackRef, currentIndex, goTo, handlers } = useCarousel({ itemsCount: products.length })
+
+  const handleTabSwitch = useCallback((key: string) => {
+    setActiveTabKey(key)
+    if (trackRef.current) trackRef.current.scrollLeft = 0
+  }, [trackRef])
 
   const goPrev = () => goTo(Math.max(0, currentIndex - 1))
   const goNext = () => goTo(Math.min(products.length - 1, currentIndex + 1))
 
-  if (!products || products.length === 0) return null
+  if (!isTabMode && (!simpleProducts || simpleProducts.length === 0)) return null
 
   return (
     <section className={`${bgClassName} pt-12 pb-10 relative`}>
-      {eyebrow && (
+      {/* Mode simple : eyebrow + titre */}
+      {!isTabMode && eyebrow && (
         <p className="text-center font-sans text-[10px] font-medium tracking-[0.3em] uppercase text-[#888] mb-1.5">
           {eyebrow}
         </p>
       )}
-      {title && (
+      {!isTabMode && title && (
         <h2 className="text-center font-serif text-[30px] font-light tracking-[0.1em] uppercase text-black mb-7">
           {title}
         </h2>
+      )}
+
+      {/* Mode tabs : label DECOUVREZ + grands titres cliquables */}
+      {isTabMode && (
+        <>
+          <p className="text-center text-[11px] font-normal tracking-[0.25em] uppercase text-[#888] mb-3">
+            {locale === 'fr' ? 'DÉCOUVREZ' : 'DISCOVER'}
+          </p>
+          <div className="flex gap-7 px-5 mb-7 overflow-x-auto [scrollbar-hide::-webkit-scrollbar]:hidden justify-center">
+            {tabs!.map(tab => (
+              <button
+                key={tab.key}
+                onClick={() => handleTabSwitch(tab.key)}
+                className={`
+                  font-serif text-[clamp(28px,8vw,38px)] font-light tracking-[0.06em] uppercase
+                  whitespace-nowrap pb-1 border-b-2 transition-all duration-200 flex-shrink-0 bg-transparent border-0 cursor-pointer
+                  ${activeTabKey === tab.key
+                    ? 'text-black border-b-black opacity-100'
+                    : 'text-black border-b-transparent opacity-40'
+                  }
+                `}
+                style={{ borderBottomWidth: '2px', borderBottomStyle: 'solid' }}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </>
       )}
 
       <div className="relative max-w-[1600px] mx-auto">
