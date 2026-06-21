@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 import { supabase } from '@/lib/supabase'
 import HeroSection      from '@/components/home/HeroSection'
 import ProductCarousel  from '@/components/home/ProductCarousel'
+import TestimonialsSection from '@/components/home/TestimonialsSection'
 import Ticker           from '@/components/ui/Ticker'
 import DecouvrezSection from '@/components/home/DecouvrezSection'
 import Footer           from '@/components/layout/Footer'
@@ -84,6 +85,7 @@ export default async function HomeEN() {
       />
       <div className="bg-black h-16 w-full" />
       <LuxeSection locale="en" />
+      <TestimonialsSection locale="en" />
       <DecouvrezSection bundles={bundles} wigs={wigs} locale="en" />
       <CollectionBanner locale="en" label="OUR WIGS" href="/en/collections/wigs" />
       <VideoSection locale="en" />
