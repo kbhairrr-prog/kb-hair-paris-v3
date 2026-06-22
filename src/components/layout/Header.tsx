@@ -25,7 +25,7 @@ const NAV_ITEMS = {
     { label: 'MES FAVORIS',        href: '/fr/wishlist' },
     { label: 'À PROPOS',           href: null, children: [
       { label: 'QUI SOMMES-NOUS', href: '/fr/pages/qui-sommes-nous' },
-      { label: 'LA FONDATRICE',   href: '/fr/pages/la-fondatrice'   },
+      { label: 'LE FONDATEUR',     href: '/fr/pages/le-fondateur'    },
     ]},
     { label: 'CGV',                href: '/fr/pages/cgv' },
   ],
@@ -41,10 +41,10 @@ const NAV_ITEMS = {
     { label: 'OUR SERVICES',       href: '/en/collections/services' },
     { label: 'VIP CARDS',          href: '/en/collections/vip-cards' },
     { label: 'ABOUT US',           href: null, children: [
-      { label: 'WHO WE ARE',   href: '/en/pages/who-we-are'    },
-      { label: 'THE FOUNDER',  href: '/en/pages/the-founder'   },
+      { label: 'WHO WE ARE',   href: '/en/pages/qui-sommes-nous' },
+      { label: 'THE FOUNDER',  href: '/en/pages/le-fondateur'   },
     ]},
-    { label: 'T&C',                href: '/en/pages/terms' },
+    { label: 'T&C',                href: '/en/pages/cgv' },
   ],
 }
 

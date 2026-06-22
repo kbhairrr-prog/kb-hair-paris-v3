@@ -53,9 +53,9 @@ export default async function PageLegaleEN({ params }: Props) {
             }
           ` }} />
           <div id="kb-page-content-en" className="kb-content-en font-serif" dangerouslySetInnerHTML={{ __html: content ?? '' }} />
-          {slug === 'who-we-are' && (
+          {slug === 'qui-sommes-nous' && (
             <div className="mt-14">
-              <a href="/en/pages/the-founder" className="block w-full bg-black text-white text-center py-5 text-[11px] tracking-[0.25em] uppercase font-light transition-colors">
+              <a href="/en/pages/le-fondateur" className="block w-full bg-black text-white text-center py-5 text-[11px] tracking-[0.25em] uppercase font-light transition-colors">
                 Discover the Founder
               </a>
             </div>

@@ -77,10 +77,10 @@ export default async function PageLegaleFR({ params }: Props) {
           {slug === 'qui-sommes-nous' && (
             <div className="mt-14">
               <a
-                href="/fr/pages/la-fondatrice"
+                href="/fr/pages/le-fondateur"
                 className="block w-full bg-black text-white text-center py-5 text-[11px] tracking-[0.25em] uppercase font-light hover:bg-[#111] transition-colors"
               >
-                Découvrir la Fondatrice
+                Découvrir le Fondateur
               </a>
             </div>
           )}
