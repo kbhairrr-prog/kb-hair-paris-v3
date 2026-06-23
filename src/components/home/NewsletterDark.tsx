@@ -23,7 +23,7 @@ export function NewsletterDark({ locale }: { locale: 'fr' | 'en' }) {
   }
 
   return (
-    <section className="bg-black px-6 py-16 text-center">
+    <section className="bg-black px-6 pt-8 pb-16 text-center">
       <p className="font-sans text-[10px] font-normal tracking-[0.3em] uppercase text-white/40 mb-4">
         KEEP ME UPDATED
       </p>
