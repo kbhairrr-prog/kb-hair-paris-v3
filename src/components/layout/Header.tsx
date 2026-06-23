@@ -98,21 +98,18 @@ export default function Header({ locale }: HeaderProps) {
   const openCart  = useCartStore(s => s.openCart)
   const nav       = (dynamicNav.length > 0 ? dynamicNav : NAV_ITEMS[locale]) ?? []
 
-  // Scroll header (optionnel: pas de changement sur BHP, reste noir)
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Fermer menu si resize desktop
   useEffect(() => {
     const onResize = () => { if (window.innerWidth > 768) setMenuOpen(false) }
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [])
 
-  // Lock scroll body quand menu ouvert
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
@@ -124,15 +121,16 @@ export default function Header({ locale }: HeaderProps) {
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#1a1a1a] h-[68px] flex items-center justify-between px-4"
               style={{ boxShadow: scrolled ? '0 1px 0 rgba(255,255,255,0.06)' : 'none' }}>
 
-        {/* Hamburger gauche — exactement comme BHP */}
+        {/* Hamburger gauche — transformation en croix via classes Tailwind conditionnelles */}
         <button
-          onClick={() => setMenuOpen(true)}
+          onClick={() => setMenuOpen(o => !o)}
           className="w-9 h-9 flex flex-col items-center justify-center gap-[5px] border border-white/30 flex-shrink-0"
           aria-label="Menu"
+          aria-expanded={menuOpen}
         >
-          <span className="block w-[18px] h-px bg-white" />
-          <span className="block w-[18px] h-px bg-white" />
-          <span className="block w-[18px] h-px bg-white" />
+          <span className={`block w-[18px] h-px bg-white transition-transform duration-300 ease-in-out ${menuOpen ? 'translate-y-[6px] rotate-45' : 'translate-y-0 rotate-0'}`} />
+          <span className={`block w-[18px] h-px bg-white transition-opacity duration-200 ease-in-out ${menuOpen ? 'opacity-0' : 'opacity-100'}`} />
+          <span className={`block w-[18px] h-px bg-white transition-transform duration-300 ease-in-out ${menuOpen ? '-translate-y-[6px] -rotate-45' : 'translate-y-0 rotate-0'}`} />
         </button>
 
         {/* Logo centré — serif, comme BHP */}
