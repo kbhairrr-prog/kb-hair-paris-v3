@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useCarousel } from '@/hooks/useCarousel'
@@ -18,8 +18,6 @@ export default function TestimonialsSection({ locale }: { locale: 'fr' | 'en' })
   const [reviews, setReviews] = useState<Testimonial[]>([])
   const [loaded, setLoaded] = useState(false)
   const [sectionActive, setSectionActive] = useState(false)
-  const [headerVisible, setHeaderVisible] = useState(false)
-  const headerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const load = async () => {
@@ -65,22 +63,6 @@ export default function TestimonialsSection({ locale }: { locale: 'fr' | 'en' })
     load()
   }, [locale])
 
-  useEffect(() => {
-    const el = headerRef.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setHeaderVisible(true)
-          observer.disconnect()
-        }
-      },
-      { threshold: 0.2 }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
-
   const { trackRef, currentIndex, goTo, handlers } = useCarousel({ itemsCount: reviews.length })
   const goPrev = useCallback(() => goTo(Math.max(0, currentIndex - 1)), [currentIndex, goTo])
   const goNext = useCallback(() => goTo(Math.min(reviews.length - 1, currentIndex + 1)), [currentIndex, reviews.length, goTo])
@@ -90,26 +72,19 @@ export default function TestimonialsSection({ locale }: { locale: 'fr' | 'en' })
     return dt.getDate() + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear()
   }
 
+  // Rien tant que chargement pas termine, pour eviter un flash de section vide
   if (!loaded) return null
+  // Section masquee depuis l'admin, ou aucun avis valide pour le moment
   if (!sectionActive || reviews.length === 0) return null
 
   return (
     <section className="bg-white pt-12 pb-10">
-      <div
-        ref={headerRef}
-        className="transition-all duration-700 ease-out"
-        style={{
-          opacity: headerVisible ? 1 : 0,
-          transform: headerVisible ? 'translateY(0)' : 'translateY(16px)',
-        }}
-      >
-        <p className="text-center font-sans text-[10px] font-medium tracking-[0.3em] uppercase text-[#888] mb-1.5">
-          {locale === 'fr' ? 'ILS NOUS FONT CONFIANCE' : 'TRUSTED BY OUR CUSTOMERS'}
-        </p>
-        <h2 className="text-center font-serif text-[30px] font-light tracking-[0.1em] uppercase text-black mb-7">
-          {locale === 'fr' ? 'AVIS CLIENTS' : 'CUSTOMER REVIEWS'}
-        </h2>
-      </div>
+      <p className="text-center font-sans text-[10px] font-medium tracking-[0.3em] uppercase text-[#888] mb-1.5">
+        {locale === 'fr' ? 'ILS NOUS FONT CONFIANCE' : 'TRUSTED BY OUR CUSTOMERS'}
+      </p>
+      <h2 className="text-center font-serif text-[30px] font-light tracking-[0.1em] uppercase text-black mb-7">
+        {locale === 'fr' ? 'AVIS CLIENTS' : 'CUSTOMER REVIEWS'}
+      </h2>
 
       <div className="relative max-w-[1600px] mx-auto">
         {reviews.length > 1 && (
@@ -118,7 +93,7 @@ export default function TestimonialsSection({ locale }: { locale: 'fr' | 'en' })
               onClick={goPrev}
               disabled={currentIndex === 0}
               aria-label={locale === 'fr' ? 'Precedent' : 'Previous'}
-              className="kb-testimonial-arrow hidden lg:flex absolute left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 items-center justify-center bg-white border border-[#e0e0e0] rounded-full cursor-pointer transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
+              className="hidden lg:flex absolute left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 items-center justify-center bg-white border border-[#e0e0e0] rounded-full cursor-pointer hover:bg-black hover:text-white hover:border-black transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-black"
             >
               <ChevronLeft size={18} />
             </button>
@@ -126,7 +101,7 @@ export default function TestimonialsSection({ locale }: { locale: 'fr' | 'en' })
               onClick={goNext}
               disabled={currentIndex >= reviews.length - 1}
               aria-label={locale === 'fr' ? 'Suivant' : 'Next'}
-              className="kb-testimonial-arrow hidden lg:flex absolute right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 items-center justify-center bg-white border border-[#e0e0e0] rounded-full cursor-pointer transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
+              className="hidden lg:flex absolute right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 items-center justify-center bg-white border border-[#e0e0e0] rounded-full cursor-pointer hover:bg-black hover:text-white hover:border-black transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-black"
             >
               <ChevronRight size={18} />
             </button>
@@ -139,17 +114,12 @@ export default function TestimonialsSection({ locale }: { locale: 'fr' | 'en' })
           style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}
           {...handlers}
         >
-          {reviews.map((r, i) => (
+          {reviews.map(r => (
             <div
               key={r.id}
               data-card
-              className="kb-testimonial-card flex-shrink-0 w-[78vw] max-w-[340px] lg:w-[320px] bg-[#f8f8f8] border border-[#e8e8e8] p-5 flex flex-col transition-all duration-500 ease-out"
-              style={{
-                scrollSnapAlign: 'start',
-                opacity: headerVisible ? 1 : 0,
-                transform: headerVisible ? 'translateY(0)' : 'translateY(20px)',
-                transitionDelay: `${Math.min(i, 4) * 80}ms`,
-              }}
+              className="flex-shrink-0 w-[78vw] max-w-[340px] lg:w-[320px] bg-[#f8f8f8] border border-[#e8e8e8] p-5 flex flex-col"
+              style={{ scrollSnapAlign: 'start' }}
             >
               <div className="flex items-center gap-0.5 mb-3">
                 {Array.from({ length: 5 }).map((_, i) => (
@@ -202,19 +172,6 @@ export default function TestimonialsSection({ locale }: { locale: 'fr' | 'en' })
           ))}
         </div>
       )}
-
-      <style jsx>{`
-        .kb-testimonial-arrow:hover:not(:disabled) {
-          background-color: #000;
-          color: #fff;
-          border-color: #000;
-          box-shadow: 0 6px 16px rgba(0,0,0,0.18);
-          transform: translateY(-50%) scale(1.06);
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .kb-testimonial-arrow, .kb-testimonial-card { transition: none !important; }
-        }
-      `}</style>
     </section>
   )
 }
