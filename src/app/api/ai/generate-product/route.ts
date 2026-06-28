@@ -40,8 +40,8 @@ LONGUEUR :
 
 Reponds UNIQUEMENT en JSON valide sans markdown :
 {
-  "name_fr": "nom 3-6 mots precis decrivant exactement ce qu on voit",
-  "name_en": "name 3-6 words precise description of what we see",
+  "name_fr": "nom 3-6 mots decrivant exactement ce qu on voit - NE PAS repeter la categorie (ex: pas de Perruque si categorie=Wigs, pas de Tissage si categorie=Bundles) - juste la texture couleur ou specificite visible",
+  "name_en": "name 3-6 words describing exactly what we see - DO NOT repeat the category name - just texture color or visible specificity",
   "short_desc_fr": "1-2 phrases percutantes max 150 caracteres accrocheuses et vraies",
   "short_desc_en": "1-2 punchy sentences max 150 characters catchy and real",
   "description_fr": "description experte 120-170 mots ton humain naturel",
