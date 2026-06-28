@@ -30,6 +30,11 @@ export interface Product {
   is_new: boolean
   is_bestseller: boolean
   tags: string[]
+  // ── Lots ──────────────────────────────────────────────────
+  bundle_size?: number | null       // null = pas de lot, 2/3/4... = vendu par X
+  bundle_label_fr?: string | null   // ex: "Lot de 3 tissages" (optionnel)
+  bundle_label_en?: string | null   // ex: "Bundle of 3"
+  // ──────────────────────────────────────────────────────────
   images: ProductImage[]
   variants: ProductVariant[]
   faqs?: ProductFAQ[]

@@ -137,10 +137,18 @@ export default function CartDrawer({ locale }: CartDrawerProps) {
                     {locale === 'fr' ? item.product.name_fr : item.product.name_en}
                   </p>
                   {item.variant && (
-                    <p className="text-[10px] text-gray-400 tracking-wide mb-2">
+                    <p className="text-[10px] text-gray-400 tracking-wide mb-1">
                       {item.variant.options?.map(o =>
                         locale === 'fr' ? o.value_fr : o.value_en
                       ).join(' / ')}
+                    </p>
+                  )}
+                  {/* Badge lot dans le panier */}
+                  {item.product.bundle_size && (
+                    <p className="text-[9px] tracking-[0.12em] uppercase text-[#C9A84C] mb-1">
+                      {locale === 'fr'
+                        ? (item.product.bundle_label_fr || `Lot de ${item.product.bundle_size}`)
+                        : (item.product.bundle_label_en || `Bundle of ${item.product.bundle_size}`)}
                     </p>
                   )}
                   <p className="text-[12px] font-light text-black mb-3">

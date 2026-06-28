@@ -206,6 +206,18 @@ export default function ProductPageClient({ product, related, locale }: ProductP
             {name}
           </h1>
 
+          {/* Badge lot */}
+          {product.bundle_size && (
+            <div className="inline-flex items-center gap-2 mb-4 px-3 py-1.5 border border-[#C9A84C]">
+              <span className="text-[#C9A84C] text-[14px]">◆</span>
+              <span className="font-sans text-[10px] font-medium tracking-[0.18em] uppercase text-[#C9A84C]">
+                {locale === 'fr'
+                  ? (product.bundle_label_fr || `Lot de ${product.bundle_size}`)
+                  : (product.bundle_label_en || `Bundle of ${product.bundle_size}`)}
+              </span>
+            </div>
+          )}
+
           <div className="flex items-center gap-3 mb-2">
             <span className="font-sans text-[18px] font-light text-black">{fmt(price)}</span>
             {disc > 0 && comparePrice && (
@@ -217,6 +229,15 @@ export default function ProductPageClient({ product, related, locale }: ProductP
               </>
             )}
           </div>
+          {/* Info lot sous le prix */}
+          {product.bundle_size && (
+            <p className="font-sans text-[11px] text-[#555] mb-3">
+              {locale === 'fr'
+                ? `Prix pour un lot de ${product.bundle_size} articles`
+                : `Price for a bundle of ${product.bundle_size} items`}
+            </p>
+          )}
+
           {Object.keys(variantTypeMap).length > 0 && !selectedVariant && (
             <p className="font-sans text-[11px] text-[#888] italic mb-5">
               {locale === 'fr'
@@ -327,7 +348,9 @@ export default function ProductPageClient({ product, related, locale }: ProductP
             {adding
               ? (locale === 'fr' ? '✓ AJOUTÉ' : '✓ ADDED')
               : inStock
-                ? (locale === 'fr' ? 'AJOUTER AU PANIER' : 'ADD TO CART')
+                ? (locale === 'fr'
+                    ? (product.bundle_size ? `AJOUTER LE LOT DE ${product.bundle_size}` : 'AJOUTER AU PANIER')
+                    : (product.bundle_size ? `ADD BUNDLE OF ${product.bundle_size}` : 'ADD TO CART'))
                 : (locale === 'fr' ? 'INDISPONIBLE' : 'UNAVAILABLE')}
           </button>
 

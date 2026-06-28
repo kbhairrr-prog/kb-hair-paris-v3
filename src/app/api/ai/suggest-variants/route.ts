@@ -18,10 +18,11 @@ Si tu utilises une couleur absente de cette liste, traduis-la toi-meme en anglai
 
 REGLES STRICTES :
 - Suggere uniquement des variantes que ce type de produit peut reellement avoir
-- Pour les longueurs : FR "16 pouces", EN "16 inches" (utilise 12, 14, 16, 18, 20, 22, 24)
-- Pour les textures : FR et EN identiques uniquement pour les mots techniques universels : Straight, Body Wave, Deep Wave, Curly, Kinky Curly
-- Pour la densite : FR et EN identiques (valeur numerique) : 150%, 180%, 200%, 250%
-- Pour le type de lace : FR et EN identiques (code technique) : 13x4, 13x6, 5x5, 360 Lace
+- Pour les longueurs : FR "16 pouces", EN "16 inches" (utilise 12, 14, 16, 18, 20, 22, 24). NE PAS inclure le champ "color" pour la longueur.
+- Pour les textures : FR et EN identiques uniquement pour les mots techniques universels : Straight, Body Wave, Deep Wave, Curly, Kinky Curly. NE PAS inclure le champ "color" pour la texture.
+- Pour la densite : FR et EN identiques (valeur numerique) : 150%, 180%, 200%, 250%. NE PAS inclure le champ "color".
+- Pour le type de lace : FR et EN identiques (code technique) : 13x4, 13x6, 5x5, 360 Lace. NE PAS inclure le champ "color".
+- Pour la COULEUR UNIQUEMENT : inclure le champ "color" avec un code hex representant visuellement la couleur (ex: "#1a1a1a" pour noir, "#8B4513" pour brun).
 - Genere entre 3 et 6 variantes representatives — pas toutes les combinaisons possibles
 - INTERDICTION ABSOLUE DE DOUBLON : chaque combinaison de valeurs (longueur+couleur+texture etc) doit etre UNIQUE dans la liste. Ne genere jamais deux fois la meme combinaison exacte.
 - Chaque variante doit avoir des options coherentes entre elles
@@ -31,19 +32,20 @@ REGLES STRICTES :
 Les IDs des types de variantes sont (utilise EXACTEMENT ces UUIDs comme cles) :
 ${variantTypes.map((vt: any) => `${vt.name_fr} -> "${vt.id}"`).join('\n')}
 
-Reponds UNIQUEMENT en JSON valide sans markdown, en utilisant les vrais UUIDs ci-dessus comme cles :
+Exemple de JSON attendu (avec les vrais UUIDs) — noter que "color" n'apparait QUE pour le type Couleur :
 {
   "variants": [
     {
       "selectedOptions": {
-        "UUID_REEL_DU_TYPE_LONGUEUR": { "fr": "16 pouces", "en": "16 inches" },
-        "UUID_REEL_DU_TYPE_TEXTURE": { "fr": "Body Wave", "en": "Body Wave" },
-        "UUID_REEL_DU_TYPE_COULEUR": { "fr": "Rouge", "en": "Red" }
+        "UUID_TYPE_LONGUEUR": { "fr": "16 pouces", "en": "16 inches" },
+        "UUID_TYPE_TEXTURE": { "fr": "Body Wave", "en": "Body Wave" },
+        "UUID_TYPE_COULEUR": { "fr": "Noir Naturel", "en": "Natural Black", "color": "#1a1a1a" }
       }
     }
   ]
 }
-`
+
+Reponds UNIQUEMENT en JSON valide sans markdown, en utilisant les vrais UUIDs ci-dessus comme cles.`
     const messages: any[] = []
     
     if (imageUrl) {

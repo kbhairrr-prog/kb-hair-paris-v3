@@ -59,11 +59,24 @@ export async function POST(req: NextRequest) {
         if (!newVariant) continue
 
         const optionIds: string[] = []
+        // Charger les types de variantes pour savoir lequel est "Couleur"
+        const { data: allVariantTypes } = await supabaseAdmin
+          .from('variant_types')
+          .select('id, name_fr')
+
+        const colorTypeIds = new Set(
+          (allVariantTypes ?? [])
+            .filter((vt: any) => vt.name_fr?.toLowerCase() === 'couleur')
+            .map((vt: any) => vt.id)
+        )
+
         for (const [typeId, rawValue] of Object.entries(v.selectedOptions ?? {})) {
           const isBilingual = rawValue && typeof rawValue === 'object' && 'fr' in (rawValue as any)
           const valFr = isBilingual ? String((rawValue as any).fr).trim() : String(rawValue).trim()
           const valEn = isBilingual ? String((rawValue as any).en).trim() : String(rawValue).trim()
-          const valColor = isBilingual ? ((rawValue as any).color ?? null) : null
+          // color_hex uniquement pour le type "Couleur", jamais pour Longueur/Texture etc.
+          const isColorType = colorTypeIds.has(typeId)
+          const valColor = isColorType && isBilingual ? ((rawValue as any).color ?? null) : null
           if (!valFr) continue
 
           const { data: existingOpt } = await supabaseAdmin
@@ -82,7 +95,7 @@ export async function POST(req: NextRequest) {
               .select()
               .single()
             optId = createdOpt?.id
-          } else if (valColor) {
+          } else if (isColorType && valColor) {
             await supabaseAdmin.from('variant_options').update({ color_hex: valColor }).eq('id', optId)
           }
 

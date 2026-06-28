@@ -31,6 +31,10 @@ export default function ProductForm({ productId, initialVariantTypes = [] }: Pro
     seo_title_fr: '', seo_title_en: '', seo_desc_fr: '', seo_desc_en: '',
     tags: '',
     specs_fr: '', specs_en: '',
+    // Lots
+    bundle_size: '',
+    bundle_label_fr: '',
+    bundle_label_en: '',
   })
 
   const [images,   setImages]   = useState<any[]>([])
@@ -163,15 +167,23 @@ export default function ProductForm({ productId, initialVariantTypes = [] }: Pro
           seo_desc_fr: data.seo_desc_fr ?? '', seo_desc_en: data.seo_desc_en ?? '',
           tags: (data.tags ?? []).join(', '),
           specs_fr: data.specs_fr ?? '', specs_en: data.specs_en ?? '',
+          bundle_size: data.bundle_size != null ? String(data.bundle_size) : '',
+          bundle_label_fr: data.bundle_label_fr ?? '',
+          bundle_label_en: data.bundle_label_en ?? '',
         })
         setImages(data.images?.sort((a: any, b: any) => a.position - b.position) ?? [])
         // Reconstruire selectedOptions a partir des options chargees depuis la base
         const loadedVariants = (data.variants ?? []).map((v: any) => {
-          const selectedOptions: Record<string, string> = {}
+          const selectedOptions: Record<string, any> = {}
           ;(v.options ?? []).forEach((po: any) => {
             const opt = po.option
             if (opt?.variant_type_id) {
-              selectedOptions[opt.variant_type_id] = opt.value_fr ?? ''
+              // Restaurer l'objet bilingual complet {fr, en, color}
+              selectedOptions[opt.variant_type_id] = {
+                fr: opt.value_fr ?? '',
+                en: opt.value_en ?? opt.value_fr ?? '',
+                color: opt.color_hex ?? '#000000',
+              }
             }
           })
           return {
@@ -270,6 +282,10 @@ export default function ProductForm({ productId, initialVariantTypes = [] }: Pro
         seo_desc_fr: form.seo_desc_fr, seo_desc_en: form.seo_desc_en,
         tags: form.tags.split(',').map(t => t.trim()).filter(Boolean),
         specs_fr: form.specs_fr || null, specs_en: form.specs_en || null,
+        // Lots
+        bundle_size: form.bundle_size ? parseInt(form.bundle_size) : null,
+        bundle_label_fr: form.bundle_label_fr || null,
+        bundle_label_en: form.bundle_label_en || null,
         updated_at: new Date().toISOString(),
       }
 
@@ -432,6 +448,60 @@ export default function ProductForm({ productId, initialVariantTypes = [] }: Pro
               <input type="number" value={form.display_order} onChange={updateField('display_order')} placeholder="0" className={inputCls} />
               <p className="font-sans text-[10px] text-[#aaa] mt-1">Plus petit = affiche en premier dans les carrousels homepage.</p>
             </div>
+          </div>
+        </div>
+
+        {/* LOTS */}
+        <div className="bg-white border border-[#e8e8e8] px-5 py-5">
+          <div className="flex items-center justify-between mb-1">
+            <p className="font-sans text-[11px] font-semibold tracking-[0.15em] uppercase text-black">Vente par lot (optionnel)</p>
+            {form.bundle_size && (
+              <span className="font-sans text-[10px] tracking-[0.1em] uppercase px-2 py-0.5 text-white" style={{backgroundColor:'#C9A84C'}}>
+                Lot de {form.bundle_size}
+              </span>
+            )}
+          </div>
+          <p className="font-sans text-[11px] text-[#888] mb-4">
+            Laissez vide si le produit est vendu à l'unité. Indiquez 3 si vendu par lot de 3, etc.
+          </p>
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <label className={labelCls}>Nombre d'articles par lot</label>
+              <select
+                value={form.bundle_size}
+                onChange={updateField('bundle_size')}
+                className={inputCls}
+              >
+                <option value="">— Vendu à l'unité —</option>
+                {[2,3,4,5,6].map(n => (
+                  <option key={n} value={String(n)}>Lot de {n}</option>
+                ))}
+              </select>
+            </div>
+            {form.bundle_size && (
+              <>
+                <div>
+                  <label className={labelCls}>Label lot FR (optionnel)</label>
+                  <input
+                    value={form.bundle_label_fr}
+                    onChange={updateField('bundle_label_fr')}
+                    placeholder="ex: Lot de 3 tissages"
+                    className={inputCls}
+                  />
+                  <p className="font-sans text-[10px] text-[#aaa] mt-1">Si vide : "Lot de {form.bundle_size}" automatique</p>
+                </div>
+                <div>
+                  <label className={labelCls}>Label lot EN (optionnel)</label>
+                  <input
+                    value={form.bundle_label_en}
+                    onChange={updateField('bundle_label_en')}
+                    placeholder="ex: Bundle of 3 weaves"
+                    className={inputCls}
+                  />
+                  <p className="font-sans text-[10px] text-[#aaa] mt-1">Si vide : "Bundle of {form.bundle_size}" automatique</p>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
