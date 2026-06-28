@@ -18,7 +18,7 @@ Si tu utilises une couleur absente de cette liste, traduis-la toi-meme en anglai
 
 REGLES STRICTES :
 - Suggere uniquement des variantes que ce type de produit peut reellement avoir
-- Pour les longueurs : FR "16 pouces", EN "16 inches" (utilise 12, 14, 16, 18, 20, 22, 24). NE PAS inclure le champ "color" pour la longueur.
+- Pour les longueurs : FR "16 pouces", EN "16 inches" (utilise 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40). NE PAS inclure le champ "color" pour la longueur.
 - Pour les textures : FR et EN identiques uniquement pour les mots techniques universels : Straight, Body Wave, Deep Wave, Curly, Kinky Curly. NE PAS inclure le champ "color" pour la texture.
 - Pour la densite : FR et EN identiques (valeur numerique) : 150%, 180%, 200%, 250%. NE PAS inclure le champ "color".
 - Pour le type de lace : FR et EN identiques (code technique) : 13x4, 13x6, 5x5, 360 Lace. NE PAS inclure le champ "color".
