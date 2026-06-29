@@ -125,11 +125,11 @@ export default function TestimonialsSection({ locale }: { locale: 'fr' | 'en' })
           ref={trackRef}
           className="flex gap-3 px-5 overflow-x-auto [scrollbar-hide::-webkit-scrollbar]:hidden cursor-grab select-none lg:justify-center"
           style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}
+          {...handlers}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onTouchStart={() => setPaused(true)}
           onTouchEnd={() => setTimeout(() => setPaused(false), 2000)}
-          {...handlers}
         >
           {reviews.map(r => (
             <div
