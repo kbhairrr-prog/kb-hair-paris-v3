@@ -23,16 +23,15 @@ export function LuxeSection({ locale }: { locale: 'fr' | 'en' }) {
 
       {/* Photo centrée avec marges blanches */}
       {imageUrl && (
-        <div className="w-full px-6 mb-10">
+        <div className="flex justify-center px-8 mb-10">
           <img
             src={imageUrl}
             alt="KB Hair"
-            className="block mx-auto"
             style={{
-              maxWidth: '520px',
-              width: '100%',
-              objectFit: 'cover',
-              objectPosition: 'center top',
+              width: '72%',
+              maxWidth: '480px',
+              height: 'auto',
+              display: 'block',
               filter: 'grayscale(20%)',
             }}
           />
