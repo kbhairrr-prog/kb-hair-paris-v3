@@ -83,9 +83,7 @@ export default async function HomeEN() {
         ctaLabel={hero?.cta_en ?? 'SHOP NOW'}
         ctaUrl={hero?.cta_url ?? '/en/collections/wigs'}
       />
-      <div className="bg-black h-16 w-full" />
       <LuxeSection locale="en" />
-      <TestimonialsSection locale="en" />
       <DecouvrezSection bundles={bundles} wigs={wigs} locale="en" />
       <CollectionBanner locale="en" label="OUR WIGS" href="/en/collections/wigs" />
       <VideoSection locale="en" />
@@ -101,6 +99,7 @@ export default async function HomeEN() {
       />
       <OurWigs wigs={wigs} locale="en" />
       <RawHairSection locale="en" />
+      <TestimonialsSection locale="en" />
       <NewsletterDark locale="en" />
       <AvantagesCarousel locale="en" />
       <Footer locale="en" />
