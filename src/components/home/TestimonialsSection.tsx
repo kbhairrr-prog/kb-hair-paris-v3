@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useCarousel } from '@/hooks/useCarousel'
@@ -67,6 +67,19 @@ export default function TestimonialsSection({ locale }: { locale: 'fr' | 'en' })
   const goPrev = useCallback(() => goTo(Math.max(0, currentIndex - 1)), [currentIndex, goTo])
   const goNext = useCallback(() => goTo(Math.min(reviews.length - 1, currentIndex + 1)), [currentIndex, reviews.length, goTo])
 
+  // Auto-scroll toutes les 4 secondes
+  const [paused, setPaused] = useState(false)
+  const currentIndexRef = useRef(0)
+  useEffect(() => { currentIndexRef.current = currentIndex }, [currentIndex])
+  useEffect(() => {
+    if (reviews.length <= 1 || paused) return
+    const interval = setInterval(() => {
+      const next = (currentIndexRef.current + 1) % reviews.length
+      goTo(next)
+    }, 4000)
+    return () => clearInterval(interval)
+  }, [reviews.length, paused, goTo])
+
   const fmtDate = (d: string) => {
     const dt = new Date(d)
     return dt.getDate() + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear()
@@ -112,6 +125,10 @@ export default function TestimonialsSection({ locale }: { locale: 'fr' | 'en' })
           ref={trackRef}
           className="flex gap-3 px-5 overflow-x-auto [scrollbar-hide::-webkit-scrollbar]:hidden cursor-grab select-none lg:justify-center"
           style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onTouchStart={() => setPaused(true)}
+          onTouchEnd={() => setTimeout(() => setPaused(false), 2000)}
           {...handlers}
         >
           {reviews.map(r => (
