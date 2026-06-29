@@ -36,24 +36,7 @@ export function LuxeSection({ locale }: { locale: 'fr' | 'en' }) {
               filter: 'grayscale(15%)',
             }}
           />
-          {/* Logo superposé en bas de la photo comme Bright Hair */}
-          <div
-            className="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-5"
-            style={{background: 'linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 100%)'}}
-          >
-            <span
-              className="font-serif text-white tracking-[0.25em] uppercase"
-              style={{fontSize: '22px', fontWeight: 300, letterSpacing: '0.3em'}}
-            >
-              KB HAIR
-            </span>
-            <span
-              className="font-sans text-white tracking-[0.35em] uppercase"
-              style={{fontSize: '9px', fontWeight: 300, opacity: 0.8}}
-            >
-              PARIS
-            </span>
-          </div>
+
         </div>
       )}
 

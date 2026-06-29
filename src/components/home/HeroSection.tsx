@@ -153,7 +153,7 @@ export default function HeroSection({
           onClick={scrollDown}
           aria-label="Defiler"
           className="kb-hero-scroll-btn w-12 h-12 rounded-full bg-white flex items-center justify-center border-none cursor-pointer hover:scale-110 transition-transform"
-          style={{boxShadow:"0 0 0 3px rgba(255,255,255,0.4), 0 4px 15px rgba(0,0,0,0.3)"}}
+          style={{boxShadow:"0 0 0 3px rgba(255,255,255,0.9), 0 6px 24px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)"}}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="#0A0A0A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </button>
